@@ -16,8 +16,31 @@ document.addEventListener('DOMContentLoaded', () => {
     init3DCards();
     initTypingEffect();
     initProjectEvents();
+    initSettingsAccordion();
     loadData();
 });
+
+// ===== 設定面板 Accordion =====
+function initSettingsAccordion() {
+    document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const targetId = header.dataset.target;
+            const content = document.getElementById(targetId);
+
+            // Toggle current accordion
+            header.classList.toggle('active');
+            content.classList.toggle('active');
+        });
+    });
+
+    // 預設展開第一個 accordion
+    const firstHeader = document.querySelector('.accordion-header');
+    const firstContent = document.querySelector('.accordion-content');
+    if (firstHeader && firstContent) {
+        firstHeader.classList.add('active');
+        firstContent.classList.add('active');
+    }
+}
 
 // ===== 粒子背景 =====
 function initParticles() {
@@ -1085,10 +1108,24 @@ function collectData() {
         lists: {}  // 儲存動態列表的 HTML
     };
 
-    // 儲存可編輯欄位
+    // 動態列表 ID（這些列表會整體儲存 HTML，不需要單獨儲存 fields）
+    const dynamicListIds = ['experienceList', 'educationList', 'skillsList', 'projectsList', 'socialLinks', 'statsList'];
+
+    // 收集動態列表內的元素，儲存時跳過它們
+    const dynamicListElements = new Set();
+    dynamicListIds.forEach(listId => {
+        const list = document.getElementById(listId);
+        if (list) {
+            list.querySelectorAll('[data-field]').forEach(el => {
+                dynamicListElements.add(el);
+            });
+        }
+    });
+
+    // 儲存可編輯欄位（排除動態列表內的）
     document.querySelectorAll('.editable').forEach(el => {
         const field = el.dataset.field;
-        if (field) {
+        if (field && !dynamicListElements.has(el)) {
             // 對於 input 元素，使用 value
             if (el.tagName === 'INPUT') {
                 data.fields[field] = el.value;

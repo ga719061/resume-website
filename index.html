@@ -27,44 +27,69 @@
             <span class="settings-icon">⚙️</span>
         </button>
         <div class="settings-dropdown">
-            <div class="settings-section">
-                <div class="settings-title">🎨 主題</div>
-                <div class="theme-options">
-                    <button class="theme-option" data-theme="neon-dark">🌙 深色霓虹</button>
-                    <button class="theme-option" data-theme="light-minimal">☀️ 淺色簡約</button>
-                    <button class="theme-option" data-theme="blue-professional">💼 藍色專業</button>
-                    <button class="theme-option" data-theme="purple-dream">🔮 紫色夢幻</button>
-                    <button class="theme-option custom-theme-btn">🎛️ 自訂顏色</button>
+            <div class="settings-header">
+                <span>⚙️ 設定</span>
+            </div>
+
+            <!-- 主題區塊 -->
+            <div class="settings-accordion">
+                <button class="accordion-header" data-target="theme-content">
+                    <span class="accordion-icon">🎨</span>
+                    <span class="accordion-title">主題設定</span>
+                    <span class="accordion-arrow">▼</span>
+                </button>
+                <div class="accordion-content" id="theme-content">
+                    <div class="theme-options">
+                        <button class="theme-option" data-theme="neon-dark">🌙 深色霓虹</button>
+                        <button class="theme-option" data-theme="light-minimal">☀️ 淺色簡約</button>
+                        <button class="theme-option" data-theme="blue-professional">💼 藍色專業</button>
+                        <button class="theme-option" data-theme="purple-dream">🔮 紫色夢幻</button>
+                        <button class="theme-option custom-theme-btn">🎛️ 自訂顏色</button>
+                    </div>
                 </div>
             </div>
-            <hr class="settings-divider">
-            <div class="settings-section">
-                <div class="settings-title">✏️ 編輯</div>
-                <div class="settings-actions">
-                    <button class="settings-btn" id="editModeBtn">
-                        <span>📝</span> 編輯模式
-                    </button>
-                    <button class="settings-btn" id="exportBtn">
-                        <span>📤</span> 匯出資料
-                    </button>
-                    <button class="settings-btn" id="importBtn">
-                        <span>📥</span> 匯入資料
-                    </button>
-                    <button class="settings-btn" id="resetBtn">
-                        <span>🔄</span> 初始化
-                    </button>
+
+            <!-- 編輯區塊 -->
+            <div class="settings-accordion">
+                <button class="accordion-header" data-target="edit-content">
+                    <span class="accordion-icon">✏️</span>
+                    <span class="accordion-title">編輯管理</span>
+                    <span class="accordion-arrow">▼</span>
+                </button>
+                <div class="accordion-content" id="edit-content">
+                    <div class="settings-actions">
+                        <button class="settings-btn" id="editModeBtn">
+                            <span>📝</span> 編輯模式
+                        </button>
+                        <button class="settings-btn" id="exportBtn">
+                            <span>📤</span> 匯出資料
+                        </button>
+                        <button class="settings-btn" id="importBtn">
+                            <span>📥</span> 匯入資料
+                        </button>
+                        <button class="settings-btn danger" id="resetBtn">
+                            <span>🔄</span> 初始化
+                        </button>
+                    </div>
                 </div>
             </div>
-            <hr class="settings-divider">
-            <div class="settings-section">
-                <div class="settings-title">📄 輸出</div>
-                <div class="settings-actions">
-                    <button class="settings-btn" id="printPdfBtn">
-                        <span>🖨️</span> 輸出 PDF
-                    </button>
-                    <button class="settings-btn" id="exportHtmlBtn">
-                        <span>🌐</span> 輸出網頁
-                    </button>
+
+            <!-- 輸出區塊 -->
+            <div class="settings-accordion">
+                <button class="accordion-header" data-target="export-content">
+                    <span class="accordion-icon">📄</span>
+                    <span class="accordion-title">輸出選項</span>
+                    <span class="accordion-arrow">▼</span>
+                </button>
+                <div class="accordion-content" id="export-content">
+                    <div class="settings-actions">
+                        <button class="settings-btn" id="printPdfBtn">
+                            <span>🖨️</span> 輸出 PDF
+                        </button>
+                        <button class="settings-btn" id="exportHtmlBtn">
+                            <span>🌐</span> 輸出網頁
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
