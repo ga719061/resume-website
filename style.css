@@ -1471,4 +1471,44 @@ body.edit-mode .editable:focus {
     h3 {
         break-after: avoid;
     }
+
+    /* 修正青色文字：改為深色以便在白底清晰可見 */
+    .social-url {
+        color: #0066cc !important;
+    }
+
+    .project-link {
+        color: #0066cc !important;
+    }
+
+    .timeline-date {
+        background: #0066cc !important;
+        color: white !important;
+    }
+
+    .timeline-marker {
+        background: #0066cc !important;
+    }
+
+    .timeline::before {
+        background: #0066cc !important;
+    }
+
+    .tag {
+        background: #e0e0e0 !important;
+        color: #333 !important;
+    }
+
+    .section-title {
+        color: #222 !important;
+    }
+
+    .section-title .icon {
+        filter: grayscale(0);
+    }
+
+    /* 所有使用 primary 顏色的元素 */
+    a {
+        color: #0066cc !important;
+    }
 }
