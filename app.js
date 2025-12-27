@@ -731,9 +731,41 @@ function reindexItems() {
 // ===== 輸出完整網頁 =====
 async function exportAsHtml() {
     try {
-        // 獲取 CSS 內容
-        const cssResponse = await fetch('style.css');
-        const cssContent = await cssResponse.text();
+        // 獲取 CSS 內容 - 嘗試從已載入的樣式表獲取
+        let cssContent = '';
+
+        // 嘗試多種方式獲取 CSS
+        try {
+            // 方式 1: 從樣式表規則中獲取
+            for (const sheet of document.styleSheets) {
+                try {
+                    if (sheet.href && sheet.href.includes('style.css')) {
+                        const rules = Array.from(sheet.cssRules || []);
+                        cssContent = rules.map(rule => rule.cssText).join('\n');
+                        break;
+                    }
+                } catch (e) {
+                    // 跨域樣式表會拋出錯誤，繼續嘗試其他方式
+                }
+            }
+        } catch (e) {
+            console.log('無法從樣式表獲取 CSS');
+        }
+
+        // 方式 2: 如果上面失敗，使用 fetch（僅在 http/https 下有效）
+        if (!cssContent && !location.protocol.startsWith('file')) {
+            try {
+                const response = await fetch('style.css');
+                cssContent = await response.text();
+            } catch (e) {
+                console.log('Fetch CSS 失敗');
+            }
+        }
+
+        // 方式 3: 如果還是沒有，使用預設的基本樣式
+        if (!cssContent) {
+            cssContent = getEmbeddedCss();
+        }
 
         // 複製當前 HTML 結構
         const clone = document.documentElement.cloneNode(true);
@@ -882,6 +914,68 @@ ${cssContent}
         console.error('輸出失敗:', error);
         showToast('輸出失敗，請稍後再試');
     }
+}
+
+// 備用內嵌 CSS（當無法獲取外部 CSS 時使用）
+function getEmbeddedCss() {
+    // 獲取當前主題的計算樣式
+    const style = getComputedStyle(document.documentElement);
+    const bgPrimary = style.getPropertyValue('--bg-primary').trim() || '#0a0a0f';
+    const bgSecondary = style.getPropertyValue('--bg-secondary').trim() || '#12121a';
+    const textPrimary = style.getPropertyValue('--text-primary').trim() || '#ffffff';
+    const textSecondary = style.getPropertyValue('--text-secondary').trim() || '#b0b0b0';
+    const primary = style.getPropertyValue('--primary').trim() || '#66fcf1';
+
+    return `
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+    font-family: 'Inter', 'Noto Sans TC', sans-serif; 
+    background: ${bgPrimary}; 
+    color: ${textPrimary}; 
+    line-height: 1.6;
+}
+.container { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; max-width: 1400px; margin: 0 auto; padding: 2rem; }
+.sidebar { position: sticky; top: 2rem; height: fit-content; }
+.profile-section, .contact-section, .social-section, .section {
+    background: ${bgSecondary};
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.avatar-wrapper { width: 120px; height: 120px; margin: 0 auto 1rem; border-radius: 50%; overflow: hidden; }
+.avatar { width: 100%; height: 100%; object-fit: cover; }
+.name { font-size: 1.5rem; font-weight: 700; text-align: center; color: ${primary}; }
+.title { font-size: 0.9rem; color: ${textSecondary}; text-align: center; }
+.section-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+.timeline { padding-left: 1.5rem; border-left: 2px solid ${primary}; }
+.timeline-item { margin-bottom: 1.5rem; }
+.timeline-content { background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 12px; }
+.timeline-content h3 { font-size: 1rem; }
+.timeline-date { font-size: 0.8rem; background: ${primary}; color: #000; padding: 0.25rem 0.5rem; border-radius: 4px; }
+.company { font-size: 0.9rem; color: ${primary}; margin: 0.5rem 0; }
+.description { font-size: 0.85rem; color: ${textSecondary}; }
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+.skill-item { background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 12px; }
+.skill-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+.skill-progress { height: 100%; background: ${primary}; transition: width 1s ease; }
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+.project-card { background: rgba(255,255,255,0.03); border-radius: 16px; overflow: hidden; }
+.project-image { height: 150px; background: linear-gradient(135deg, ${primary}22, ${primary}44); }
+.project-info { padding: 1rem; }
+.tag { display: inline-block; padding: 0.25rem 0.5rem; background: ${primary}22; color: ${primary}; border-radius: 4px; font-size: 0.75rem; margin-right: 0.25rem; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.stat-item { text-align: center; padding: 1.5rem; background: rgba(255,255,255,0.03); border-radius: 16px; }
+.stat-number { font-size: 2rem; font-weight: 700; color: ${primary}; }
+.stat-label { font-size: 0.85rem; color: ${textSecondary}; }
+.contact-list { list-style: none; }
+.contact-list li { padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem; }
+.social-list { list-style: none; }
+.social-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 0.5rem; }
+.animate-on-scroll { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+.animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
+@media (max-width: 900px) { .container { grid-template-columns: 1fr; } .sidebar { position: static; } }
+    `;
 }
 
 // ===== 資料持久化 =====
