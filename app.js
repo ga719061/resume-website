@@ -483,9 +483,7 @@ const sectionTemplates = {
                 <span class="icon">👤</span> 關於我
             </h2>
             <div class="section-content">
-                <p class="about-text editable" data-field="about-${Date.now()}">
-                    在此輸入關於自己的描述...
-                </p>
+                <p class="about-text editable" data-field="about-${Date.now()}">在此輸入關於自己的描述...</p>
             </div>
         </section>
     `,
@@ -883,7 +881,7 @@ function initAddButtons() {
         const html = createTimelineItem('exp', index, {
             title: '資深前端工程師',
             date: '2023 - 現在',
-            company: 'Tech Solutions Corp.',
+            company: '公司名稱',
             desc: '負責前端架構設計與開發，優化效能並提升使用者體驗。'
         });
         list.insertAdjacentHTML('beforeend', html);
