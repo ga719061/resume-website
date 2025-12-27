@@ -1353,10 +1353,12 @@ body.edit-mode .editable:focus {
 
     .skill-name {
         font-size: 0.8rem;
+        color: #222 !important;
     }
 
     .skill-level {
         font-size: 0.75rem;
+        color: #0066cc !important;
     }
 
     .skill-bar {
