@@ -1167,25 +1167,9 @@ function initSkillBars() {
     });
 }
 
-// ===== 3D 卡片效果 =====
+// ===== 卡片 Hover 效果 (純 CSS，不需要 JS) =====
 function init3DCards() {
-    document.querySelectorAll('.card-3d').forEach(card => {
-        card.addEventListener('mousemove', e => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = (y - centerY) / 20;
-            const rotateY = (centerX - x) / 20;
-
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
-
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
-        });
-    });
+    // 現在使用純 CSS 實現簡單的上浮效果，不需要 JS
 }
 
 // ===== 打字機效果 =====

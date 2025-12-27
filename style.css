@@ -959,10 +959,14 @@ body.edit-mode .add-section-btn {
     color: var(--text-secondary);
 }
 
-/* ===== 3D 卡片效果 ===== */
+/* ===== 卡片 Hover 效果 ===== */
 .card-3d {
-    transform-style: preserve-3d;
-    perspective: 1000px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-3d:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(var(--primary-rgb), 0.2);
 }
 
 /* ===== 滾動動畫 ===== */
