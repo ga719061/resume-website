@@ -369,15 +369,33 @@
             <!-- 統計數據 -->
             <section class="section animate-on-scroll" id="stats" data-section-type="stats">
                 <button class="section-delete-btn" title="刪除此板塊">✕</button>
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <span class="stat-number counter" data-target="5">0</span>
-                        <span class="stat-label">年經驗</span>
+                <h2 class="section-title">
+                    <span class="icon">📊</span> 統計數據
+                </h2>
+                <div class="section-content">
+                    <div class="stats-grid" id="statsList">
+                        <div class="stat-item" data-index="0">
+                            <span class="stat-number editable" data-field="stat-number-0" data-target="5">5</span>
+                            <span class="stat-label editable" data-field="stat-label-0">年經驗</span>
+                            <button class="delete-btn small stat-delete" title="刪除">✕</button>
+                        </div>
+                        <div class="stat-item" data-index="1">
+                            <span class="stat-number editable" data-field="stat-number-1" data-target="50">50</span>
+                            <span class="stat-label editable" data-field="stat-label-1">完成專案</span>
+                            <button class="delete-btn small stat-delete" title="刪除">✕</button>
+                        </div>
+                        <div class="stat-item" data-index="2">
+                            <span class="stat-number editable" data-field="stat-number-2" data-target="100">100</span>
+                            <span class="stat-label editable" data-field="stat-label-2">滿意客戶</span>
+                            <button class="delete-btn small stat-delete" title="刪除">✕</button>
+                        </div>
+                        <div class="stat-item" data-index="3">
+                            <span class="stat-number editable" data-field="stat-number-3" data-target="1000">1000</span>
+                            <span class="stat-label editable" data-field="stat-label-3">杯咖啡</span>
+                            <button class="delete-btn small stat-delete" title="刪除">✕</button>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-number counter" data-target="50">0</span>
-                        <span class="stat-label">完成專案</span>
-                    </div>
+                    <button class="add-btn" id="addStatBtn">+ 新增統計</button>
                 </div>
             </section>
 

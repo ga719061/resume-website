@@ -1073,6 +1073,13 @@ body.edit-mode .project-url {
     background: var(--bg-card);
     border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
+    position: relative;
+}
+
+.stat-item .delete-btn.small.stat-delete {
+    position: absolute;
+    top: var(--spacing-xs);
+    right: var(--spacing-xs);
 }
 
 .stat-number {

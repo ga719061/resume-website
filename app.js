@@ -492,8 +492,18 @@ function initEditMode() {
                 const data = JSON.parse(event.target.result);
                 applyData(data);
                 saveData();
+
+                // 重新設定編輯模式的 contenteditable
+                const isEditMode = document.body.classList.contains('edit-mode');
+                document.querySelectorAll('.editable').forEach(el => {
+                    if (el.tagName !== 'INPUT') {
+                        el.contentEditable = isEditMode;
+                    }
+                });
+
                 showToast('資料已匯入！');
             } catch (err) {
+                console.error('Import error:', err);
                 showToast('匯入失敗：檔案格式錯誤');
             }
         };
@@ -697,6 +707,23 @@ function initAddButtons() {
         list.insertAdjacentHTML('beforeend', html);
         saveData();
     });
+
+    // 新增統計項目
+    document.getElementById('addStatBtn')?.addEventListener('click', () => {
+        const list = document.getElementById('statsList');
+        const index = list.children.length;
+        const isEdit = document.body.classList.contains('edit-mode');
+        const html = `
+            <div class="stat-item" data-index="${index}">
+                <span class="stat-number editable" data-field="stat-number-${index}" data-target="0" contenteditable="${isEdit}">0</span>
+                <span class="stat-label editable" data-field="stat-label-${index}" contenteditable="${isEdit}">標籤</span>
+                <button class="delete-btn small stat-delete" title="刪除">✕</button>
+            </div>
+        `;
+        list.insertAdjacentHTML('beforeend', html);
+        saveData();
+        showToast('已新增統計項目');
+    });
 }
 
 function createTimelineItem(prefix, index, defaults, isEdu = false) {
@@ -722,7 +749,7 @@ function createTimelineItem(prefix, index, defaults, isEdu = false) {
 }
 
 function reindexItems() {
-    ['experienceList', 'educationList', 'skillsList', 'projectsList', 'socialLinks'].forEach(listId => {
+    ['experienceList', 'educationList', 'skillsList', 'projectsList', 'socialLinks', 'statsList'].forEach(listId => {
         const list = document.getElementById(listId);
         if (!list) return;
 
@@ -1067,7 +1094,7 @@ function collectData() {
     });
 
     // 儲存動態列表的 HTML
-    const dynamicLists = ['experienceList', 'educationList', 'skillsList', 'projectsList', 'socialLinks'];
+    const dynamicLists = ['experienceList', 'educationList', 'skillsList', 'projectsList', 'socialLinks', 'statsList'];
     dynamicLists.forEach(listId => {
         const list = document.getElementById(listId);
         if (list) {
