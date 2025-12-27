@@ -20,25 +20,45 @@ document.addEventListener('DOMContentLoaded', () => {
     loadData();
 });
 
-// ===== 設定面板 Accordion =====
+// ===== 設定面板事件 =====
 function initSettingsAccordion() {
-    document.querySelectorAll('.accordion-header').forEach(header => {
-        header.addEventListener('click', () => {
-            const targetId = header.dataset.target;
-            const content = document.getElementById(targetId);
+    // 更新日誌 Modal
+    const showChangelogBtn = document.getElementById('showChangelogBtn');
+    const changelogModal = document.getElementById('changelogModal');
+    const closeChangelog = document.getElementById('closeChangelog');
 
-            // Toggle current accordion
-            header.classList.toggle('active');
-            content.classList.toggle('active');
+    showChangelogBtn?.addEventListener('click', () => {
+        changelogModal.classList.add('active');
+    });
+
+    closeChangelog?.addEventListener('click', () => {
+        changelogModal.classList.remove('active');
+    });
+
+    changelogModal?.addEventListener('click', e => {
+        if (e.target === changelogModal) {
+            changelogModal.classList.remove('active');
+        }
+    });
+
+    // 語言選擇
+    document.querySelectorAll('.language-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.language-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const lang = btn.dataset.lang;
+            localStorage.setItem('resume-language', lang);
+            showToast(`語言已切換為 ${btn.textContent}`);
+            // 語言切換功能可在未來實作
         });
     });
 
-    // 預設展開第一個 accordion
-    const firstHeader = document.querySelector('.accordion-header');
-    const firstContent = document.querySelector('.accordion-content');
-    if (firstHeader && firstContent) {
-        firstHeader.classList.add('active');
-        firstContent.classList.add('active');
+    // 載入已儲存的語言設定
+    const savedLang = localStorage.getItem('resume-language');
+    if (savedLang) {
+        document.querySelectorAll('.language-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.lang === savedLang);
+        });
     }
 }
 

@@ -21,7 +21,7 @@
     <!-- 光標跟隨效果 -->
     <div class="cursor-glow"></div>
 
-    <!-- 設定選單 (整合主題與編輯功能) -->
+    <!-- 設定選單 -->
     <div class="settings-panel">
         <button class="settings-toggle" title="設定">
             <span class="settings-icon">⚙️</span>
@@ -32,95 +32,102 @@
                 <span class="version-tag">v1.0</span>
             </div>
 
-            <!-- 主題區塊 -->
-            <div class="settings-accordion">
-                <button class="accordion-header" data-target="theme-content">
-                    <span class="accordion-icon">🎨</span>
-                    <span class="accordion-title">主題設定</span>
-                    <span class="accordion-arrow">▼</span>
-                </button>
-                <div class="accordion-content" id="theme-content">
-                    <div class="theme-options">
-                        <button class="theme-option" data-theme="neon-dark">🌙 深色霓虹</button>
-                        <button class="theme-option" data-theme="light-minimal">☀️ 淺色簡約</button>
-                        <button class="theme-option" data-theme="blue-professional">💼 藍色專業</button>
-                        <button class="theme-option" data-theme="purple-dream">🔮 紫色夢幻</button>
-                        <button class="theme-option custom-theme-btn">🎛️ 自訂顏色</button>
-                    </div>
+            <!-- 語言選擇 -->
+            <div class="settings-section">
+                <div class="settings-section-title">🌐 語言 Language</div>
+                <div class="language-options">
+                    <button class="language-btn active" data-lang="zh-TW">繁體中文</button>
+                    <button class="language-btn" data-lang="zh-CN">简体中文</button>
+                    <button class="language-btn" data-lang="en">English</button>
                 </div>
             </div>
 
-            <!-- 編輯區塊 -->
-            <div class="settings-accordion">
-                <button class="accordion-header" data-target="edit-content">
-                    <span class="accordion-icon">✏️</span>
-                    <span class="accordion-title">編輯管理</span>
-                    <span class="accordion-arrow">▼</span>
-                </button>
-                <div class="accordion-content" id="edit-content">
-                    <div class="settings-actions">
-                        <button class="settings-btn" id="editModeBtn">
-                            <span>📝</span> 編輯模式
-                        </button>
-                        <button class="settings-btn" id="exportBtn">
-                            <span>📤</span> 匯出資料
-                        </button>
-                        <button class="settings-btn" id="importBtn">
-                            <span>📥</span> 匯入資料
-                        </button>
-                        <button class="settings-btn danger" id="resetBtn">
-                            <span>🔄</span> 初始化
-                        </button>
-                    </div>
+            <hr class="settings-divider">
+
+            <!-- 主題設定 -->
+            <div class="settings-section">
+                <div class="settings-section-title">🎨 主題設定</div>
+                <div class="theme-options">
+                    <button class="theme-option" data-theme="neon-dark">🌙 深色霓虹</button>
+                    <button class="theme-option" data-theme="light-minimal">☀️ 淺色簡約</button>
+                    <button class="theme-option" data-theme="blue-professional">💼 藍色專業</button>
+                    <button class="theme-option" data-theme="purple-dream">🔮 紫色夢幻</button>
+                    <button class="theme-option custom-theme-btn">🎛️ 自訂顏色</button>
                 </div>
             </div>
 
-            <!-- 輸出區塊 -->
-            <div class="settings-accordion">
-                <button class="accordion-header" data-target="export-content">
-                    <span class="accordion-icon">📄</span>
-                    <span class="accordion-title">輸出選項</span>
-                    <span class="accordion-arrow">▼</span>
-                </button>
-                <div class="accordion-content" id="export-content">
-                    <div class="settings-actions">
-                        <button class="settings-btn" id="printPdfBtn">
-                            <span>🖨️</span> 輸出 PDF
-                        </button>
-                        <button class="settings-btn" id="exportHtmlBtn">
-                            <span>🌐</span> 輸出網頁
-                        </button>
-                    </div>
+            <hr class="settings-divider">
+
+            <!-- 編輯管理 -->
+            <div class="settings-section">
+                <div class="settings-section-title">✏️ 編輯管理</div>
+                <div class="settings-actions">
+                    <button class="settings-btn" id="editModeBtn">
+                        <span>📝</span> 編輯模式
+                    </button>
+                    <button class="settings-btn" id="exportBtn">
+                        <span>📤</span> 匯出資料
+                    </button>
+                    <button class="settings-btn" id="importBtn">
+                        <span>📥</span> 匯入資料
+                    </button>
+                    <button class="settings-btn danger" id="resetBtn">
+                        <span>🔄</span> 初始化
+                    </button>
                 </div>
             </div>
 
-            <!-- 更新日誌區塊 -->
-            <div class="settings-accordion">
-                <button class="accordion-header" data-target="changelog-content">
-                    <span class="accordion-icon">📋</span>
-                    <span class="accordion-title">更新日誌</span>
-                    <span class="accordion-arrow">▼</span>
-                </button>
-                <div class="accordion-content" id="changelog-content">
-                    <div class="changelog-list">
-                        <div class="changelog-item">
-                            <div class="changelog-version">v1.0</div>
-                            <div class="changelog-date">2024-12-28</div>
-                            <ul class="changelog-changes">
-                                <li>🎉 首次發布</li>
-                                <li>✨ 支援多主題切換</li>
-                                <li>📝 可編輯個人資訊</li>
-                                <li>💾 資料自動儲存</li>
-                                <li>📤 匯出/匯入功能</li>
-                                <li>🖨️ PDF 輸出支援</li>
-                                <li>🌐 靜態網頁輸出</li>
-                            </ul>
-                        </div>
-                    </div>
+            <hr class="settings-divider">
+
+            <!-- 輸出選項 -->
+            <div class="settings-section">
+                <div class="settings-section-title">📄 輸出選項</div>
+                <div class="settings-actions">
+                    <button class="settings-btn" id="printPdfBtn">
+                        <span>🖨️</span> 輸出 PDF
+                    </button>
+                    <button class="settings-btn" id="exportHtmlBtn">
+                        <span>🌐</span> 輸出網頁
+                    </button>
                 </div>
+            </div>
+
+            <hr class="settings-divider">
+
+            <!-- 更新日誌按鈕 -->
+            <div class="settings-section">
+                <button class="settings-btn changelog-btn" id="showChangelogBtn">
+                    <span>📋</span> 更新日誌
+                </button>
             </div>
         </div>
         <input type="file" id="importFile" accept=".json" hidden>
+    </div>
+
+    <!-- 更新日誌 Modal -->
+    <div class="modal" id="changelogModal">
+        <div class="modal-content changelog-modal">
+            <div class="modal-header">
+                <h3>📋 更新日誌</h3>
+                <button class="modal-close" id="closeChangelog">✕</button>
+            </div>
+            <div class="changelog-list">
+                <div class="changelog-item">
+                    <div class="changelog-version">v1.0</div>
+                    <div class="changelog-date">2024-12-28</div>
+                    <ul class="changelog-changes">
+                        <li>🎉 首次發布</li>
+                        <li>✨ 支援多主題切換</li>
+                        <li>📝 可編輯個人資訊</li>
+                        <li>💾 資料自動儲存</li>
+                        <li>📤 匯出/匯入功能</li>
+                        <li>🖨️ PDF 輸出支援</li>
+                        <li>🌐 靜態網頁輸出</li>
+                        <li>🌍 多語言支援</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- 主容器 -->

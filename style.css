@@ -231,7 +231,7 @@ body:hover .cursor-glow {
 
 /* 更新日誌樣式 */
 .changelog-list {
-    padding: var(--spacing-sm);
+    padding: var(--spacing-md);
 }
 
 .changelog-item {
@@ -243,7 +243,7 @@ body:hover .cursor-glow {
 }
 
 .changelog-version {
-    font-size: 0.85rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--primary);
     display: inline-block;
@@ -251,84 +251,106 @@ body:hover .cursor-glow {
 }
 
 .changelog-date {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
     display: inline-block;
 }
 
 .changelog-changes {
     list-style: none;
-    margin-top: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
     padding-left: 0;
 }
 
 .changelog-changes li {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    padding: 2px 0;
-}
-
-/* Accordion 區塊 */
-.settings-accordion {
-    margin-bottom: var(--spacing-xs);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-}
-
-.accordion-header {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: var(--spacing-sm) var(--spacing-md);
-    border: none;
-    background: transparent;
-    color: var(--text-primary);
-    cursor: pointer;
     font-size: 0.85rem;
-    font-weight: 500;
+    color: var(--text-secondary);
+    padding: 4px 0;
+}
+
+/* 更新日誌 Modal */
+.changelog-modal {
+    max-width: 450px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h3 {
+    margin: 0;
+}
+
+.modal-close {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    border: none;
+    background: rgba(255, 100, 100, 0.1);
+    color: #ff6464;
+    cursor: pointer;
+    font-size: 0.9rem;
     transition: all var(--transition-fast);
-    gap: var(--spacing-sm);
 }
 
-.accordion-header:hover {
-    background: var(--bg-card-hover);
+.modal-close:hover {
+    background: #ff6464;
+    color: white;
 }
 
-.accordion-icon {
-    font-size: 1rem;
+/* 設定區塊 */
+.settings-section {
+    margin-bottom: var(--spacing-xs);
 }
 
-.accordion-title {
+.settings-section-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--spacing-xs);
+    padding: 0 var(--spacing-xs);
+}
+
+.settings-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: var(--spacing-sm) 0;
+}
+
+/* 語言選擇 */
+.language-options {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.language-btn {
     flex: 1;
-    text-align: left;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all var(--transition-fast);
 }
 
-.accordion-arrow {
-    font-size: 0.6rem;
-    transition: transform var(--transition-fast);
-    opacity: 0.6;
+.language-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
 }
 
-.accordion-header.active .accordion-arrow {
-    transform: rotate(180deg);
-}
-
-.accordion-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
-    background: rgba(0, 0, 0, 0.1);
-}
-
-.accordion-content.active {
-    max-height: 300px;
-}
-
-.accordion-content .theme-options,
-.accordion-content .settings-actions {
-    padding: var(--spacing-sm);
+.language-btn.active {
+    background: rgba(var(--primary-rgb), 0.15);
+    border-color: var(--primary);
+    color: var(--primary);
 }
 
 .theme-options,
