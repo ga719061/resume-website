@@ -802,7 +802,45 @@ async function exportAsHtml() {
         clone.querySelector('body')?.classList.remove('edit-mode');
 
         // 移除 data-theme 以外的 data 屬性保持主題
+        // 獲取主題
         const theme = document.documentElement.dataset.theme || '';
+
+        // 獲取當前主題的計算樣式
+        const computedStyle = getComputedStyle(document.documentElement);
+        const cssVars = `
+:root {
+    --bg-primary: ${computedStyle.getPropertyValue('--bg-primary').trim() || '#0a0a0f'};
+    --bg-secondary: ${computedStyle.getPropertyValue('--bg-secondary').trim() || '#12121a'};
+    --bg-card: ${computedStyle.getPropertyValue('--bg-card').trim() || 'rgba(255, 255, 255, 0.03)'};
+    --bg-card-hover: ${computedStyle.getPropertyValue('--bg-card-hover').trim() || 'rgba(255, 255, 255, 0.06)'};
+    --text-primary: ${computedStyle.getPropertyValue('--text-primary').trim() || '#ffffff'};
+    --text-secondary: ${computedStyle.getPropertyValue('--text-secondary').trim() || '#b0b0b0'};
+    --text-muted: ${computedStyle.getPropertyValue('--text-muted').trim() || '#888888'};
+    --primary: ${computedStyle.getPropertyValue('--primary').trim() || '#66fcf1'};
+    --primary-rgb: ${computedStyle.getPropertyValue('--primary-rgb').trim() || '102, 252, 241'};
+    --accent: ${computedStyle.getPropertyValue('--accent').trim() || '#ff6b9d'};
+    --accent-rgb: ${computedStyle.getPropertyValue('--accent-rgb').trim() || '255, 107, 157'};
+    --gradient-1: ${computedStyle.getPropertyValue('--gradient-1').trim() || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};
+    --gradient-2: ${computedStyle.getPropertyValue('--gradient-2').trim() || 'linear-gradient(135deg, #66fcf1 0%, #45a29e 100%)'};
+    --border-color: ${computedStyle.getPropertyValue('--border-color').trim() || 'rgba(255, 255, 255, 0.1)'};
+    --shadow-color: ${computedStyle.getPropertyValue('--shadow-color').trim() || 'rgba(0, 0, 0, 0.5)'};
+    --glass-bg: ${computedStyle.getPropertyValue('--glass-bg').trim() || 'rgba(255, 255, 255, 0.05)'};
+    --glass-border: ${computedStyle.getPropertyValue('--glass-border').trim() || 'rgba(255, 255, 255, 0.1)'};
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-full: 50%;
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+`;
 
         // 建構獨立 HTML
         const standalonHtml = `<!DOCTYPE html>
@@ -813,6 +851,7 @@ async function exportAsHtml() {
     <title>${document.querySelector('.name')?.textContent || '個人簡歷'}</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
+${cssVars}
 ${cssContent}
     </style>
 </head>
