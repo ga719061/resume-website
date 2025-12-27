@@ -1164,13 +1164,24 @@ function collectData() {
         data.stats.push(parseInt(el.dataset.target) || 0);
     });
 
-    // 儲存動態列表的 HTML
+    // 儲存動態列表的 HTML（清理編輯模式相關元素）
     const dynamicLists = ['experienceList', 'educationList', 'skillsList', 'projectsList', 'socialLinks', 'statsList'];
     dynamicLists.forEach(listId => {
         const list = document.getElementById(listId);
         if (list) {
+            // 複製節點以便清理
+            const clone = list.cloneNode(true);
+
+            // 移除刪除按鈕
+            clone.querySelectorAll('.delete-btn').forEach(btn => btn.remove());
+
+            // 移除 contenteditable 屬性
+            clone.querySelectorAll('[contenteditable]').forEach(el => {
+                el.removeAttribute('contenteditable');
+            });
+
             // 保留空格
-            let html = list.innerHTML;
+            let html = clone.innerHTML;
             html = html.replace(/  /g, ' \u00A0');
             data.lists[listId] = html;
         }
@@ -1290,6 +1301,9 @@ function applyData(data) {
 
     // 更新技能條並重新初始化動畫
     setTimeout(() => {
+        // 為恢復的項目重新加入刪除按鈕
+        restoreDeleteButtons();
+
         document.querySelectorAll('.skill-item').forEach(item => {
             const levelEl = item.querySelector('.skill-level');
             const progressEl = item.querySelector('.skill-progress');
@@ -1307,6 +1321,47 @@ function applyData(data) {
         initProjectEvents();
         initSkillBars();
     }, 100);
+}
+
+// 為恢復的列表項目重新加入刪除按鈕
+function restoreDeleteButtons() {
+    // 為時間軸項目加入刪除按鈕
+    document.querySelectorAll('.timeline-item').forEach(item => {
+        if (!item.querySelector('.delete-btn')) {
+            const content = item.querySelector('.timeline-content');
+            if (content) {
+                content.insertAdjacentHTML('beforeend', '<button class="delete-btn" title="刪除此項目">✕</button>');
+            }
+        }
+    });
+
+    // 為技能項目加入刪除按鈕
+    document.querySelectorAll('.skill-item').forEach(item => {
+        if (!item.querySelector('.delete-btn')) {
+            item.insertAdjacentHTML('beforeend', '<button class="delete-btn small" title="刪除">✕</button>');
+        }
+    });
+
+    // 為專案卡片加入刪除按鈕
+    document.querySelectorAll('.project-card').forEach(card => {
+        if (!card.querySelector('.delete-btn')) {
+            card.insertAdjacentHTML('afterbegin', '<button class="delete-btn" title="刪除">✕</button>');
+        }
+    });
+
+    // 為社群連結加入刪除按鈕
+    document.querySelectorAll('#socialLinks .social-item').forEach(item => {
+        if (!item.querySelector('.delete-btn')) {
+            item.insertAdjacentHTML('beforeend', '<button class="delete-btn small" title="刪除">✕</button>');
+        }
+    });
+
+    // 為統計項目加入刪除按鈕
+    document.querySelectorAll('.stat-item').forEach(item => {
+        if (!item.querySelector('.delete-btn')) {
+            item.insertAdjacentHTML('beforeend', '<button class="delete-btn small stat-delete" title="刪除">✕</button>');
+        }
+    });
 }
 
 // ===== 滾動動畫 =====
