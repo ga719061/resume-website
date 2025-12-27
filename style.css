@@ -459,56 +459,61 @@ body.edit-mode .avatar-edit {
 }
 
 /* 社群連結 */
-.social-links {
+.social-list {
+    list-style: none;
     display: flex;
+    flex-direction: column;
     gap: var(--spacing-sm);
-    flex-wrap: wrap;
     margin-bottom: var(--spacing-md);
 }
 
-.social-link {
-    width: 40px;
-    height: 40px;
+.social-item {
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: var(--radius-sm);
-    background: var(--bg-card);
-    color: var(--text-secondary);
-    transition: all var(--transition-normal);
-}
-
-.social-link svg {
-    width: 20px;
-    height: 20px;
-}
-
-.social-link:hover {
-    background: var(--primary);
-    color: var(--bg-primary);
-    transform: translateY(-3px);
-}
-
-.add-social-btn {
-    width: 100%;
+    gap: var(--spacing-sm);
     padding: var(--spacing-sm);
-    border: 1px dashed var(--border-color);
-    background: transparent;
-    color: var(--text-muted);
+    background: var(--bg-card);
     border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-size: 0.85rem;
-    opacity: 0;
+    border: 1px solid var(--border-color);
+    position: relative;
     transition: all var(--transition-fast);
 }
 
-body.edit-mode .add-social-btn {
-    opacity: 1;
+.social-item:hover {
+    background: var(--bg-card-hover);
 }
 
-.add-social-btn:hover {
-    border-color: var(--primary);
+.social-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.social-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.social-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.social-url {
+    font-size: 0.75rem;
     color: var(--primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.social-item .delete-btn.small {
+    position: absolute;
+    right: var(--spacing-xs);
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 /* ===== 主內容區 ===== */

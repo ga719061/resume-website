@@ -381,6 +381,27 @@ function initAddButtons() {
         init3DCards();
         saveData();
     });
+
+    // 新增社群連結
+    document.getElementById('addSocialBtn')?.addEventListener('click', () => {
+        const list = document.getElementById('socialLinks');
+        const index = list.children.length;
+        const isEdit = document.body.classList.contains('edit-mode');
+        const icons = ['🌐', '📧', '🐦', '📸', '📺', '💬'];
+        const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+        const html = `
+            <li class="social-item" data-index="${index}">
+                <span class="social-icon">${randomIcon}</span>
+                <div class="social-info">
+                    <span class="social-name editable" data-field="social-name-${index}" contenteditable="${isEdit}">社群名稱</span>
+                    <span class="social-url editable" data-field="social-url-${index}" contenteditable="${isEdit}">網址</span>
+                </div>
+                <button class="delete-btn small" title="刪除">✕</button>
+            </li>
+        `;
+        list.insertAdjacentHTML('beforeend', html);
+        saveData();
+    });
 }
 
 function createTimelineItem(prefix, index, defaults, isEdu = false) {
@@ -406,7 +427,7 @@ function createTimelineItem(prefix, index, defaults, isEdu = false) {
 }
 
 function reindexItems() {
-    ['experienceList', 'educationList', 'skillsList', 'projectsList'].forEach(listId => {
+    ['experienceList', 'educationList', 'skillsList', 'projectsList', 'socialLinks'].forEach(listId => {
         const list = document.getElementById(listId);
         if (!list) return;
 
