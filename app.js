@@ -437,8 +437,22 @@ function initEditMode() {
     const importBtn = document.getElementById('importBtn');
     const importFile = document.getElementById('importFile');
     const printPdfBtn = document.getElementById('printPdfBtn');
+    const resetBtn = document.getElementById('resetBtn');
 
     let isEditMode = false;
+
+    // 初始化按鈕
+    resetBtn?.addEventListener('click', () => {
+        if (confirm('確定要初始化嗎？這將清除所有已儲存的資料並重新載入頁面。')) {
+            localStorage.removeItem('resume-data');
+            localStorage.removeItem('resume-theme');
+            localStorage.removeItem('resume-custom-theme');
+            showToast('資料已初始化，正在重新載入...');
+            setTimeout(() => {
+                location.reload();
+            }, 500);
+        }
+    });
 
     editBtn?.addEventListener('click', () => {
         isEditMode = !isEditMode;
