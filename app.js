@@ -1052,7 +1052,11 @@ function collectData() {
             if (el.tagName === 'INPUT') {
                 data.fields[field] = el.value;
             } else {
-                data.fields[field] = el.innerHTML;
+                // 保留空格：將連續空格轉換為 &nbsp;
+                let content = el.innerHTML;
+                // 將連續兩個以上空格轉換為 &nbsp; 組合以保留
+                content = content.replace(/  /g, ' \u00A0');
+                data.fields[field] = content;
             }
         }
     });
@@ -1067,7 +1071,10 @@ function collectData() {
     dynamicLists.forEach(listId => {
         const list = document.getElementById(listId);
         if (list) {
-            data.lists[listId] = list.innerHTML;
+            // 保留空格
+            let html = list.innerHTML;
+            html = html.replace(/  /g, ' \u00A0');
+            data.lists[listId] = html;
         }
     });
 
