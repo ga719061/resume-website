@@ -1164,9 +1164,10 @@ body.edit-mode .editable:focus {
     }
 }
 
-/* ===== 列印樣式 ===== */
+/* ===== 列印樣式 (A4 優化) ===== */
 @media print {
 
+    /* 隱藏不需要的元素 */
     #particles,
     .cursor-glow,
     .settings-panel,
@@ -1174,32 +1175,106 @@ body.edit-mode .editable:focus {
     .edit-toolbar,
     .add-btn,
     .delete-btn,
+    .section-delete-btn,
+    .add-section-btn,
     .avatar-edit,
     .add-social-btn,
-    .toast {
+    .toast,
+    .project-placeholder {
         display: none !important;
     }
 
+    /* 列印顏色調整 */
     * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
 
-    body {
-        background: white !important;
-        color: #333 !important;
-        font-size: 11pt;
+    /* 頁面設定 */
+    @page {
+        size: A4;
+        margin: 1.5cm 1cm;
     }
 
+    html,
+    body {
+        width: 210mm;
+        min-height: 297mm;
+    }
+
+    body {
+        background: white !important;
+        color: #222 !important;
+        font-size: 10pt;
+        line-height: 1.4;
+    }
+
+    /* 主容器：兩欄佈局適合 A4 */
     .container {
-        display: block;
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: 15px;
         max-width: 100%;
         padding: 0;
     }
 
+    /* 側邊欄縮小 */
     .sidebar {
         position: static;
-        margin-bottom: 20px;
+    }
+
+    .profile-section {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .avatar-wrapper {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 10px;
+    }
+
+    .name {
+        font-size: 1rem !important;
+        background: none !important;
+        -webkit-background-clip: unset !important;
+        background-clip: unset !important;
+        -webkit-text-fill-color: #222 !important;
+    }
+
+    .title {
+        font-size: 0.8rem;
+    }
+
+    .contact-section,
+    .social-section {
+        padding: 8px;
+        margin-bottom: 8px;
+    }
+
+    .contact-section h3,
+    .social-section h3 {
+        font-size: 0.7rem;
+        margin-bottom: 5px;
+    }
+
+    .contact-list li {
+        padding: 2px 0;
+    }
+
+    .contact-text {
+        font-size: 0.75rem;
+    }
+
+    /* 主內容區 */
+    .main-content {
+        gap: 10px;
+    }
+
+    .section {
+        padding: 10px;
+        margin-bottom: 10px;
+        page-break-inside: avoid;
     }
 
     .section,
@@ -1207,40 +1282,193 @@ body.edit-mode .editable:focus {
     .contact-section,
     .social-section {
         background: white !important;
-        border: 1px solid #ccc !important;
+        border: 1px solid #ddd !important;
         box-shadow: none !important;
         backdrop-filter: none !important;
-        page-break-inside: avoid;
-        margin-bottom: 15px;
     }
 
-    .name {
-        background: none !important;
-        -webkit-background-clip: unset !important;
-        background-clip: unset !important;
-        -webkit-text-fill-color: #333 !important;
+    .section-title {
+        font-size: 0.95rem;
+        margin-bottom: 8px;
     }
 
-    .stat-number {
-        background: none !important;
-        -webkit-background-clip: unset !important;
-        background-clip: unset !important;
-        -webkit-text-fill-color: #333 !important;
+    .section-title .icon {
+        font-size: 0.9rem;
     }
 
-    .timeline-content,
-    .skill-item,
-    .project-card,
-    .stat-item {
-        background: #f9f9f9 !important;
+    /* 時間軸 */
+    .timeline {
+        padding-left: 15px;
+    }
+
+    .timeline::before {
+        width: 1px;
+    }
+
+    .timeline-marker {
+        width: 8px;
+        height: 8px;
+        left: calc(-15px - 4px);
+    }
+
+    .timeline-item {
+        margin-bottom: 8px;
+    }
+
+    .timeline-content {
+        padding: 8px;
+        background: #f8f8f8 !important;
         border: 1px solid #ddd !important;
     }
 
-    .skill-progress {
-        background: #4a90d9 !important;
+    .timeline-content h3 {
+        font-size: 0.85rem;
     }
 
-    @page {
-        margin: 1cm;
+    .timeline-date {
+        font-size: 0.7rem;
+        padding: 2px 5px;
+    }
+
+    .company {
+        font-size: 0.8rem;
+    }
+
+    .description {
+        font-size: 0.75rem;
+        line-height: 1.4;
+    }
+
+    /* 技能 */
+    .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .skill-item {
+        padding: 6px;
+        background: #f8f8f8 !important;
+        border: 1px solid #ddd !important;
+    }
+
+    .skill-name {
+        font-size: 0.8rem;
+    }
+
+    .skill-level {
+        font-size: 0.75rem;
+    }
+
+    .skill-bar {
+        height: 5px;
+    }
+
+    .skill-progress {
+        background: #3b82f6 !important;
+    }
+
+    /* 專案 */
+    .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .project-card {
+        background: #f8f8f8 !important;
+        border: 1px solid #ddd !important;
+    }
+
+    .project-image {
+        height: 60px;
+        background: #e8e8e8 !important;
+    }
+
+    .project-info {
+        padding: 8px;
+    }
+
+    .project-info h3 {
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+    }
+
+    .project-info p {
+        font-size: 0.7rem;
+        margin-bottom: 6px;
+    }
+
+    .project-tags {
+        gap: 3px;
+        margin-bottom: 5px;
+    }
+
+    .tag {
+        font-size: 0.65rem;
+        padding: 1px 4px;
+    }
+
+    .project-link {
+        font-size: 0.75rem;
+    }
+
+    /* 統計數據 */
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    .stat-item {
+        padding: 8px;
+        background: #f8f8f8 !important;
+        border: 1px solid #ddd !important;
+    }
+
+    .stat-number {
+        font-size: 1.2rem !important;
+        background: none !important;
+        -webkit-background-clip: unset !important;
+        background-clip: unset !important;
+        -webkit-text-fill-color: #222 !important;
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+    }
+
+    /* 社群連結列印樣式 */
+    .social-list {
+        gap: 4px;
+    }
+
+    .social-item {
+        padding: 4px;
+    }
+
+    .social-icon {
+        font-size: 0.9rem;
+    }
+
+    .social-name {
+        font-size: 0.75rem;
+    }
+
+    .social-url {
+        font-size: 0.65rem;
+    }
+
+    /* 關於我 */
+    .about-text {
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+
+    /* 分頁控制 */
+    .section {
+        break-inside: avoid;
+    }
+
+    h2,
+    h3 {
+        break-after: avoid;
     }
 }
