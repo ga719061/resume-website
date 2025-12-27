@@ -913,6 +913,109 @@ body.edit-mode .add-section-btn {
     background: rgba(var(--primary-rgb), 0.1);
     color: var(--primary);
     border-radius: var(--radius-sm);
+    position: relative;
+}
+
+body.edit-mode .tag.editable {
+    cursor: text;
+    min-width: 40px;
+}
+
+body.edit-mode .tag.editable:hover {
+    background: rgba(var(--primary-rgb), 0.2);
+}
+
+/* 新增標籤按鈕 */
+.add-tag-btn {
+    display: none;
+    width: 24px;
+    height: 24px;
+    border: 1px dashed var(--primary);
+    background: transparent;
+    color: var(--primary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    transition: all var(--transition-fast);
+}
+
+body.edit-mode .add-tag-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-tag-btn:hover {
+    background: rgba(var(--primary-rgb), 0.1);
+}
+
+/* 專案圖片編輯 */
+.project-image {
+    position: relative;
+}
+
+.project-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.project-img-edit {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--primary);
+    color: var(--bg-primary);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    font-size: 1rem;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+body.edit-mode .project-img-edit {
+    display: flex;
+}
+
+.project-img-edit:hover {
+    transform: scale(1.1);
+}
+
+/* 專案連結輸入框 */
+.project-link-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.link-label {
+    font-size: 1rem;
+}
+
+.project-url {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed transparent;
+    color: var(--primary);
+    font-size: 0.85rem;
+    padding: var(--spacing-xs) 0;
+    outline: none;
+    font-family: inherit;
+}
+
+body.edit-mode .project-url {
+    border-bottom-color: var(--primary);
+}
+
+.project-url:focus {
+    border-bottom-style: solid;
 }
 
 .project-link {

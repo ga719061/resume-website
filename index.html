@@ -303,37 +303,55 @@
                     <div class="projects-grid" id="projectsList">
                         <div class="project-card card-3d" data-index="0">
                             <div class="project-image">
-                                <div class="project-placeholder">🖼️</div>
+                                <img class="project-img" id="projectImg-0" src="" alt="專案圖片" style="display: none;">
+                                <div class="project-placeholder" id="projectPlaceholder-0">🖼️</div>
+                                <input type="file" class="project-img-input" id="projectImgInput-0" accept="image/*"
+                                    hidden>
+                                <button class="project-img-edit" title="更換圖片">📷</button>
                             </div>
                             <div class="project-info">
                                 <h3 class="editable" data-field="proj-name-0">電商平台重構</h3>
                                 <p class="editable" data-field="proj-desc-0">
                                     使用 React + Next.js 重構公司電商平台，實現 SSR 優化 SEO。
                                 </p>
-                                <div class="project-tags">
-                                    <span class="tag">React</span>
-                                    <span class="tag">Next.js</span>
-                                    <span class="tag">TypeScript</span>
+                                <div class="project-tags" data-index="0">
+                                    <span class="tag editable" data-field="proj-tag-0-0">React</span>
+                                    <span class="tag editable" data-field="proj-tag-0-1">Next.js</span>
+                                    <span class="tag editable" data-field="proj-tag-0-2">TypeScript</span>
+                                    <button class="add-tag-btn" title="新增標籤">+</button>
                                 </div>
-                                <a href="#" class="project-link editable" data-field="proj-link-0">查看專案 →</a>
+                                <div class="project-link-wrapper">
+                                    <span class="link-label">🔗</span>
+                                    <input type="url" class="project-url editable" data-field="proj-url-0"
+                                        placeholder="輸入專案連結" value="https://example.com">
+                                </div>
                             </div>
                             <button class="delete-btn" title="刪除此項目">✕</button>
                         </div>
                         <div class="project-card card-3d" data-index="1">
                             <div class="project-image">
-                                <div class="project-placeholder">🖼️</div>
+                                <img class="project-img" id="projectImg-1" src="" alt="專案圖片" style="display: none;">
+                                <div class="project-placeholder" id="projectPlaceholder-1">🖼️</div>
+                                <input type="file" class="project-img-input" id="projectImgInput-1" accept="image/*"
+                                    hidden>
+                                <button class="project-img-edit" title="更換圖片">📷</button>
                             </div>
                             <div class="project-info">
                                 <h3 class="editable" data-field="proj-name-1">即時協作白板</h3>
                                 <p class="editable" data-field="proj-desc-1">
                                     開發即時多人協作白板工具，支援繪圖、便利貼、投票功能。
                                 </p>
-                                <div class="project-tags">
-                                    <span class="tag">Vue.js</span>
-                                    <span class="tag">Socket.io</span>
-                                    <span class="tag">Canvas</span>
+                                <div class="project-tags" data-index="1">
+                                    <span class="tag editable" data-field="proj-tag-1-0">Vue.js</span>
+                                    <span class="tag editable" data-field="proj-tag-1-1">Socket.io</span>
+                                    <span class="tag editable" data-field="proj-tag-1-2">Canvas</span>
+                                    <button class="add-tag-btn" title="新增標籤">+</button>
                                 </div>
-                                <a href="#" class="project-link editable" data-field="proj-link-1">查看專案 →</a>
+                                <div class="project-link-wrapper">
+                                    <span class="link-label">🔗</span>
+                                    <input type="url" class="project-url editable" data-field="proj-url-1"
+                                        placeholder="輸入專案連結" value="https://example.com">
+                                </div>
                             </div>
                             <button class="delete-btn" title="刪除此項目">✕</button>
                         </div>

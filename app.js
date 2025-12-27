@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initSkillBars();
     init3DCards();
     initTypingEffect();
+    initProjectEvents();
     loadData();
 });
 
@@ -647,24 +648,32 @@ function initAddButtons() {
     document.getElementById('addProjectBtn')?.addEventListener('click', () => {
         const list = document.getElementById('projectsList');
         const index = list.children.length;
+        const isEdit = document.body.classList.contains('edit-mode');
         const html = `
             <div class="project-card card-3d" data-index="${index}">
                 <div class="project-image">
-                    <div class="project-placeholder">🖼️</div>
+                    <img class="project-img" id="projectImg-${index}" src="" alt="專案圖片" style="display: none;">
+                    <div class="project-placeholder" id="projectPlaceholder-${index}">🖼️</div>
+                    <input type="file" class="project-img-input" id="projectImgInput-${index}" accept="image/*" hidden>
+                    <button class="project-img-edit" title="更換圖片">📷</button>
                 </div>
                 <div class="project-info">
-                    <h3 class="editable" data-field="proj-name-${index}" contenteditable="${document.body.classList.contains('edit-mode')}">專案名稱</h3>
-                    <p class="editable" data-field="proj-desc-${index}" contenteditable="${document.body.classList.contains('edit-mode')}">專案描述...</p>
-                    <div class="project-tags">
-                        <span class="tag">標籤</span>
+                    <h3 class="editable" data-field="proj-name-${index}" contenteditable="${isEdit}">專案名稱</h3>
+                    <p class="editable" data-field="proj-desc-${index}" contenteditable="${isEdit}">專案描述...</p>
+                    <div class="project-tags" data-index="${index}">
+                        <span class="tag editable" data-field="proj-tag-${index}-0" contenteditable="${isEdit}">標籤</span>
+                        <button class="add-tag-btn" title="新增標籤">+</button>
                     </div>
-                    <a href="#" class="project-link editable" data-field="proj-link-${index}" contenteditable="${document.body.classList.contains('edit-mode')}">查看專案 →</a>
+                    <div class="project-link-wrapper">
+                        <span class="link-label">🔗</span>
+                        <input type="url" class="project-url editable" data-field="proj-url-${index}" placeholder="輸入專案連結" value="">
+                    </div>
                 </div>
                 <button class="delete-btn" title="刪除此項目">✕</button>
             </div>
         `;
         list.insertAdjacentHTML('beforeend', html);
-        init3DCards();
+        initProjectEvents();
         saveData();
     });
 
@@ -1178,6 +1187,73 @@ function initSkillBars() {
 // ===== 卡片 Hover 效果 (純 CSS，不需要 JS) =====
 function init3DCards() {
     // 現在使用純 CSS 實現簡單的上浮效果，不需要 JS
+}
+
+// ===== 專案卡片事件 =====
+function initProjectEvents() {
+    // 專案圖片上傳
+    document.querySelectorAll('.project-img-edit').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const card = e.target.closest('.project-card');
+            const index = card.dataset.index;
+            const input = document.getElementById(`projectImgInput-${index}`);
+            input?.click();
+        });
+    });
+
+    document.querySelectorAll('.project-img-input').forEach(input => {
+        input.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const card = e.target.closest('.project-card');
+            const index = card.dataset.index;
+            const img = document.getElementById(`projectImg-${index}`);
+            const placeholder = document.getElementById(`projectPlaceholder-${index}`);
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                img.src = event.target.result;
+                img.style.display = 'block';
+                if (placeholder) placeholder.style.display = 'none';
+                saveData();
+                showToast('專案圖片已更新！');
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    // 新增標籤
+    document.querySelectorAll('.add-tag-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const tagsContainer = e.target.closest('.project-tags');
+            const projectIndex = tagsContainer.dataset.index;
+            const tagCount = tagsContainer.querySelectorAll('.tag').length;
+            const isEdit = document.body.classList.contains('edit-mode');
+
+            const newTag = document.createElement('span');
+            newTag.className = 'tag editable';
+            newTag.dataset.field = `proj-tag-${projectIndex}-${tagCount}`;
+            newTag.contentEditable = isEdit;
+            newTag.textContent = '標籤';
+
+            tagsContainer.insertBefore(newTag, e.target);
+
+            // 聚焦並選中
+            if (isEdit) {
+                newTag.focus();
+                document.execCommand('selectAll', false, null);
+            }
+
+            saveData();
+        });
+    });
+
+    // URL 輸入框變更儲存
+    document.querySelectorAll('.project-url').forEach(input => {
+        input.addEventListener('change', () => saveData());
+        input.addEventListener('blur', () => saveData());
+    });
 }
 
 // ===== 打字機效果 =====
