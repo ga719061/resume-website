@@ -1168,10 +1168,25 @@ function applyData(data) {
         if (avatar) avatar.src = data.avatar;
     }
 
+
+    // 收集動態列表內的元素，避免重複設值
+    const dynamicListIds = ['experienceList', 'educationList', 'skillsList', 'projectsList', 'socialLinks', 'statsList'];
+    const dynamicListElements = new Set();
+    dynamicListIds.forEach(listId => {
+        const list = document.getElementById(listId);
+        if (list && data.lists && data.lists[listId]) {
+            // 標記這個列表內的所有 data-field 元素
+            list.querySelectorAll('[data-field]').forEach(el => {
+                dynamicListElements.add(el);
+            });
+        }
+    });
+
     if (data.fields) {
         Object.entries(data.fields).forEach(([field, value]) => {
             const el = document.querySelector(`[data-field="${field}"]`);
-            if (el) {
+            if (el && !dynamicListElements.has(el)) {
+                // 只處理不在動態列表內的元素
                 if (el.tagName === 'INPUT') {
                     el.value = value;
                 } else {
