@@ -1168,19 +1168,24 @@ function applyData(data) {
         });
     }
 
-    // 更新技能條
+    // 更新技能條並重新初始化動畫
     setTimeout(() => {
         document.querySelectorAll('.skill-item').forEach(item => {
             const levelEl = item.querySelector('.skill-level');
             const progressEl = item.querySelector('.skill-progress');
             if (levelEl && progressEl) {
-                const level = parseInt(levelEl.textContent) || 0;
+                // 取得純數字（去掉刪除按鈕等內容）
+                const levelText = levelEl.textContent || levelEl.innerText || '0';
+                const level = parseInt(levelText.replace(/[^0-9]/g, '')) || 0;
                 progressEl.style.setProperty('--progress', `${level}%`);
             }
+            // 移除 animated 類別以便重新觸發動畫
+            item.classList.remove('animated');
         });
 
-        // 重新初始化動態事件
+        // 重新初始化動態事件和動畫
         initProjectEvents();
+        initSkillBars();
     }, 100);
 }
 
