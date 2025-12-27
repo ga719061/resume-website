@@ -564,6 +564,33 @@ function initEditMode() {
             }
         }, 300);
     });
+
+    // 輸出完整網頁
+    const exportHtmlBtn = document.getElementById('exportHtmlBtn');
+    exportHtmlBtn?.addEventListener('click', () => {
+        showToast('正在產生網頁...');
+
+        // 暫時關閉編輯模式
+        const wasEditMode = document.body.classList.contains('edit-mode');
+        if (wasEditMode) {
+            document.body.classList.remove('edit-mode');
+            document.querySelectorAll('.editable').forEach(el => {
+                el.contentEditable = false;
+            });
+        }
+
+        setTimeout(() => {
+            exportAsHtml();
+
+            // 恢復編輯模式
+            if (wasEditMode) {
+                document.body.classList.add('edit-mode');
+                document.querySelectorAll('.editable').forEach(el => {
+                    el.contentEditable = true;
+                });
+            }
+        }, 100);
+    });
 }
 
 function initAddButtons() {
@@ -699,6 +726,162 @@ function reindexItems() {
             });
         });
     });
+}
+
+// ===== 輸出完整網頁 =====
+async function exportAsHtml() {
+    try {
+        // 獲取 CSS 內容
+        const cssResponse = await fetch('style.css');
+        const cssContent = await cssResponse.text();
+
+        // 複製當前 HTML 結構
+        const clone = document.documentElement.cloneNode(true);
+
+        // 移除不需要的元素
+        const removeSelectors = [
+            '#particles',
+            '.settings-panel',
+            '.cursor-glow',
+            '.add-btn',
+            '.delete-btn',
+            '.section-delete-btn',
+            '.add-section-btn',
+            '.avatar-edit',
+            '.settings-toggle',
+            'script',
+            '#customThemeModal',
+            '#addSectionModal',
+            '#importFile',
+            '#avatarInput',
+            '.toast'
+        ];
+
+        removeSelectors.forEach(selector => {
+            clone.querySelectorAll(selector).forEach(el => el.remove());
+        });
+
+        // 移除所有 contenteditable 屬性
+        clone.querySelectorAll('[contenteditable]').forEach(el => {
+            el.removeAttribute('contenteditable');
+        });
+
+        // 移除 edit-mode class
+        clone.querySelector('body')?.classList.remove('edit-mode');
+
+        // 移除 data-theme 以外的 data 屬性保持主題
+        const theme = document.documentElement.dataset.theme || '';
+
+        // 建構獨立 HTML
+        const standalonHtml = `<!DOCTYPE html>
+<html lang="zh-TW"${theme ? ` data-theme="${theme}"` : ''}>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${document.querySelector('.name')?.textContent || '個人簡歷'}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+${cssContent}
+    </style>
+</head>
+<body>
+    ${clone.querySelector('body')?.innerHTML || ''}
+    
+    <script>
+    // 粒子背景
+    (function() {
+        const canvas = document.createElement('canvas');
+        canvas.id = 'particles';
+        canvas.style.cssText = 'position:fixed;top:0;left:0;z-index:-1;pointer-events:none';
+        document.body.prepend(canvas);
+        
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        function Particle() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 0.5;
+            this.speedX = Math.random() * 0.5 - 0.25;
+            this.speedY = Math.random() * 0.5 - 0.25;
+            this.opacity = Math.random() * 0.5 + 0.2;
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(102, 252, 241, ' + p.opacity + ')';
+                ctx.fill();
+                p.x += p.speedX;
+                p.y += p.speedY;
+                if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+            });
+            requestAnimationFrame(animate);
+        }
+        
+        resize();
+        for (let i = 0; i < 50; i++) particles.push(new Particle());
+        animate();
+        window.addEventListener('resize', resize);
+    })();
+    
+    // 滾動動畫
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+    
+    // 計數器動畫
+    document.querySelectorAll('.counter').forEach(counter => {
+        const target = parseInt(counter.dataset.target);
+        let current = 0;
+        const increment = target / 50;
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            counter.textContent = Math.floor(current);
+        }, 30);
+    });
+    
+    // 技能條動畫
+    document.querySelectorAll('.skill-progress').forEach(bar => {
+        setTimeout(() => bar.style.width = bar.style.getPropertyValue('--progress'), 500);
+    });
+    </script>
+</body>
+</html>`;
+
+        // 下載檔案
+        const blob = new Blob([standalonHtml], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'resume.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showToast('網頁已輸出！');
+    } catch (error) {
+        console.error('輸出失敗:', error);
+        showToast('輸出失敗，請稍後再試');
+    }
 }
 
 // ===== 資料持久化 =====
