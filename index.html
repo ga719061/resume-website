@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="個人簡歷網頁 - 展示專業經歷與技能">
-    <title>個人簡歷</title>
+    <meta name="description" content="履歷生產器 - 輕鬆建立專業個人履歷">
+    <title>履歷生產器</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -28,7 +28,8 @@
         </button>
         <div class="settings-dropdown">
             <div class="settings-header">
-                <span>⚙️ 設定</span>
+                <span>📄 履歷生產器</span>
+                <span class="version-tag">v1.0</span>
             </div>
 
             <!-- 主題區塊 -->
@@ -89,6 +90,32 @@
                         <button class="settings-btn" id="exportHtmlBtn">
                             <span>🌐</span> 輸出網頁
                         </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 更新日誌區塊 -->
+            <div class="settings-accordion">
+                <button class="accordion-header" data-target="changelog-content">
+                    <span class="accordion-icon">📋</span>
+                    <span class="accordion-title">更新日誌</span>
+                    <span class="accordion-arrow">▼</span>
+                </button>
+                <div class="accordion-content" id="changelog-content">
+                    <div class="changelog-list">
+                        <div class="changelog-item">
+                            <div class="changelog-version">v1.0</div>
+                            <div class="changelog-date">2024-12-28</div>
+                            <ul class="changelog-changes">
+                                <li>🎉 首次發布</li>
+                                <li>✨ 支援多主題切換</li>
+                                <li>📝 可編輯個人資訊</li>
+                                <li>💾 資料自動儲存</li>
+                                <li>📤 匯出/匯入功能</li>
+                                <li>🖨️ PDF 輸出支援</li>
+                                <li>🌐 靜態網頁輸出</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
