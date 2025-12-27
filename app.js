@@ -20,6 +20,220 @@ document.addEventListener('DOMContentLoaded', () => {
     loadData();
 });
 
+// ===== 多語言資料 =====
+const translations = {
+    'zh-TW': {
+        // 設定面板
+        'settings.title': '📄 履歷生產器',
+        'settings.language': '🌐 語言 Language',
+        'settings.theme': '🎨 主題設定',
+        'settings.edit': '✏️ 編輯管理',
+        'settings.export': '📄 輸出選項',
+        'theme.neonDark': '🌙 深色霓虹',
+        'theme.lightMinimal': '☀️ 淺色簡約',
+        'theme.bluePro': '💼 藍色專業',
+        'theme.purpleDream': '🔮 紫色夢幻',
+        'theme.custom': '🎛️ 自訂顏色',
+        'edit.mode': '📝 編輯模式',
+        'edit.export': '📤 匯出資料',
+        'edit.import': '📥 匯入資料',
+        'edit.reset': '🔄 初始化',
+        'export.pdf': '🖨️ 輸出 PDF',
+        'export.html': '🌐 輸出網頁',
+        'changelog.title': '📋 更新日誌',
+        // 板塊標題
+        'section.about': '關於我',
+        'section.experience': '工作經歷',
+        'section.education': '學歷',
+        'section.skills': '技能專長',
+        'section.projects': '專案作品',
+        'section.stats': '統計數據',
+        // 按鈕
+        'btn.addExperience': '+ 新增工作經歷',
+        'btn.addEducation': '+ 新增學歷',
+        'btn.addSkill': '+ 新增技能',
+        'btn.addProject': '+ 新增專案',
+        'btn.addSocial': '+ 新增社群連結',
+        'btn.addStat': '+ 新增統計',
+        'btn.addSection': '+ 新增板塊',
+        // 提示訊息
+        'toast.saved': '資料已儲存',
+        'toast.exported': '資料已匯出',
+        'toast.imported': '資料已匯入！',
+        'toast.reset': '資料已初始化，正在重新載入...',
+        'toast.langChanged': '語言已切換'
+    },
+    'zh-CN': {
+        'settings.title': '📄 简历生成器',
+        'settings.language': '🌐 语言 Language',
+        'settings.theme': '🎨 主题设定',
+        'settings.edit': '✏️ 编辑管理',
+        'settings.export': '📄 输出选项',
+        'theme.neonDark': '🌙 深色霓虹',
+        'theme.lightMinimal': '☀️ 浅色简约',
+        'theme.bluePro': '💼 蓝色专业',
+        'theme.purpleDream': '🔮 紫色梦幻',
+        'theme.custom': '🎛️ 自定颜色',
+        'edit.mode': '📝 编辑模式',
+        'edit.export': '📤 导出数据',
+        'edit.import': '📥 导入数据',
+        'edit.reset': '🔄 初始化',
+        'export.pdf': '🖨️ 输出 PDF',
+        'export.html': '🌐 输出网页',
+        'changelog.title': '📋 更新日志',
+        'section.about': '关于我',
+        'section.experience': '工作经历',
+        'section.education': '学历',
+        'section.skills': '技能专长',
+        'section.projects': '项目作品',
+        'section.stats': '统计数据',
+        'btn.addExperience': '+ 新增工作经历',
+        'btn.addEducation': '+ 新增学历',
+        'btn.addSkill': '+ 新增技能',
+        'btn.addProject': '+ 新增项目',
+        'btn.addSocial': '+ 新增社交链接',
+        'btn.addStat': '+ 新增统计',
+        'btn.addSection': '+ 新增板块',
+        'toast.saved': '数据已保存',
+        'toast.exported': '数据已导出',
+        'toast.imported': '数据已导入！',
+        'toast.reset': '数据已初始化，正在重新加载...',
+        'toast.langChanged': '语言已切换'
+    },
+    'en': {
+        'settings.title': '📄 Resume Builder',
+        'settings.language': '🌐 Language',
+        'settings.theme': '🎨 Theme Settings',
+        'settings.edit': '✏️ Edit',
+        'settings.export': '📄 Export Options',
+        'theme.neonDark': '🌙 Neon Dark',
+        'theme.lightMinimal': '☀️ Light Minimal',
+        'theme.bluePro': '💼 Blue Professional',
+        'theme.purpleDream': '🔮 Purple Dream',
+        'theme.custom': '🎛️ Custom Colors',
+        'edit.mode': '📝 Edit Mode',
+        'edit.export': '📤 Export Data',
+        'edit.import': '📥 Import Data',
+        'edit.reset': '🔄 Reset',
+        'export.pdf': '🖨️ Export PDF',
+        'export.html': '🌐 Export HTML',
+        'changelog.title': '📋 Changelog',
+        'section.about': 'About Me',
+        'section.experience': 'Experience',
+        'section.education': 'Education',
+        'section.skills': 'Skills',
+        'section.projects': 'Projects',
+        'section.stats': 'Statistics',
+        'btn.addExperience': '+ Add Experience',
+        'btn.addEducation': '+ Add Education',
+        'btn.addSkill': '+ Add Skill',
+        'btn.addProject': '+ Add Project',
+        'btn.addSocial': '+ Add Social Link',
+        'btn.addStat': '+ Add Stat',
+        'btn.addSection': '+ Add Section',
+        'toast.saved': 'Data saved',
+        'toast.exported': 'Data exported',
+        'toast.imported': 'Data imported!',
+        'toast.reset': 'Data reset, reloading...',
+        'toast.langChanged': 'Language changed'
+    }
+};
+
+let currentLang = 'zh-TW';
+
+function t(key) {
+    return translations[currentLang]?.[key] || translations['zh-TW'][key] || key;
+}
+
+function applyLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang === 'zh-TW' ? 'zh-TW' : lang === 'zh-CN' ? 'zh-CN' : 'en';
+
+    // 設定面板
+    const settingsHeader = document.querySelector('.settings-header span:first-child');
+    if (settingsHeader) settingsHeader.textContent = t('settings.title');
+
+    // 設定區塊標題
+    const sectionTitles = document.querySelectorAll('.settings-section-title');
+    if (sectionTitles[0]) sectionTitles[0].textContent = t('settings.language');
+    if (sectionTitles[1]) sectionTitles[1].textContent = t('settings.theme');
+    if (sectionTitles[2]) sectionTitles[2].textContent = t('settings.edit');
+    if (sectionTitles[3]) sectionTitles[3].textContent = t('settings.export');
+
+    // 主題選項
+    document.querySelectorAll('.theme-option').forEach(btn => {
+        const theme = btn.dataset.theme;
+        if (theme === 'neon-dark') btn.textContent = t('theme.neonDark');
+        else if (theme === 'light-minimal') btn.textContent = t('theme.lightMinimal');
+        else if (theme === 'blue-professional') btn.textContent = t('theme.bluePro');
+        else if (theme === 'purple-dream') btn.textContent = t('theme.purpleDream');
+        else if (btn.classList.contains('custom-theme-btn')) btn.textContent = t('theme.custom');
+    });
+
+    // 編輯按鈕
+    const editModeBtn = document.getElementById('editModeBtn');
+    const exportBtn = document.getElementById('exportBtn');
+    const importBtn = document.getElementById('importBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const printPdfBtn = document.getElementById('printPdfBtn');
+    const exportHtmlBtn = document.getElementById('exportHtmlBtn');
+    const showChangelogBtn = document.getElementById('showChangelogBtn');
+
+    if (editModeBtn) editModeBtn.innerHTML = `<span>📝</span> ${t('edit.mode').replace('📝 ', '')}`;
+    if (exportBtn) exportBtn.innerHTML = `<span>📤</span> ${t('edit.export').replace('📤 ', '')}`;
+    if (importBtn) importBtn.innerHTML = `<span>📥</span> ${t('edit.import').replace('📥 ', '')}`;
+    if (resetBtn) resetBtn.innerHTML = `<span>🔄</span> ${t('edit.reset').replace('🔄 ', '')}`;
+    if (printPdfBtn) printPdfBtn.innerHTML = `<span>🖨️</span> ${t('export.pdf').replace('🖨️ ', '')}`;
+    if (exportHtmlBtn) exportHtmlBtn.innerHTML = `<span>🌐</span> ${t('export.html').replace('🌐 ', '')}`;
+    if (showChangelogBtn) showChangelogBtn.innerHTML = `<span>📋</span> ${t('changelog.title').replace('📋 ', '')}`;
+
+    // 更新日誌 Modal 標題
+    const changelogTitle = document.querySelector('#changelogModal .modal-header h3');
+    if (changelogTitle) changelogTitle.textContent = t('changelog.title');
+
+    // 板塊標題
+    document.querySelectorAll('.section').forEach(section => {
+        const type = section.dataset.sectionType;
+        const titleEl = section.querySelector('.section-title');
+        if (!titleEl) return;
+
+        const iconSpan = titleEl.querySelector('.icon');
+        const icon = iconSpan ? iconSpan.textContent : '';
+
+        if (type === 'about') titleEl.innerHTML = `<span class="icon">${icon}</span> ${t('section.about')}`;
+        else if (type === 'experience') titleEl.innerHTML = `<span class="icon">${icon}</span> ${t('section.experience')}`;
+        else if (type === 'education') titleEl.innerHTML = `<span class="icon">${icon}</span> ${t('section.education')}`;
+        else if (type === 'skills') titleEl.innerHTML = `<span class="icon">${icon}</span> ${t('section.skills')}`;
+        else if (type === 'projects') titleEl.innerHTML = `<span class="icon">${icon}</span> ${t('section.projects')}`;
+        else if (type === 'stats') titleEl.innerHTML = `<span class="icon">${icon}</span> ${t('section.stats')}`;
+    });
+
+    // 新增按鈕
+    document.getElementById('addExperienceBtn')?.childNodes.forEach(n => {
+        if (n.nodeType === 3) n.textContent = t('btn.addExperience');
+    });
+    const addExpBtn = document.getElementById('addExperienceBtn');
+    if (addExpBtn) addExpBtn.textContent = t('btn.addExperience');
+
+    const addEduBtn = document.getElementById('addEducationBtn');
+    if (addEduBtn) addEduBtn.textContent = t('btn.addEducation');
+
+    const addSkillBtn = document.getElementById('addSkillBtn');
+    if (addSkillBtn) addSkillBtn.textContent = t('btn.addSkill');
+
+    const addProjectBtn = document.getElementById('addProjectBtn');
+    if (addProjectBtn) addProjectBtn.textContent = t('btn.addProject');
+
+    const addSocialBtn = document.getElementById('addSocialBtn');
+    if (addSocialBtn) addSocialBtn.textContent = t('btn.addSocial');
+
+    const addStatBtn = document.getElementById('addStatBtn');
+    if (addStatBtn) addStatBtn.textContent = t('btn.addStat');
+
+    const addSectionBtn = document.getElementById('addSectionBtn');
+    if (addSectionBtn) addSectionBtn.textContent = t('btn.addSection');
+}
+
 // ===== 設定面板事件 =====
 function initSettingsAccordion() {
     // 更新日誌 Modal
@@ -48,18 +262,18 @@ function initSettingsAccordion() {
             btn.classList.add('active');
             const lang = btn.dataset.lang;
             localStorage.setItem('resume-language', lang);
-            showToast(`語言已切換為 ${btn.textContent}`);
-            // 語言切換功能可在未來實作
+            applyLanguage(lang);
+            showToast(t('toast.langChanged'));
         });
     });
 
     // 載入已儲存的語言設定
-    const savedLang = localStorage.getItem('resume-language');
-    if (savedLang) {
-        document.querySelectorAll('.language-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.lang === savedLang);
-        });
-    }
+    const savedLang = localStorage.getItem('resume-language') || 'zh-TW';
+    currentLang = savedLang;
+    document.querySelectorAll('.language-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === savedLang);
+    });
+    applyLanguage(savedLang);
 }
 
 // ===== 粒子背景 =====
