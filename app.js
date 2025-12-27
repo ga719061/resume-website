@@ -801,6 +801,14 @@ async function exportAsHtml() {
         // 移除 edit-mode class
         clone.querySelector('body')?.classList.remove('edit-mode');
 
+        // 將計數器更新為目標數字
+        clone.querySelectorAll('.counter').forEach(counter => {
+            const target = counter.dataset.target;
+            if (target) {
+                counter.textContent = target;
+            }
+        });
+
         // 移除 data-theme 以外的 data 屬性保持主題
         // 獲取主題
         const theme = document.documentElement.dataset.theme || '';
