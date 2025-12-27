@@ -576,9 +576,9 @@ const sectionTemplates = {
                         </div>
                         <div class="project-info">
                             <h3 class="editable">專案名稱</h3>
-                            <p class="editable">專案描述...</p>
+                            <p class="editable">使用現代化技術堆疊開發的網頁應用程式，解決了...</p>
                             <div class="project-tags">
-                                <span class="tag">標籤</span>
+                                <span class="tag">React</span>
                             </div>
                             <a href="#" class="project-link editable">查看專案 →</a>
                         </div>
@@ -595,11 +595,11 @@ const sectionTemplates = {
             <div class="stats-grid">
                 <div class="stat-item">
                     <span class="stat-number counter" data-target="5">0</span>
-                    <span class="stat-label editable">年經驗</span>
+                    <span class="stat-label editable">年開發經驗</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-number counter" data-target="50">0</span>
-                    <span class="stat-label editable">完成專案</span>
+                    <span class="stat-label editable">專案完成</span>
                 </div>
             </div>
         </section>
@@ -881,10 +881,10 @@ function initAddButtons() {
         const list = document.getElementById('experienceList');
         const index = list.children.length;
         const html = createTimelineItem('exp', index, {
-            title: '職位名稱',
-            date: '開始 - 結束',
-            company: '公司名稱',
-            desc: '工作描述...'
+            title: '資深前端工程師',
+            date: '2023 - 現在',
+            company: 'Tech Solutions Corp.',
+            desc: '負責前端架構設計與開發，優化效能並提升使用者體驗。'
         });
         list.insertAdjacentHTML('beforeend', html);
         saveData();
@@ -895,10 +895,10 @@ function initAddButtons() {
         const list = document.getElementById('educationList');
         const index = list.children.length;
         const html = createTimelineItem('edu', index, {
-            title: '學位',
-            date: '開始 - 結束',
-            company: '學校名稱',
-            desc: '描述...'
+            title: '資訊工程學士',
+            date: '2015 - 2019',
+            company: '國立台灣大學',
+            desc: '主修演算法與軟體工程，畢業專題獲得系上首獎。'
         }, true);
         list.insertAdjacentHTML('beforeend', html);
         saveData();
