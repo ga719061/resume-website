@@ -1037,21 +1037,49 @@ body {
 // ===== 資料持久化 =====
 function collectData() {
     const data = {
-        version: 1,
+        version: 2,
         avatar: document.getElementById('avatar')?.src || '',
         fields: {},
-        stats: []
+        stats: [],
+        lists: {}  // 儲存動態列表的 HTML
     };
 
+    // 儲存可編輯欄位
     document.querySelectorAll('.editable').forEach(el => {
         const field = el.dataset.field;
         if (field) {
-            data.fields[field] = el.textContent.trim();
+            // 對於 input 元素，使用 value
+            if (el.tagName === 'INPUT') {
+                data.fields[field] = el.value;
+            } else {
+                data.fields[field] = el.innerHTML;
+            }
         }
     });
 
+    // 儲存統計數據
     document.querySelectorAll('.counter').forEach(el => {
         data.stats.push(parseInt(el.dataset.target) || 0);
+    });
+
+    // 儲存動態列表的 HTML
+    const dynamicLists = ['experienceList', 'educationList', 'skillsList', 'projectsList', 'socialLinks'];
+    dynamicLists.forEach(listId => {
+        const list = document.getElementById(listId);
+        if (list) {
+            data.lists[listId] = list.innerHTML;
+        }
+    });
+
+    // 儲存專案圖片
+    data.projectImages = {};
+    document.querySelectorAll('.project-img').forEach(img => {
+        if (img.src && !img.src.endsWith('undefined') && img.style.display !== 'none') {
+            const card = img.closest('.project-card');
+            if (card) {
+                data.projectImages[card.dataset.index] = img.src;
+            }
+        }
     });
 
     return data;
@@ -1085,6 +1113,16 @@ function loadData() {
 }
 
 function applyData(data) {
+    // 恢復動態列表（需要先恢復，才能正確恢復欄位內容）
+    if (data.lists) {
+        Object.entries(data.lists).forEach(([listId, html]) => {
+            const list = document.getElementById(listId);
+            if (list && html) {
+                list.innerHTML = html;
+            }
+        });
+    }
+
     if (data.avatar) {
         const avatar = document.getElementById('avatar');
         if (avatar) avatar.src = data.avatar;
@@ -1093,7 +1131,13 @@ function applyData(data) {
     if (data.fields) {
         Object.entries(data.fields).forEach(([field, value]) => {
             const el = document.querySelector(`[data-field="${field}"]`);
-            if (el) el.textContent = value;
+            if (el) {
+                if (el.tagName === 'INPUT') {
+                    el.value = value;
+                } else {
+                    el.innerHTML = value;
+                }
+            }
         });
     }
 
@@ -1101,6 +1145,19 @@ function applyData(data) {
         document.querySelectorAll('.counter').forEach((el, i) => {
             if (data.stats[i] !== undefined) {
                 el.dataset.target = data.stats[i];
+            }
+        });
+    }
+
+    // 恢復專案圖片
+    if (data.projectImages) {
+        Object.entries(data.projectImages).forEach(([index, src]) => {
+            const img = document.querySelector(`.project-card[data-index="${index}"] .project-img`);
+            const placeholder = document.querySelector(`.project-card[data-index="${index}"] .project-placeholder`);
+            if (img && src) {
+                img.src = src;
+                img.style.display = 'block';
+                if (placeholder) placeholder.style.display = 'none';
             }
         });
     }
@@ -1115,6 +1172,9 @@ function applyData(data) {
                 progressEl.style.setProperty('--progress', `${level}%`);
             }
         });
+
+        // 重新初始化動態事件
+        initProjectEvents();
     }, 100);
 }
 
