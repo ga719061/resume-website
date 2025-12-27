@@ -575,10 +575,10 @@ const sectionTemplates = {
                             <div class="project-placeholder">🖼️</div>
                         </div>
                         <div class="project-info">
-                            <h3 class="editable">專案名稱</h3>
-                            <p class="editable">使用現代化技術堆疊開發的網頁應用程式，解決了...</p>
+                            <h3 class="editable"> </h3>
+                            <p class="editable"> </p>
                             <div class="project-tags">
-                                <span class="tag">React</span>
+                                <span class="tag"> </span>
                             </div>
                             <a href="#" class="project-link editable">查看專案 →</a>
                         </div>
@@ -594,12 +594,12 @@ const sectionTemplates = {
             <button class="section-delete-btn" title="刪除此板塊">✕</button>
             <div class="stats-grid">
                 <div class="stat-item">
-                    <span class="stat-number counter" data-target="5">0</span>
-                    <span class="stat-label editable">年開發經驗</span>
+                    <span class="stat-number counter" data-target="0">0</span>
+                    <span class="stat-label editable"> </span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number counter" data-target="50">0</span>
-                    <span class="stat-label editable">專案完成</span>
+                    <span class="stat-number counter" data-target="0">0</span>
+                    <span class="stat-label editable"> </span>
                 </div>
             </div>
         </section>
@@ -608,10 +608,10 @@ const sectionTemplates = {
         <section class="section animate-on-scroll" data-section-type="custom">
             <button class="section-delete-btn" title="刪除此板塊">✕</button>
             <h2 class="section-title editable">
-                <span class="icon">📝</span> 自訂標題
+                <span class="icon">📝</span>  
             </h2>
             <div class="section-content">
-                <p class="editable">在此輸入自訂內容...</p>
+                <p class="editable"> </p>
             </div>
         </section>
     `,
@@ -623,7 +623,7 @@ const sectionTemplates = {
             </h2>
             <div class="section-content">
                 <ul class="cert-list">
-                    <li class="cert-item editable">證書名稱 - 發證機構 (年份)</li>
+                    <li class="cert-item editable"> </li>
                 </ul>
             </div>
         </section>
@@ -636,8 +636,8 @@ const sectionTemplates = {
             </h2>
             <div class="section-content">
                 <ul class="lang-list">
-                    <li class="lang-item"><span class="editable">中文</span> - <span class="editable">母語</span></li>
-                    <li class="lang-item"><span class="editable">英文</span> - <span class="editable">流利</span></li>
+                    <li class="lang-item"><span class="editable"> </span> - <span class="editable"> </span></li>
+                    <li class="lang-item"><span class="editable"> </span> - <span class="editable"> </span></li>
                 </ul>
             </div>
         </section>
@@ -650,9 +650,9 @@ const sectionTemplates = {
             </h2>
             <div class="section-content">
                 <div class="interests-tags">
-                    <span class="tag editable">閱讀</span>
-                    <span class="tag editable">旅遊</span>
-                    <span class="tag editable">攝影</span>
+                    <span class="tag editable"> </span>
+                    <span class="tag editable"> </span>
+                    <span class="tag editable"> </span>
                 </div>
             </div>
         </section>
@@ -881,10 +881,10 @@ function initAddButtons() {
         const list = document.getElementById('experienceList');
         const index = list.children.length;
         const html = createTimelineItem('exp', index, {
-            title: '資深前端工程師',
-            date: '2023 - 現在',
-            company: 'Tech Solutions Corp.',
-            desc: '負責前端架構設計與開發，優化效能並提升使用者體驗。'
+            title: ' ',
+            date: ' ',
+            company: ' ',
+            desc: ' '
         });
         list.insertAdjacentHTML('beforeend', html);
         saveData();
@@ -895,10 +895,10 @@ function initAddButtons() {
         const list = document.getElementById('educationList');
         const index = list.children.length;
         const html = createTimelineItem('edu', index, {
-            title: '資訊工程學士',
-            date: '2015 - 2019',
-            company: '國立台灣大學',
-            desc: '主修演算法與軟體工程，畢業專題獲得系上首獎。'
+            title: ' ',
+            date: ' ',
+            company: ' ',
+            desc: ' '
         }, true);
         list.insertAdjacentHTML('beforeend', html);
         saveData();
@@ -911,8 +911,8 @@ function initAddButtons() {
         const html = `
             <div class="skill-item" data-index="${index}">
                 <div class="skill-header">
-                    <span class="skill-name editable" data-field="skill-name-${index}" contenteditable="${document.body.classList.contains('edit-mode')}">新技能</span>
-                    <span class="skill-level editable" data-field="skill-level-${index}" contenteditable="${document.body.classList.contains('edit-mode')}">50</span>%
+                    <span class="skill-name editable" data-field="skill-name-${index}" contenteditable="${document.body.classList.contains('edit-mode')}"> </span>
+                    <span class="skill-level editable" data-field="skill-level-${index}" contenteditable="${document.body.classList.contains('edit-mode')}">0</span>%
                     <button class="delete-btn small" title="刪除">✕</button>
                 </div>
                 <div class="skill-bar">
@@ -939,10 +939,10 @@ function initAddButtons() {
                     <button class="project-img-edit" title="更換圖片">📷</button>
                 </div>
                 <div class="project-info">
-                    <h3 class="editable" data-field="proj-name-${index}" contenteditable="${isEdit}">專案名稱</h3>
-                    <p class="editable" data-field="proj-desc-${index}" contenteditable="${isEdit}">專案描述...</p>
+                    <h3 class="editable" data-field="proj-name-${index}" contenteditable="${isEdit}"> </h3>
+                    <p class="editable" data-field="proj-desc-${index}" contenteditable="${isEdit}"> </p>
                     <div class="project-tags" data-index="${index}">
-                        <span class="tag editable" data-field="proj-tag-${index}-0" contenteditable="${isEdit}">標籤</span>
+                        <span class="tag editable" data-field="proj-tag-${index}-0" contenteditable="${isEdit}"> </span>
                         <button class="add-tag-btn" title="新增標籤">+</button>
                     </div>
                     <div class="project-link-wrapper">
@@ -969,8 +969,8 @@ function initAddButtons() {
             <li class="social-item" data-index="${index}">
                 <span class="social-icon">${randomIcon}</span>
                 <div class="social-info">
-                    <span class="social-name editable" data-field="social-name-${index}" contenteditable="${isEdit}">社群名稱</span>
-                    <span class="social-url editable" data-field="social-url-${index}" contenteditable="${isEdit}">網址</span>
+                    <span class="social-name editable" data-field="social-name-${index}" contenteditable="${isEdit}"> </span>
+                    <span class="social-url editable" data-field="social-url-${index}" contenteditable="${isEdit}"> </span>
                 </div>
                 <button class="delete-btn small" title="刪除">✕</button>
             </li>
@@ -987,7 +987,7 @@ function initAddButtons() {
         const html = `
             <div class="stat-item" data-index="${index}">
                 <span class="stat-number editable" data-field="stat-number-${index}" data-target="0" contenteditable="${isEdit}">0</span>
-                <span class="stat-label editable" data-field="stat-label-${index}" contenteditable="${isEdit}">標籤</span>
+                <span class="stat-label editable" data-field="stat-label-${index}" contenteditable="${isEdit}"> </span>
                 <button class="delete-btn small stat-delete" title="刪除">✕</button>
             </div>
         `;
@@ -1167,6 +1167,12 @@ async function exportAsHtml() {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
 ${cssVars}
+/* 強制顯示統計數據顏色 (避免背景裁切導致透明) */
+.stat-number {
+    color: var(--primary) !important;
+    background: none !important;
+    -webkit-text-fill-color: initial !important;
+}
 ${cssContent}
     </style>
 </head>
