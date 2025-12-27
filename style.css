@@ -919,10 +919,40 @@ body.edit-mode .add-section-btn {
 body.edit-mode .tag.editable {
     cursor: text;
     min-width: 40px;
+    padding-right: 20px;
 }
 
 body.edit-mode .tag.editable:hover {
     background: rgba(var(--primary-rgb), 0.2);
+}
+
+/* 標籤刪除按鈕 */
+.tag-delete-btn {
+    display: none;
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 10px;
+    line-height: 1;
+    padding: 0;
+}
+
+body.edit-mode .tag-delete-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tag-delete-btn:hover {
+    background: #ff4757;
 }
 
 /* 新增標籤按鈕 */

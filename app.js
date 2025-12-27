@@ -1191,41 +1191,20 @@ function init3DCards() {
 
 // ===== 專案卡片事件 =====
 function initProjectEvents() {
-    // 專案圖片上傳
-    document.querySelectorAll('.project-img-edit').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+    const projectsList = document.getElementById('projectsList');
+    if (!projectsList) return;
+
+    // 使用事件委派，支援動態新增的元素
+    projectsList.addEventListener('click', (e) => {
+        // 圖片編輯按鈕
+        if (e.target.classList.contains('project-img-edit')) {
             const card = e.target.closest('.project-card');
-            const index = card.dataset.index;
-            const input = document.getElementById(`projectImgInput-${index}`);
+            const input = card.querySelector('.project-img-input');
             input?.click();
-        });
-    });
+        }
 
-    document.querySelectorAll('.project-img-input').forEach(input => {
-        input.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const card = e.target.closest('.project-card');
-            const index = card.dataset.index;
-            const img = document.getElementById(`projectImg-${index}`);
-            const placeholder = document.getElementById(`projectPlaceholder-${index}`);
-
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                img.src = event.target.result;
-                img.style.display = 'block';
-                if (placeholder) placeholder.style.display = 'none';
-                saveData();
-                showToast('專案圖片已更新！');
-            };
-            reader.readAsDataURL(file);
-        });
-    });
-
-    // 新增標籤
-    document.querySelectorAll('.add-tag-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        // 新增標籤按鈕
+        if (e.target.classList.contains('add-tag-btn')) {
             const tagsContainer = e.target.closest('.project-tags');
             const projectIndex = tagsContainer.dataset.index;
             const tagCount = tagsContainer.querySelectorAll('.tag').length;
@@ -1237,23 +1216,74 @@ function initProjectEvents() {
             newTag.contentEditable = isEdit;
             newTag.textContent = '標籤';
 
+            // 創建刪除按鈕
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'tag-delete-btn';
+            deleteBtn.title = '刪除標籤';
+            deleteBtn.textContent = '×';
+            newTag.appendChild(deleteBtn);
+
             tagsContainer.insertBefore(newTag, e.target);
 
             // 聚焦並選中
             if (isEdit) {
                 newTag.focus();
-                document.execCommand('selectAll', false, null);
+                const range = document.createRange();
+                range.selectNodeContents(newTag);
+                range.setEndBefore(deleteBtn);
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
             }
 
             saveData();
-        });
+        }
+
+        // 標籤刪除按鈕
+        if (e.target.classList.contains('tag-delete-btn')) {
+            e.stopPropagation();
+            const tag = e.target.closest('.tag');
+            if (tag && confirm('確定要刪除此標籤嗎？')) {
+                tag.remove();
+                saveData();
+                showToast('標籤已刪除');
+            }
+        }
     });
 
-    // URL 輸入框變更儲存
-    document.querySelectorAll('.project-url').forEach(input => {
-        input.addEventListener('change', () => saveData());
-        input.addEventListener('blur', () => saveData());
+    // 圖片上傳變更事件
+    projectsList.addEventListener('change', (e) => {
+        if (e.target.classList.contains('project-img-input')) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const card = e.target.closest('.project-card');
+            const img = card.querySelector('.project-img');
+            const placeholder = card.querySelector('.project-placeholder');
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                img.src = event.target.result;
+                img.style.display = 'block';
+                if (placeholder) placeholder.style.display = 'none';
+                saveData();
+                showToast('專案圖片已更新！');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // URL 輸入框變更
+        if (e.target.classList.contains('project-url')) {
+            saveData();
+        }
     });
+
+    // URL 輸入框 blur 事件
+    projectsList.addEventListener('blur', (e) => {
+        if (e.target.classList.contains('project-url')) {
+            saveData();
+        }
+    }, true);
 }
 
 // ===== 打字機效果 =====
