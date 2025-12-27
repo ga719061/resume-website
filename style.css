@@ -1455,6 +1455,27 @@ body.edit-mode .stat-number.editable {
     }
 }
 
+/* ===== 編輯模式樣式 ===== */
+.editable {
+    white-space: pre-wrap;
+    /* 保留空格和換行 */
+    word-break: break-word;
+    /* 避免長單詞破壞布局 */
+}
+
+/* 編輯模式下給予提示 */
+body.edit-mode .editable:hover {
+    background: rgba(var(--primary-rgb), 0.1);
+    outline: 1px dashed var(--primary);
+    cursor: text;
+    border-radius: 4px;
+}
+
+body.edit-mode .editable:focus {
+    background: rgba(var(--primary-rgb), 0.15);
+    outline: 2px solid var(--primary);
+}
+
 /* ===== 列印樣式 (A4 優化) ===== */
 @media print {
 

@@ -1364,11 +1364,7 @@ function collectData() {
             if (el.tagName === 'INPUT') {
                 data.fields[field] = el.value;
             } else {
-                // 保留空格：將連續空格轉換為 &nbsp;
-                let content = el.innerHTML;
-                // 將連續兩個以上空格轉換為 &nbsp; 組合以保留
-                content = content.replace(/  /g, ' \u00A0');
-                data.fields[field] = content;
+                data.fields[field] = el.innerHTML;
             }
         }
     });
@@ -1394,10 +1390,7 @@ function collectData() {
                 el.removeAttribute('contenteditable');
             });
 
-            // 保留空格
-            let html = clone.innerHTML;
-            html = html.replace(/  /g, ' \u00A0');
-            data.lists[listId] = html;
+            data.lists[listId] = clone.innerHTML;
         }
     });
 
