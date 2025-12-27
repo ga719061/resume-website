@@ -1106,6 +1106,12 @@ function loadData() {
 
     try {
         const data = JSON.parse(saved);
+
+        // 檢查是否為舊版資料格式
+        if (data.version < 2) {
+            console.log('檢測到舊版資料格式，將在下次儲存時更新');
+        }
+
         applyData(data);
     } catch (e) {
         console.error('Failed to load data:', e);
