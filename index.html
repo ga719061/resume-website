@@ -132,7 +132,8 @@
         <!-- 主內容區 -->
         <main class="main-content">
             <!-- 關於我 -->
-            <section class="section animate-on-scroll" id="about">
+            <section class="section animate-on-scroll" id="about" data-section-type="about">
+                <button class="section-delete-btn" title="刪除此板塊">✕</button>
                 <h2 class="section-title">
                     <span class="icon">👤</span> 關於我
                 </h2>
@@ -146,7 +147,8 @@
             </section>
 
             <!-- 工作經歷 -->
-            <section class="section animate-on-scroll" id="experience">
+            <section class="section animate-on-scroll" id="experience" data-section-type="experience">
+                <button class="section-delete-btn" title="刪除此板塊">✕</button>
                 <h2 class="section-title">
                     <span class="icon">💼</span> 工作經歷
                 </h2>
@@ -188,7 +190,8 @@
             </section>
 
             <!-- 教育背景 -->
-            <section class="section animate-on-scroll" id="education">
+            <section class="section animate-on-scroll" id="education" data-section-type="education">
+                <button class="section-delete-btn" title="刪除此板塊">✕</button>
                 <h2 class="section-title">
                     <span class="icon">🎓</span> 教育背景
                 </h2>
@@ -215,7 +218,8 @@
             </section>
 
             <!-- 技能專長 -->
-            <section class="section animate-on-scroll" id="skills">
+            <section class="section animate-on-scroll" id="skills" data-section-type="skills">
+                <button class="section-delete-btn" title="刪除此板塊">✕</button>
                 <h2 class="section-title">
                     <span class="icon">⚡</span> 技能專長
                 </h2>
@@ -287,7 +291,8 @@
             </section>
 
             <!-- 專案作品 -->
-            <section class="section animate-on-scroll" id="projects">
+            <section class="section animate-on-scroll" id="projects" data-section-type="projects">
+                <button class="section-delete-btn" title="刪除此板塊">✕</button>
                 <h2 class="section-title">
                     <span class="icon">🚀</span> 專案作品
                 </h2>
@@ -335,7 +340,8 @@
             </section>
 
             <!-- 統計數據 -->
-            <section class="section animate-on-scroll" id="stats">
+            <section class="section animate-on-scroll" id="stats" data-section-type="stats">
+                <button class="section-delete-btn" title="刪除此板塊">✕</button>
                 <div class="stats-grid">
                     <div class="stat-item">
                         <span class="stat-number counter" data-target="5">0</span>
@@ -355,7 +361,62 @@
                     </div>
                 </div>
             </section>
+
+            <!-- 新增板塊按鈕 (編輯模式才顯示) -->
+            <button class="add-section-btn" id="addSectionBtn">+ 新增板塊</button>
         </main>
+    </div>
+
+    <!-- 新增板塊 Modal -->
+    <div class="modal" id="addSectionModal">
+        <div class="modal-content">
+            <h3>➕ 新增板塊</h3>
+            <div class="section-options">
+                <button class="section-option-btn" data-section="about">
+                    <span class="option-icon">👤</span>
+                    <span class="option-text">關於我</span>
+                </button>
+                <button class="section-option-btn" data-section="experience">
+                    <span class="option-icon">💼</span>
+                    <span class="option-text">工作經歷</span>
+                </button>
+                <button class="section-option-btn" data-section="education">
+                    <span class="option-icon">🎓</span>
+                    <span class="option-text">教育背景</span>
+                </button>
+                <button class="section-option-btn" data-section="skills">
+                    <span class="option-icon">⚡</span>
+                    <span class="option-text">技能專長</span>
+                </button>
+                <button class="section-option-btn" data-section="projects">
+                    <span class="option-icon">🚀</span>
+                    <span class="option-text">專案作品</span>
+                </button>
+                <button class="section-option-btn" data-section="stats">
+                    <span class="option-icon">📊</span>
+                    <span class="option-text">統計數據</span>
+                </button>
+                <button class="section-option-btn" data-section="custom">
+                    <span class="option-icon">📝</span>
+                    <span class="option-text">自訂區塊</span>
+                </button>
+                <button class="section-option-btn" data-section="certifications">
+                    <span class="option-icon">🏆</span>
+                    <span class="option-text">證書認證</span>
+                </button>
+                <button class="section-option-btn" data-section="languages">
+                    <span class="option-icon">🌍</span>
+                    <span class="option-text">語言能力</span>
+                </button>
+                <button class="section-option-btn" data-section="interests">
+                    <span class="option-icon">💡</span>
+                    <span class="option-text">興趣愛好</span>
+                </button>
+            </div>
+            <div class="modal-actions">
+                <button id="cancelAddSection" class="btn-secondary">取消</button>
+            </div>
+        </div>
     </div>
 
     <!-- 自訂主題 Modal -->

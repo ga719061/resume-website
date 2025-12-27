@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCursorGlow();
     initTheme();
     initEditMode();
+    initSectionManager();
     initScrollAnimations();
     initCounters();
     initSkillBars();
@@ -168,6 +169,264 @@ function adjustColor(hex, amount) {
     const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + amount));
     const b = Math.min(255, Math.max(0, (num & 0x0000FF) + amount));
     return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
+// ===== 板塊管理 =====
+function initSectionManager() {
+    const addSectionBtn = document.getElementById('addSectionBtn');
+    const modal = document.getElementById('addSectionModal');
+    const cancelBtn = document.getElementById('cancelAddSection');
+    const mainContent = document.querySelector('.main-content');
+
+    // 開啟新增板塊 Modal
+    addSectionBtn?.addEventListener('click', () => {
+        modal.classList.add('active');
+    });
+
+    // 關閉 Modal
+    cancelBtn?.addEventListener('click', () => {
+        modal.classList.remove('active');
+    });
+
+    modal?.addEventListener('click', e => {
+        if (e.target === modal) modal.classList.remove('active');
+    });
+
+    // 選擇板塊類型
+    document.querySelectorAll('.section-option-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const sectionType = btn.dataset.section;
+            addNewSection(sectionType);
+            modal.classList.remove('active');
+            showToast('已新增板塊！');
+            saveData();
+        });
+    });
+
+    // 刪除板塊
+    document.addEventListener('click', e => {
+        if (e.target.classList.contains('section-delete-btn')) {
+            const section = e.target.closest('.section');
+            if (section && confirm('確定要刪除此板塊嗎？')) {
+                section.remove();
+                saveData();
+                showToast('板塊已刪除');
+            }
+        }
+    });
+}
+
+// 板塊模板
+const sectionTemplates = {
+    about: () => `
+        <section class="section animate-on-scroll" data-section-type="about">
+            <button class="section-delete-btn" title="刪除此板塊">✕</button>
+            <h2 class="section-title">
+                <span class="icon">👤</span> 關於我
+            </h2>
+            <div class="section-content">
+                <p class="about-text editable" data-field="about-${Date.now()}">
+                    在此輸入關於自己的描述...
+                </p>
+            </div>
+        </section>
+    `,
+    experience: () => `
+        <section class="section animate-on-scroll" data-section-type="experience">
+            <button class="section-delete-btn" title="刪除此板塊">✕</button>
+            <h2 class="section-title">
+                <span class="icon">💼</span> 工作經歷
+            </h2>
+            <div class="section-content">
+                <div class="timeline" id="experienceList-${Date.now()}">
+                    <div class="timeline-item" data-index="0">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content card-3d">
+                            <div class="timeline-header">
+                                <h3 class="editable">職位名稱</h3>
+                                <span class="timeline-date editable">開始 - 結束</span>
+                            </div>
+                            <h4 class="company editable">公司名稱</h4>
+                            <p class="description editable">工作描述...</p>
+                            <button class="delete-btn" title="刪除此項目">✕</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="add-btn">+ 新增工作經歷</button>
+            </div>
+        </section>
+    `,
+    education: () => `
+        <section class="section animate-on-scroll" data-section-type="education">
+            <button class="section-delete-btn" title="刪除此板塊">✕</button>
+            <h2 class="section-title">
+                <span class="icon">🎓</span> 教育背景
+            </h2>
+            <div class="section-content">
+                <div class="timeline" id="educationList-${Date.now()}">
+                    <div class="timeline-item" data-index="0">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content card-3d">
+                            <div class="timeline-header">
+                                <h3 class="editable">學位</h3>
+                                <span class="timeline-date editable">開始 - 結束</span>
+                            </div>
+                            <h4 class="company editable">學校名稱</h4>
+                            <p class="description editable">描述...</p>
+                            <button class="delete-btn" title="刪除此項目">✕</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="add-btn">+ 新增教育背景</button>
+            </div>
+        </section>
+    `,
+    skills: () => `
+        <section class="section animate-on-scroll" data-section-type="skills">
+            <button class="section-delete-btn" title="刪除此板塊">✕</button>
+            <h2 class="section-title">
+                <span class="icon">⚡</span> 技能專長
+            </h2>
+            <div class="section-content">
+                <div class="skills-grid" id="skillsList-${Date.now()}">
+                    <div class="skill-item" data-index="0">
+                        <div class="skill-header">
+                            <span class="skill-name editable">技能名稱</span>
+                            <span class="skill-level editable">80</span>%
+                            <button class="delete-btn small" title="刪除">✕</button>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 80%"></div>
+                        </div>
+                    </div>
+                </div>
+                <button class="add-btn">+ 新增技能</button>
+            </div>
+        </section>
+    `,
+    projects: () => `
+        <section class="section animate-on-scroll" data-section-type="projects">
+            <button class="section-delete-btn" title="刪除此板塊">✕</button>
+            <h2 class="section-title">
+                <span class="icon">🚀</span> 專案作品
+            </h2>
+            <div class="section-content">
+                <div class="projects-grid" id="projectsList-${Date.now()}">
+                    <div class="project-card card-3d" data-index="0">
+                        <div class="project-image">
+                            <div class="project-placeholder">🖼️</div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="editable">專案名稱</h3>
+                            <p class="editable">專案描述...</p>
+                            <div class="project-tags">
+                                <span class="tag">標籤</span>
+                            </div>
+                            <a href="#" class="project-link editable">查看專案 →</a>
+                        </div>
+                        <button class="delete-btn" title="刪除此項目">✕</button>
+                    </div>
+                </div>
+                <button class="add-btn">+ 新增專案</button>
+            </div>
+        </section>
+    `,
+    stats: () => `
+        <section class="section animate-on-scroll" data-section-type="stats">
+            <button class="section-delete-btn" title="刪除此板塊">✕</button>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number counter" data-target="5">0</span>
+                    <span class="stat-label editable">年經驗</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number counter" data-target="50">0</span>
+                    <span class="stat-label editable">完成專案</span>
+                </div>
+            </div>
+        </section>
+    `,
+    custom: () => `
+        <section class="section animate-on-scroll" data-section-type="custom">
+            <button class="section-delete-btn" title="刪除此板塊">✕</button>
+            <h2 class="section-title editable">
+                <span class="icon">📝</span> 自訂標題
+            </h2>
+            <div class="section-content">
+                <p class="editable">在此輸入自訂內容...</p>
+            </div>
+        </section>
+    `,
+    certifications: () => `
+        <section class="section animate-on-scroll" data-section-type="certifications">
+            <button class="section-delete-btn" title="刪除此板塊">✕</button>
+            <h2 class="section-title">
+                <span class="icon">🏆</span> 證書認證
+            </h2>
+            <div class="section-content">
+                <ul class="cert-list">
+                    <li class="cert-item editable">證書名稱 - 發證機構 (年份)</li>
+                </ul>
+            </div>
+        </section>
+    `,
+    languages: () => `
+        <section class="section animate-on-scroll" data-section-type="languages">
+            <button class="section-delete-btn" title="刪除此板塊">✕</button>
+            <h2 class="section-title">
+                <span class="icon">🌍</span> 語言能力
+            </h2>
+            <div class="section-content">
+                <ul class="lang-list">
+                    <li class="lang-item"><span class="editable">中文</span> - <span class="editable">母語</span></li>
+                    <li class="lang-item"><span class="editable">英文</span> - <span class="editable">流利</span></li>
+                </ul>
+            </div>
+        </section>
+    `,
+    interests: () => `
+        <section class="section animate-on-scroll" data-section-type="interests">
+            <button class="section-delete-btn" title="刪除此板塊">✕</button>
+            <h2 class="section-title">
+                <span class="icon">💡</span> 興趣愛好
+            </h2>
+            <div class="section-content">
+                <div class="interests-tags">
+                    <span class="tag editable">閱讀</span>
+                    <span class="tag editable">旅遊</span>
+                    <span class="tag editable">攝影</span>
+                </div>
+            </div>
+        </section>
+    `
+};
+
+function addNewSection(type) {
+    const mainContent = document.querySelector('.main-content');
+    const addBtn = document.getElementById('addSectionBtn');
+    const template = sectionTemplates[type];
+
+    if (template && mainContent) {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = template();
+        const newSection = tempDiv.firstElementChild;
+
+        // 插入到新增按鈕之前
+        mainContent.insertBefore(newSection, addBtn);
+
+        // 重新初始化動畫效果
+        initScrollAnimations();
+        init3DCards();
+        initSkillBars();
+        initCounters();
+
+        // 如果在編輯模式，設定 contenteditable
+        if (document.body.classList.contains('edit-mode')) {
+            newSection.querySelectorAll('.editable').forEach(el => {
+                el.contentEditable = true;
+            });
+        }
+    }
 }
 
 // ===== 編輯模式 =====
