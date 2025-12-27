@@ -1003,6 +1003,23 @@ body.edit-mode .editable:focus {
     outline-color: var(--primary);
 }
 
+/* 編輯模式下使用漸變文字的元素需要恢復正常顏色 */
+body.edit-mode .name.editable {
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color: var(--primary);
+    color: var(--primary);
+}
+
+body.edit-mode .stat-number.editable {
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color: var(--primary);
+    color: var(--primary);
+}
+
 /* ===== Modal ===== */
 .modal {
     position: fixed;
