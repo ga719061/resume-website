@@ -17,7 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initTypingEffect();
     initProjectEvents();
     initSettingsAccordion();
+    initKeyboardShortcuts();
+    initUndoRedo();
+    initAutoBackup();
+    initDragAndDrop();
     loadData();
+    checkStorageUsage();
 });
 
 // ===== 多語言資料 =====
@@ -278,9 +283,20 @@ function initSettingsAccordion() {
 
 // ===== 粒子背景 =====
 function initParticles() {
+    // 檢測用戶是否偏好減少動畫
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+        console.log('尊重用戶偏好：禁用粒子動畫');
+        return;
+    }
+
     const canvas = document.getElementById('particles');
+    if (!canvas) return;
+
     const ctx = canvas.getContext('2d');
     let particles = [];
+    let animationId = null;
+    let isAnimating = true;
 
     function resize() {
         canvas.width = window.innerWidth;
@@ -303,6 +319,8 @@ function initParticles() {
     }
 
     function animate() {
+        if (!isAnimating) return;
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         const primaryColor = getComputedStyle(document.documentElement)
@@ -325,8 +343,43 @@ function initParticles() {
         });
 
         ctx.globalAlpha = 1;
-        requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(animate);
     }
+
+    function pauseAnimation() {
+        isAnimating = false;
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+    }
+
+    function resumeAnimation() {
+        if (!isAnimating) {
+            isAnimating = true;
+            animate();
+        }
+    }
+
+    // 視窗可見性 API - 離開分頁時暫停動畫
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            pauseAnimation();
+        } else {
+            resumeAnimation();
+        }
+    });
+
+    // 監聽動畫偏好設定變更
+    window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', e => {
+        if (e.matches) {
+            pauseAnimation();
+            canvas.style.display = 'none';
+        } else {
+            canvas.style.display = 'block';
+            resumeAnimation();
+        }
+    });
 
     resize();
     createParticles();
@@ -733,17 +786,19 @@ function initEditMode() {
         }
     });
 
-    // 匯出
-    exportBtn?.addEventListener('click', () => {
+    // 匯出 (含圖片壓縮)
+    exportBtn?.addEventListener('click', async () => {
+        showToast('正在壓縮圖片...');
         const data = collectData();
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const compressedData = await compressExportData(data);
+        const blob = new Blob([JSON.stringify(compressedData, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = `resume-backup-${new Date().toISOString().split('T')[0]}.json`;
         a.click();
         URL.revokeObjectURL(url);
-        showToast('資料已匯出！');
+        showToast('資料已匯出！（圖片已壓縮）');
     });
 
     // 匯入
@@ -1793,4 +1848,276 @@ function showToast(message) {
     setTimeout(() => {
         toast.classList.remove('show');
     }, 3000);
+}
+
+// ===== 鍵盤快捷鍵 =====
+function initKeyboardShortcuts() {
+    document.addEventListener('keydown', e => {
+        // Ctrl+S: 儲存
+        if (e.ctrlKey && e.key === 's') {
+            e.preventDefault();
+            saveData();
+            showToast('✅ 已儲存');
+        }
+
+        // Ctrl+E: 切換編輯模式
+        if (e.ctrlKey && e.key === 'e') {
+            e.preventDefault();
+            const editBtn = document.getElementById('editModeBtn');
+            editBtn?.click();
+        }
+
+        // Ctrl+Z: 撤銷
+        if (e.ctrlKey && e.key === 'z' && !e.shiftKey) {
+            e.preventDefault();
+            undo();
+        }
+
+        // Ctrl+Y 或 Ctrl+Shift+Z: 重做
+        if ((e.ctrlKey && e.key === 'y') || (e.ctrlKey && e.shiftKey && e.key === 'z')) {
+            e.preventDefault();
+            redo();
+        }
+    });
+}
+
+// ===== Undo/Redo 功能 =====
+const undoStack = [];
+const redoStack = [];
+const MAX_UNDO_STACK = 50;
+let isUndoRedoAction = false;
+
+function initUndoRedo() {
+    // 每次內容變更時記錄狀態
+    document.addEventListener('input', e => {
+        if (e.target.classList.contains('editable') && !isUndoRedoAction) {
+            pushUndoState();
+        }
+    });
+
+    // 初始狀態
+    setTimeout(() => {
+        pushUndoState();
+    }, 500);
+}
+
+function pushUndoState() {
+    const state = collectData();
+    undoStack.push(JSON.stringify(state));
+
+    // 限制堆疊大小
+    if (undoStack.length > MAX_UNDO_STACK) {
+        undoStack.shift();
+    }
+
+    // 清空重做堆疊
+    redoStack.length = 0;
+}
+
+function undo() {
+    if (undoStack.length <= 1) {
+        showToast('⚠️ 沒有可撤銷的操作');
+        return;
+    }
+
+    isUndoRedoAction = true;
+
+    // 將當前狀態推入重做堆疊
+    const currentState = undoStack.pop();
+    redoStack.push(currentState);
+
+    // 恢復上一個狀態
+    const previousState = undoStack[undoStack.length - 1];
+    if (previousState) {
+        applyData(JSON.parse(previousState));
+        showToast('↩️ 已撤銷');
+    }
+
+    setTimeout(() => {
+        isUndoRedoAction = false;
+    }, 100);
+}
+
+function redo() {
+    if (redoStack.length === 0) {
+        showToast('⚠️ 沒有可重做的操作');
+        return;
+    }
+
+    isUndoRedoAction = true;
+
+    // 從重做堆疊取出狀態
+    const nextState = redoStack.pop();
+    undoStack.push(nextState);
+
+    applyData(JSON.parse(nextState));
+    showToast('↪️ 已重做');
+
+    setTimeout(() => {
+        isUndoRedoAction = false;
+    }, 100);
+}
+
+// ===== 自動備份 =====
+function initAutoBackup() {
+    // 每分鐘自動備份
+    setInterval(() => {
+        const backup = {
+            timestamp: Date.now(),
+            data: collectData()
+        };
+        localStorage.setItem('resume-backup', JSON.stringify(backup));
+        console.log('自動備份完成:', new Date().toLocaleTimeString());
+    }, 60000);
+
+    // 檢查是否有備份可恢復
+    const backup = localStorage.getItem('resume-backup');
+    if (backup) {
+        try {
+            const { timestamp, data } = JSON.parse(backup);
+            const backupTime = new Date(timestamp).toLocaleString();
+            console.log(`找到備份 (${backupTime})`);
+        } catch (e) {
+            console.error('備份資料損壞');
+        }
+    }
+}
+
+// ===== 拖曳排序 =====
+function initDragAndDrop() {
+    const mainContent = document.querySelector('.main-content');
+    if (!mainContent) return;
+
+    let draggedSection = null;
+
+    // 只在編輯模式下啟用拖曳
+    function updateDraggable() {
+        const isEditMode = document.body.classList.contains('edit-mode');
+        document.querySelectorAll('.section').forEach(section => {
+            section.draggable = isEditMode;
+        });
+    }
+
+    // 監聽編輯模式變化
+    const observer = new MutationObserver(() => {
+        updateDraggable();
+    });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+    // Drag 事件
+    mainContent.addEventListener('dragstart', e => {
+        if (!e.target.classList.contains('section')) return;
+        draggedSection = e.target;
+        e.target.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+    });
+
+    mainContent.addEventListener('dragend', e => {
+        if (!e.target.classList.contains('section')) return;
+        e.target.classList.remove('dragging');
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('drag-over'));
+        draggedSection = null;
+        saveData();
+        showToast('📦 板塊順序已更新');
+    });
+
+    mainContent.addEventListener('dragover', e => {
+        e.preventDefault();
+        const section = e.target.closest('.section');
+        if (!section || section === draggedSection) return;
+
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('drag-over'));
+        section.classList.add('drag-over');
+    });
+
+    mainContent.addEventListener('drop', e => {
+        e.preventDefault();
+        const targetSection = e.target.closest('.section');
+        if (!targetSection || !draggedSection || targetSection === draggedSection) return;
+
+        const allSections = [...mainContent.querySelectorAll('.section')];
+        const draggedIndex = allSections.indexOf(draggedSection);
+        const targetIndex = allSections.indexOf(targetSection);
+
+        if (draggedIndex < targetIndex) {
+            targetSection.after(draggedSection);
+        } else {
+            targetSection.before(draggedSection);
+        }
+
+        targetSection.classList.remove('drag-over');
+    });
+}
+
+// ===== localStorage 容量警告 =====
+function checkStorageUsage() {
+    try {
+        let totalSize = 0;
+        for (let key in localStorage) {
+            if (localStorage.hasOwnProperty(key)) {
+                totalSize += localStorage[key].length * 2; // UTF-16 每字元 2 bytes
+            }
+        }
+
+        const totalMB = totalSize / (1024 * 1024);
+        const maxMB = 5; // localStorage 限制約 5MB
+        const usagePercent = (totalMB / maxMB) * 100;
+
+        if (usagePercent > 80) {
+            showToast(`⚠️ 儲存空間使用 ${usagePercent.toFixed(1)}%，接近上限！`);
+        }
+
+        console.log(`localStorage 使用量: ${totalMB.toFixed(2)} MB (${usagePercent.toFixed(1)}%)`);
+    } catch (e) {
+        console.error('無法檢查儲存空間:', e);
+    }
+}
+
+// ===== 圖片壓縮（匯出時使用）=====
+function compressImage(base64, maxWidth = 800, quality = 0.7) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+
+            // 等比縮放
+            if (width > maxWidth) {
+                height = (height * maxWidth) / width;
+                width = maxWidth;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = () => resolve(base64); // 壓縮失敗則返回原圖
+        img.src = base64;
+    });
+}
+
+// 壓縮匯出資料中的圖片
+async function compressExportData(data) {
+    const compressedData = { ...data };
+
+    // 壓縮頭像
+    if (compressedData.avatar && compressedData.avatar.startsWith('data:image')) {
+        compressedData.avatar = await compressImage(compressedData.avatar);
+    }
+
+    // 壓縮專案圖片
+    if (compressedData.projectImages) {
+        for (const [key, src] of Object.entries(compressedData.projectImages)) {
+            if (src && src.startsWith('data:image')) {
+                compressedData.projectImages[key] = await compressImage(src);
+            }
+        }
+    }
+
+    return compressedData;
 }

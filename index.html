@@ -11,6 +11,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
         rel="stylesheet">
+    <!-- 字體已包含 display=swap -->
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -23,8 +24,8 @@
 
     <!-- 設定選單 -->
     <div class="settings-panel">
-        <button class="settings-toggle" title="設定">
-            <span class="settings-icon">⚙️</span>
+        <button class="settings-toggle" title="設定" aria-label="開啟設定選單">
+            <span class="settings-icon" aria-hidden="true">⚙️</span>
         </button>
         <div class="settings-dropdown">
             <div class="settings-header">
@@ -138,10 +139,10 @@
                 <div class="avatar-wrapper">
                     <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='35' r='25' fill='%2366fcf1'/%3E%3Cellipse cx='50' cy='85' rx='35' ry='25' fill='%2366fcf1'/%3E%3C/svg%3E"
                         alt="頭像" class="avatar" id="avatar">
-                    <button class="avatar-edit" title="更換頭像">📷</button>
+                    <button class="avatar-edit" title="更換頭像" aria-label="更換個人頭像">📷</button>
                     <input type="file" id="avatarInput" accept="image/*" hidden>
                 </div>
-                <h1 class="name editable" data-field="name">您的姓名</h1>
+                <h1 class="name editable" data-field="name" role="textbox" aria-label="姓名">您的姓名</h1>
                 <p class="title editable" data-field="title"><span class="typing-text">您的職稱</span><span
                         class="typing-cursor">|</span></p>
             </div>
@@ -201,7 +202,7 @@
                     <span class="icon">👤</span> 關於我
                 </h2>
                 <div class="section-content">
-                    <p class="about-text editable" data-field="about">
+                    <p class="about-text editable" data-field="about" role="textbox" aria-label="自我介紹">
                         在此輸入您的自我介紹，包含專業背景、核心能力、工作理念等。例如：擁有多年相關領域經驗，專精於某某技術，熱衷於解決問題並創造價值。</p>
                 </div>
             </section>
@@ -351,7 +352,8 @@
                     <div class="projects-grid" id="projectsList">
                         <div class="project-card card-3d" data-index="0">
                             <div class="project-image">
-                                <img class="project-img" id="projectImg-0" src="" alt="專案圖片" style="display: none;">
+                                <img class="project-img" id="projectImg-0" src="" alt="專案圖片" style="display: none;"
+                                    loading="lazy">
                                 <div class="project-placeholder" id="projectPlaceholder-0">🖼️</div>
                                 <input type="file" class="project-img-input" id="projectImgInput-0" accept="image/*"
                                     hidden>
@@ -379,7 +381,8 @@
                         </div>
                         <div class="project-card card-3d" data-index="1">
                             <div class="project-image">
-                                <img class="project-img" id="projectImg-1" src="" alt="專案圖片" style="display: none;">
+                                <img class="project-img" id="projectImg-1" src="" alt="專案圖片" style="display: none;"
+                                    loading="lazy">
                                 <div class="project-placeholder" id="projectPlaceholder-1">🖼️</div>
                                 <input type="file" class="project-img-input" id="projectImgInput-1" accept="image/*"
                                     hidden>

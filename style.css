@@ -863,6 +863,23 @@ body.edit-mode .section-delete-btn {
     position: relative;
 }
 
+/* ===== 拖曳排序樣式 ===== */
+.section.dragging {
+    opacity: 0.5;
+    transform: scale(1.02);
+    box-shadow: 0 10px 40px rgba(var(--primary-rgb), 0.3);
+    cursor: grabbing;
+}
+
+.section.drag-over {
+    border: 2px dashed var(--primary) !important;
+    background: rgba(var(--primary-rgb), 0.05);
+}
+
+body.edit-mode .section {
+    cursor: grab;
+}
+
 /* ===== 新增板塊按鈕 ===== */
 .add-section-btn {
     width: 100%;
@@ -1430,8 +1447,51 @@ body.edit-mode .stat-number.editable {
 @media (max-width: 640px) {
     .container {
         padding: var(--spacing-md);
+        gap: var(--spacing-md);
     }
 
+    /* 設定面板調整 */
+    .settings-panel {
+        top: var(--spacing-sm);
+        right: var(--spacing-sm);
+    }
+
+    .settings-dropdown {
+        min-width: 200px;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    /* Sidebar 優化 */
+    .sidebar {
+        position: relative;
+        order: -1;
+    }
+
+    .profile-section {
+        padding: var(--spacing-md);
+    }
+
+    .avatar-wrapper {
+        width: 100px;
+        height: 100px;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .name {
+        font-size: 1.5rem;
+    }
+
+    .title {
+        font-size: 0.95rem;
+    }
+
+    .contact-section,
+    .social-section {
+        padding: var(--spacing-md);
+    }
+
+    /* 編輯工具列 */
     .edit-toolbar {
         flex-wrap: wrap;
         padding: var(--spacing-xs);
@@ -1439,6 +1499,15 @@ body.edit-mode .stat-number.editable {
 
     .toolbar-btn span:last-child {
         display: none;
+    }
+
+    /* 內容區塊 */
+    .section {
+        padding: var(--spacing-md);
+    }
+
+    .section-title {
+        font-size: 1.25rem;
     }
 
     .skills-grid,
@@ -1452,6 +1521,21 @@ body.edit-mode .stat-number.editable {
 
     .stat-number {
         font-size: 1.75rem;
+    }
+
+    /* 時間軸調整 */
+    .timeline {
+        padding-left: var(--spacing-md);
+    }
+
+    .timeline-header {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+
+    /* 拖曳排序在手機上禁用 */
+    .section {
+        cursor: default !important;
     }
 }
 
@@ -1824,5 +1908,40 @@ body.edit-mode .editable:focus {
     /* 所有使用 primary 顏色的元素 */
     a {
         color: #0066cc !important;
+    }
+}
+
+/* ===== 動畫偏好設定 ===== */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    #particles {
+        display: none !important;
+    }
+
+    .cursor-glow {
+        display: none !important;
+    }
+
+    .typing-cursor {
+        animation: none !important;
+    }
+
+    .animate-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .skill-progress {
+        transform: scaleX(1) !important;
+        transition: none !important;
     }
 }
