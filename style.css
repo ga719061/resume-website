@@ -1,6 +1,6 @@
-/* ===== CSS Variables (主題系統) ===== */
+﻿/* ===== CSS Variables (銝駁?蝟餌絞) ===== */
 :root {
-    /* 深色霓虹主題 (預設) */
+    /* 瘛梯?銝駁? (?身) */
     --bg-primary: #0a0a0f;
     --bg-secondary: #12121a;
     --bg-card: rgba(255, 255, 255, 0.03);
@@ -19,7 +19,7 @@
     --glass-bg: rgba(255, 255, 255, 0.05);
     --glass-border: rgba(255, 255, 255, 0.1);
 
-    /* 間距 */
+    /* ?? */
     --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
     --spacing-md: 1rem;
@@ -27,19 +27,19 @@
     --spacing-xl: 2rem;
     --spacing-2xl: 3rem;
 
-    /* 圓角 */
+    /* ?? */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 20px;
     --radius-full: 50%;
 
-    /* 動畫 */
+    /* ? */
     --transition-fast: 0.15s ease;
     --transition-normal: 0.3s ease;
     --transition-slow: 0.5s ease;
 }
 
-/* 淺色簡約主題 */
+/* 瘛箄蝪∠?銝駁? */
 [data-theme="light-minimal"] {
     --bg-primary: #f5f5f7;
     --bg-secondary: #ffffff;
@@ -60,7 +60,7 @@
     --glass-border: rgba(0, 0, 0, 0.08);
 }
 
-/* 藍色專業主題 */
+/* ?撠平銝駁? */
 [data-theme="blue-professional"] {
     --bg-primary: #0f172a;
     --bg-secondary: #1e293b;
@@ -81,7 +81,7 @@
     --glass-border: rgba(148, 163, 184, 0.2);
 }
 
-/* 紫色夢幻主題 */
+/* 蝝怨憭Ｗ劂銝駁? */
 [data-theme="purple-dream"] {
     --bg-primary: #0f0a1a;
     --bg-secondary: #1a1025;
@@ -102,7 +102,7 @@
     --glass-border: rgba(168, 85, 247, 0.2);
 }
 
-/* 🌸 可愛風格主題 */
+/* ? ?舀?憸冽銝駁? */
 [data-theme="cute-style"] {
     --bg-primary: #fff0f5;
     /* Lavender Blush */
@@ -125,7 +125,7 @@
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(255, 255, 255, 0.5);
 
-    /* 圓潤風格 */
+    /* ?膜憸冽 */
     --radius-sm: 12px;
     --radius-md: 20px;
     --radius-lg: 30px;
@@ -153,7 +153,7 @@ body {
     overflow-x: hidden;
 }
 
-/* ===== 粒子背景 ===== */
+/* ===== 蝎?? ===== */
 #particles {
     position: fixed;
     top: 0;
@@ -164,7 +164,7 @@ body {
     z-index: 0;
 }
 
-/* ===== 光標跟隨效果 ===== */
+/* ===== ??頝?? ===== */
 .cursor-glow {
     position: fixed;
     width: 300px;
@@ -182,7 +182,7 @@ body:hover .cursor-glow {
     opacity: 1;
 }
 
-/* ===== 設定選單 (整合主題與編輯) ===== */
+/* ===== 閮剖??詨 (?游?銝駁??楊頛? ===== */
 .settings-panel {
     position: fixed;
     top: var(--spacing-lg);
@@ -193,7 +193,7 @@ body:hover .cursor-glow {
     align-items: center;
 }
 
-/* 編輯模式獨立按鈕 */
+/* 蝺刻摩璅∪??函??? */
 .edit-mode-toggle {
     width: 44px;
     height: 44px;
@@ -267,14 +267,14 @@ body.edit-mode .edit-mode-toggle {
     box-shadow: 0 10px 40px var(--shadow-color);
 }
 
-/* 只用點擊控制展開/縮起 */
+/* ?芰暺??批撅?/蝮株絲 */
 .settings-dropdown.active {
     opacity: 1;
     visibility: visible;
     transform: translateY(0) scale(1);
 }
 
-/* 設定面板標題 */
+/* 閮剖??Ｘ璅? */
 .settings-header {
     font-size: 0.9rem;
     font-weight: 600;
@@ -296,7 +296,7 @@ body.edit-mode .edit-mode-toggle {
     border-radius: 4px;
 }
 
-/* 更新日誌樣式 */
+/* ?湔?亥?璅?? */
 .changelog-list {
     padding: var(--spacing-md);
 }
@@ -335,7 +335,7 @@ body.edit-mode .edit-mode-toggle {
     padding: 4px 0;
 }
 
-/* 更新日誌 Modal */
+/* ?湔?亥? Modal */
 .changelog-modal {
     max-width: 450px;
 }
@@ -370,7 +370,7 @@ body.edit-mode .edit-mode-toggle {
     color: white;
 }
 
-/* 設定區塊 */
+/* 閮剖??憛?*/
 .settings-section {
     margin-bottom: var(--spacing-xs);
 }
@@ -391,7 +391,7 @@ body.edit-mode .edit-mode-toggle {
     margin: var(--spacing-sm) 0;
 }
 
-/* 語言選擇 */
+/* 隤??豢? */
 .language-options {
     display: flex;
     gap: var(--spacing-xs);
@@ -441,7 +441,7 @@ body.edit-mode .edit-mode-toggle {
     transition: all var(--transition-fast);
 }
 
-/* 為每個主題選項設定固定顏色，確保在任何主題下都清晰可見 */
+/* ?箸??蜓憿?身摰摰??莎?蝣箔??其遙雿蜓憿??賣??啣閬?*/
 .theme-option[data-theme="neon-dark"] {
     color: #66fcf1;
 }
@@ -499,7 +499,7 @@ body.edit-mode .edit-mode-toggle {
     background: rgba(255, 107, 107, 0.15);
 }
 
-/* ===== 主容器 ===== */
+/* ===== 銝餃捆??===== */
 .container {
     display: grid;
     grid-template-columns: 320px 1fr;
@@ -511,7 +511,7 @@ body.edit-mode .edit-mode-toggle {
     z-index: 10;
 }
 
-/* ===== 側邊欄 ===== */
+/* ===== ?湧?甈?===== */
 .sidebar {
     position: sticky;
     top: var(--spacing-xl);
@@ -607,8 +607,8 @@ body.edit-mode .avatar-edit {
     }
 }
 
-/* 聯絡方式區塊 */
-/* 側邊欄區塊共用樣式 */
+/* ?舐窗?孵??憛?*/
+/* ?湧?甈?憛?冽見撘?*/
 .sidebar-section {
     position: relative;
 }
@@ -622,7 +622,7 @@ body.edit-mode .avatar-edit {
     border-radius: var(--radius-lg);
 }
 
-/* 區塊刪除按鈕 */
+/* ?憛?斗???*/
 .section-delete-btn {
     position: absolute;
     top: var(--spacing-sm);
@@ -653,7 +653,7 @@ body.edit-mode .section-delete-btn {
     transform: scale(1.1);
 }
 
-/* 新增側邊欄區塊 */
+/* ?啣??湧?甈?憛?*/
 .sidebar-add-section {
     display: none;
     position: relative;
@@ -719,7 +719,7 @@ body.edit-mode .sidebar-add-section {
     background: rgba(var(--primary-rgb), 0.1);
 }
 
-/* 聯絡方式項目 */
+/* ?舐窗?孵?? */
 .contact-item {
     display: flex;
     align-items: center;
@@ -753,7 +753,7 @@ body.edit-mode .sidebar-add-section {
     letter-spacing: 1px;
 }
 
-/* 側邊欄標籤樣式 */
+/* ?湧?甈?蝐斗見撘?*/
 .sidebar-tags {
     display: flex;
     flex-wrap: wrap;
@@ -797,7 +797,7 @@ body.edit-mode .add-tag-inline {
     color: var(--primary);
 }
 
-/* 語言能力列表 */
+/* 隤??賢??” */
 .language-list {
     list-style: none;
     display: flex;
@@ -857,7 +857,7 @@ body.edit-mode .add-tag-inline {
     color: var(--text-secondary);
 }
 
-/* 社群連結 */
+/* 蝷曄黎??? */
 .social-list {
     list-style: none;
     display: flex;
@@ -917,7 +917,7 @@ body.edit-mode .add-tag-inline {
     pointer-events: auto;
 }
 
-/* ===== 主內容區 ===== */
+/* ===== 銝餃摰孵? ===== */
 .main-content {
     display: flex;
     flex-direction: column;
@@ -951,7 +951,7 @@ body.edit-mode .add-tag-inline {
     font-size: 1.25rem;
 }
 
-/* 時間軸 */
+/* ??頠?*/
 .timeline {
     position: relative;
     padding-left: var(--spacing-xl);
@@ -1035,7 +1035,7 @@ body.edit-mode .add-tag-inline {
     line-height: 1.7;
 }
 
-/* 刪除按鈕 */
+/* ?芷?? */
 .delete-btn {
     position: absolute;
     top: var(--spacing-sm);
@@ -1072,7 +1072,7 @@ body.edit-mode .delete-btn {
     color: white;
 }
 
-/* 新增按鈕 */
+/* ?啣??? */
 .add-btn {
     width: 100%;
     padding: var(--spacing-md);
@@ -1099,7 +1099,7 @@ body.edit-mode .add-btn {
     background: rgba(var(--primary-rgb), 0.05);
 }
 
-/* ===== 板塊刪除按鈕 ===== */
+/* ===== ?踹??芷?? ===== */
 .section-delete-btn {
     position: absolute;
     top: var(--spacing-md);
@@ -1134,7 +1134,7 @@ body.edit-mode .section-delete-btn {
     position: relative;
 }
 
-/* ===== 拖曳排序樣式 ===== */
+/* ===== ???璅?? ===== */
 .section.dragging {
     opacity: 0.5;
     transform: scale(1.02);
@@ -1151,7 +1151,7 @@ body.edit-mode .section {
     cursor: grab;
 }
 
-/* ===== 新增板塊按鈕 ===== */
+/* ===== ?啣??踹??? ===== */
 .add-section-btn {
     width: 100%;
     padding: var(--spacing-lg);
@@ -1179,7 +1179,7 @@ body.edit-mode .add-section-btn {
     background: rgba(var(--primary-rgb), 0.05);
 }
 
-/* ===== 板塊選擇 Modal ===== */
+/* ===== ?踹??豢? Modal ===== */
 .section-options {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -1216,7 +1216,7 @@ body.edit-mode .add-section-btn {
     font-weight: 500;
 }
 
-/* ===== 技能區塊 ===== */
+/* ===== ??賢?憛?===== */
 .skills-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -1267,7 +1267,7 @@ body.edit-mode .add-section-btn {
     transform: scaleX(1);
 }
 
-/* ===== 專案區塊 ===== */
+/* ===== 撠??憛?===== */
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -1344,7 +1344,7 @@ body.edit-mode .tag.editable:hover {
     background: rgba(var(--primary-rgb), 0.2);
 }
 
-/* 標籤刪除按鈕 */
+/* 璅惜?芷?? */
 .tag-delete-btn {
     display: none;
     position: absolute;
@@ -1373,7 +1373,7 @@ body.edit-mode .tag-delete-btn {
     background: #ff4757;
 }
 
-/* 新增標籤按鈕 */
+/* ?啣?璅惜?? */
 .add-tag-btn {
     display: none;
     width: 24px;
@@ -1398,7 +1398,7 @@ body.edit-mode .add-tag-btn {
     background: rgba(var(--primary-rgb), 0.1);
 }
 
-/* 專案圖片編輯 */
+/* 撠???蝺刻摩 */
 .project-image {
     position: relative;
 }
@@ -1435,7 +1435,7 @@ body.edit-mode .project-img-edit {
     transform: scale(1.1);
 }
 
-/* 專案連結輸入框 */
+/* 撠????頛詨獢?*/
 .project-link-wrapper {
     display: flex;
     align-items: center;
@@ -1446,7 +1446,7 @@ body.edit-mode .project-img-edit {
     font-size: 1rem;
 }
 
-/* 可點擊的專案連結 */
+/* ?舫???撠???? */
 .project-link-view {
     color: var(--primary);
     text-decoration: none;
@@ -1460,12 +1460,12 @@ body.edit-mode .project-img-edit {
     text-decoration: underline;
 }
 
-/* 編輯模式：隱藏連結，顯示輸入框 */
+/* 蝺刻摩璅∪?嚗???嚗＊蝷箄撓?交? */
 body.edit-mode .project-link-view {
     display: none;
 }
 
-/* 非編輯模式：隱藏輸入框，顯示連結 */
+/* ?楊頛舀芋撘??梯?頛詨獢?憿舐內??? */
 .project-url {
     display: none;
     flex: 1;
@@ -1499,7 +1499,7 @@ body.edit-mode .project-url {
     color: var(--accent);
 }
 
-/* ===== 統計區塊 ===== */
+/* ===== 蝯梯??憛?===== */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1538,7 +1538,7 @@ body.edit-mode .project-url {
     color: var(--text-secondary);
 }
 
-/* ===== 卡片 Hover 效果 ===== */
+/* ===== ?∠? Hover ?? ===== */
 .card-3d {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -1548,7 +1548,7 @@ body.edit-mode .project-url {
     box-shadow: 0 20px 40px rgba(var(--primary-rgb), 0.2);
 }
 
-/* ===== 滾動動畫 ===== */
+/* ===== 皛曉?? ===== */
 .animate-on-scroll {
     opacity: 0;
     transform: translateY(30px);
@@ -1560,7 +1560,7 @@ body.edit-mode .project-url {
     transform: translateY(0);
 }
 
-/* ===== 編輯模式 ===== */
+/* ===== 蝺刻摩璅∪? ===== */
 .editable {
     position: relative;
     transition: all var(--transition-fast);
@@ -1586,7 +1586,7 @@ body.edit-mode .editable:focus {
     outline-color: var(--primary);
 }
 
-/* 編輯模式下使用漸變文字的元素需要恢復正常顏色 */
+/* 蝺刻摩璅∪?銝蝙?冽撓霈?摮????閬敺拇迤撣賊???*/
 body.edit-mode .name.editable {
     background: none;
     -webkit-background-clip: unset;
@@ -1697,7 +1697,7 @@ body.edit-mode .stat-number.editable {
     border-color: var(--text-primary);
 }
 
-/* ===== Toast 通知 ===== */
+/* ===== Toast ? ===== */
 .toast {
     position: fixed;
     bottom: 100px;
@@ -1721,7 +1721,7 @@ body.edit-mode .stat-number.editable {
     transform: translateX(-50%) translateY(0);
 }
 
-/* ===== 響應式設計 ===== */
+/* ===== ?踵?撘身閮?===== */
 @media (max-width: 1024px) {
     .container {
         grid-template-columns: 1fr;
@@ -1742,7 +1742,7 @@ body.edit-mode .stat-number.editable {
         gap: var(--spacing-md);
     }
 
-    /* 設定面板調整 */
+    /* 閮剖??Ｘ隤踵 */
     .settings-panel {
         top: var(--spacing-sm);
         right: var(--spacing-sm);
@@ -1754,7 +1754,7 @@ body.edit-mode .stat-number.editable {
         overflow-y: auto;
     }
 
-    /* Sidebar 優化 */
+    /* Sidebar ?芸? */
     .sidebar {
         position: relative;
         order: -1;
@@ -1783,7 +1783,7 @@ body.edit-mode .stat-number.editable {
         padding: var(--spacing-md);
     }
 
-    /* 編輯工具列 */
+    /* 蝺刻摩撌亙??*/
     .edit-toolbar {
         flex-wrap: wrap;
         padding: var(--spacing-xs);
@@ -1793,7 +1793,7 @@ body.edit-mode .stat-number.editable {
         display: none;
     }
 
-    /* 內容區塊 */
+    /* ?批捆?憛?*/
     .section {
         padding: var(--spacing-md);
     }
@@ -1815,7 +1815,7 @@ body.edit-mode .stat-number.editable {
         font-size: 1.75rem;
     }
 
-    /* 時間軸調整 */
+    /* ??頠貉矽??*/
     .timeline {
         padding-left: var(--spacing-md);
     }
@@ -1825,21 +1825,21 @@ body.edit-mode .stat-number.editable {
         gap: var(--spacing-xs);
     }
 
-    /* 拖曳排序在手機上禁用 */
+    /* ????冽?璈?蝳 */
     .section {
         cursor: default !important;
     }
 }
 
-/* ===== 編輯模式樣式 ===== */
+/* ===== 蝺刻摩璅∪?璅?? ===== */
 .editable {
     white-space: pre-wrap;
-    /* 保留空格和換行 */
+    /* 靽?蝛箸??銵?*/
     word-break: break-word;
-    /* 避免長單詞破壞布局 */
+    /* ?踹??瑕閰憯?撅 */
 }
 
-/* 編輯模式下給予提示 */
+/* 蝺刻摩璅∪?銝策鈭?蝷?*/
 body.edit-mode .editable:hover {
     background: rgba(var(--primary-rgb), 0.1);
     outline: 1px dashed var(--primary);
@@ -1852,10 +1852,10 @@ body.edit-mode .editable:focus {
     outline: 2px solid var(--primary);
 }
 
-/* ===== 列印樣式 (A4 優化) ===== */
+/* ===== ?璅?? (A4 ?芸?) ===== */
 @media print {
 
-    /* 隱藏不需要的元素 */
+    /* ?梯?銝?閬??? */
     #particles,
     .cursor-glow,
     .settings-panel,
@@ -1872,13 +1872,13 @@ body.edit-mode .editable:focus {
         display: none !important;
     }
 
-    /* 列印顏色調整 */
+    /* ?憿隤踵 */
     * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
 
-    /* 頁面設定 */
+    /* ?閮剖? */
     @page {
         size: A4;
         margin: 1.5cm 1cm;
@@ -1897,7 +1897,7 @@ body.edit-mode .editable:focus {
         line-height: 1.4;
     }
 
-    /* 主容器：兩欄佈局適合 A4 */
+    /* 銝餃捆?剁??拇?雿??拙? A4 */
     .container {
         display: grid;
         grid-template-columns: 180px 1fr;
@@ -1906,7 +1906,7 @@ body.edit-mode .editable:focus {
         padding: 0;
     }
 
-    /* 側邊欄縮小 */
+    /* ?湧?甈葬撠?*/
     .sidebar {
         position: static;
     }
@@ -1954,7 +1954,7 @@ body.edit-mode .editable:focus {
         font-size: 0.75rem;
     }
 
-    /* 主內容區 */
+    /* 銝餃摰孵? */
     .main-content {
         gap: 10px;
     }
@@ -1984,7 +1984,7 @@ body.edit-mode .editable:focus {
         font-size: 0.9rem;
     }
 
-    /* 時間軸 */
+    /* ??頠?*/
     .timeline {
         padding-left: 15px;
     }
@@ -2027,7 +2027,7 @@ body.edit-mode .editable:focus {
         line-height: 1.4;
     }
 
-    /* 技能 */
+    /* ???*/
     .skills-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 8px;
@@ -2057,7 +2057,7 @@ body.edit-mode .editable:focus {
         background: #3b82f6 !important;
     }
 
-    /* 專案 */
+    /* 撠? */
     .projects-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
@@ -2101,7 +2101,7 @@ body.edit-mode .editable:focus {
         font-size: 0.75rem;
     }
 
-    /* 統計數據 */
+    /* 蝯梯??豢? */
     .stats-grid {
         grid-template-columns: repeat(4, 1fr);
         gap: 8px;
@@ -2125,7 +2125,7 @@ body.edit-mode .editable:focus {
         font-size: 0.7rem;
     }
 
-    /* 社群連結列印樣式 */
+    /* 蝷曄黎????璅?? */
     .social-list {
         gap: 4px;
     }
@@ -2159,13 +2159,13 @@ body.edit-mode .editable:focus {
         text-decoration: none;
     }
 
-    /* 關於我 */
+    /* ???*/
     .about-text {
         font-size: 0.8rem;
         line-height: 1.5;
     }
 
-    /* 分頁控制 */
+    /* ???批 */
     .section {
         break-inside: avoid;
     }
@@ -2175,7 +2175,7 @@ body.edit-mode .editable:focus {
         break-after: avoid;
     }
 
-    /* 修正青色文字：改為深色以便在白底清晰可見 */
+    /* 靽格迤???嚗?箸楛?脖誑靘踹?賢?皜?航? */
     .social-url {
         color: #0066cc !important;
     }
@@ -2210,13 +2210,13 @@ body.edit-mode .editable:focus {
         filter: grayscale(0);
     }
 
-    /* 所有使用 primary 顏色的元素 */
+    /* ??蝙??primary 憿??蝝?*/
     a {
         color: #0066cc !important;
     }
 }
 
-/* ===== 動畫偏好設定 ===== */
+/* ===== ??末閮剖? ===== */
 @media (prefers-reduced-motion: reduce) {
 
     *,
@@ -2228,7 +2228,7 @@ body.edit-mode .editable:focus {
         scroll-behavior: auto !important;
     }
 
-    /* 粒子背景保留顯示，不受動畫偏好影響 */
+    /* 蝎??靽?憿舐內嚗????怠?憟賢蔣??*/
 
     .cursor-glow {
         display: none !important;
@@ -2248,13 +2248,14 @@ body.edit-mode .editable:focus {
         transition: none !important;
     }
 }
-/* ��s��x���|�˦� */
+/* 更新日誌折疊樣式 */
 .changelog-item { border-bottom: 1px solid #333; padding: 10px 0; }
 .changelog-item:last-child { border-bottom: none; }
 .changelog-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 5px 0; user-select: none; }
 .changelog-header:hover { background-color: rgba(255, 255, 255, 0.05); }
-.changelog-header::after { content: '��'; font-size: 0.8rem; color: #888; transition: transform 0.3s ease; }
+.changelog-header::after { content: '\25bc'; font-size: 0.8rem; color: #888; transition: transform 0.3s ease; }
 .changelog-item.active .changelog-header::after { transform: rotate(180deg); }
 .changelog-details { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, opacity 0.3s ease-out; opacity: 0; }
 .changelog-item.active .changelog-details { max-height: 500px; opacity: 1; transition: max-height 0.5s ease-in, opacity 0.3s ease-in; }
 .changelog-changes { padding: 10px 0 10px 20px; margin: 0; }
+
