@@ -178,6 +178,13 @@ body:hover .cursor-glow {
     justify-content: center;
     font-size: 1.2rem;
     transition: all var(--transition-normal);
+    overflow: hidden;
+}
+
+.edit-mode-toggle .edit-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .edit-mode-toggle:hover {
@@ -603,6 +610,8 @@ body.edit-mode .avatar-edit {
     align-items: center;
     justify-content: center;
     transition: all var(--transition-fast);
+    z-index: 10;
+    pointer-events: auto;
 }
 
 body.edit-mode .section-delete-btn {
@@ -646,16 +655,18 @@ body.edit-mode .sidebar-add-section {
 .sidebar-section-options {
     display: none;
     position: absolute;
-    top: 100%;
+    bottom: 100%;
     left: 0;
     right: 0;
-    margin-top: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     padding: var(--spacing-xs);
     z-index: 100;
-    box-shadow: 0 5px 20px var(--shadow-color);
+    box-shadow: 0 -5px 20px var(--shadow-color);
+    max-height: 200px;
+    overflow-y: auto;
 }
 
 .sidebar-section-options.active {
@@ -699,6 +710,8 @@ body.edit-mode .sidebar-add-section {
     right: var(--spacing-xs);
     top: 50%;
     transform: translateY(-50%);
+    z-index: 10;
+    pointer-events: auto;
 }
 
 .contact-section h3,
@@ -871,6 +884,8 @@ body.edit-mode .add-tag-inline {
     right: var(--spacing-xs);
     top: 50%;
     transform: translateY(-50%);
+    z-index: 10;
+    pointer-events: auto;
 }
 
 /* ===== 主內容區 ===== */

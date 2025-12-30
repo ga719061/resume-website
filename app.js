@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTypingEffect();
     initProjectEvents();
     initSettingsAccordion();
-    initKeyboardShortcuts();
+    // initKeyboardShortcuts(); // 已停用，避免與瀏覽器衝突
     initUndoRedo();
     initAutoBackup();
     initDragAndDrop();
@@ -191,7 +191,8 @@ function applyLanguage(lang) {
     const exportHtmlBtn = document.getElementById('exportHtmlBtn');
     const showChangelogBtn = document.getElementById('showChangelogBtn');
 
-    if (editModeBtn) editModeBtn.innerHTML = `<span>📝</span> ${t('edit.mode').replace('📝 ', '')}`;
+    // 編輯按鈕已獨立，只保留 icon，不更新文字
+    if (editModeBtn) editModeBtn.innerHTML = `<span class="edit-icon">✏️</span>`;
     if (exportBtn) exportBtn.innerHTML = `<span>📤</span> ${t('edit.export').replace('📤 ', '')}`;
     if (importBtn) importBtn.innerHTML = `<span>📥</span> ${t('edit.import').replace('📥 ', '')}`;
     if (resetBtn) resetBtn.innerHTML = `<span>🔄</span> ${t('edit.reset').replace('🔄 ', '')}`;
@@ -1659,6 +1660,22 @@ function collectData() {
         }
     });
 
+    // 儲存側邊欄區塊
+    data.sidebarSections = [];
+    document.querySelectorAll('.sidebar .sidebar-section').forEach(section => {
+        const sectionType = section.dataset.sectionType;
+        const clone = section.cloneNode(true);
+
+        // 清理編輯相關元素
+        clone.querySelectorAll('.delete-btn, .section-delete-btn, .add-btn, .add-tag-inline').forEach(el => el.remove());
+        clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+
+        data.sidebarSections.push({
+            type: sectionType,
+            html: clone.outerHTML
+        });
+    });
+
     return data;
 }
 
@@ -1760,6 +1777,28 @@ function applyData(data) {
         });
     }
 
+    // 恢復側邊欄區塊
+    if (data.sidebarSections && data.sidebarSections.length > 0) {
+        const sidebar = document.querySelector('.sidebar');
+        const addSectionBtn = document.querySelector('.sidebar-add-section');
+        const profileSection = document.querySelector('.profile-section');
+
+        if (sidebar && addSectionBtn) {
+            // 移除現有的側邊欄區塊（除了 profile-section 和 sidebar-add-section）
+            sidebar.querySelectorAll('.sidebar-section').forEach(section => {
+                section.remove();
+            });
+
+            // 恢復儲存的區塊
+            data.sidebarSections.forEach(sectionData => {
+                addSectionBtn.insertAdjacentHTML('beforebegin', sectionData.html);
+            });
+
+            // 重新加入按鈕和其他 UI 元素
+            restoreSidebarButtons();
+        }
+    }
+
     // 更新技能條並重新初始化動畫
     setTimeout(() => {
         // 為恢復的項目重新加入刪除按鈕
@@ -1821,6 +1860,51 @@ function restoreDeleteButtons() {
     document.querySelectorAll('.stat-item').forEach(item => {
         if (!item.querySelector('.delete-btn')) {
             item.insertAdjacentHTML('beforeend', '<button class="delete-btn small stat-delete" title="刪除">✕</button>');
+        }
+    });
+}
+
+// 恢復側邊欄區塊的按鈕
+function restoreSidebarButtons() {
+    // 為每個側邊欄區塊加入刪除按鈕
+    document.querySelectorAll('.sidebar-section').forEach(section => {
+        if (!section.querySelector('.section-delete-btn')) {
+            section.insertAdjacentHTML('afterbegin', '<button class="section-delete-btn" title="刪除此區塊">✕</button>');
+        }
+    });
+
+    // 為聯絡區塊加入按鈕
+    document.querySelectorAll('.contact-section').forEach(section => {
+        const list = section.querySelector('.contact-list');
+        if (list && !section.querySelector('.add-btn')) {
+            list.insertAdjacentHTML('afterend', '<button class="add-btn" id="addContactBtn">+ 新增聯絡</button>');
+        }
+        // 為每個聯絡項目加入刪除按鈕
+        section.querySelectorAll('.contact-item').forEach(item => {
+            if (!item.querySelector('.delete-btn')) {
+                item.insertAdjacentHTML('beforeend', '<button class="delete-btn small" title="刪除">✕</button>');
+            }
+        });
+    });
+
+    // 為社群區塊加入按鈕
+    document.querySelectorAll('.social-section').forEach(section => {
+        const list = section.querySelector('.social-list');
+        if (list && !section.querySelector('.add-btn')) {
+            list.insertAdjacentHTML('afterend', '<button class="add-btn" id="addSocialBtn">+ 新增社群</button>');
+        }
+        // 為每個社群項目加入刪除按鈕
+        section.querySelectorAll('.social-item').forEach(item => {
+            if (!item.querySelector('.delete-btn')) {
+                item.insertAdjacentHTML('beforeend', '<button class="delete-btn small" title="刪除">✕</button>');
+            }
+        });
+    });
+
+    // 為標籤區塊加入新增按鈕
+    document.querySelectorAll('.sidebar-tags').forEach(container => {
+        if (!container.querySelector('.add-tag-inline')) {
+            container.insertAdjacentHTML('beforeend', '<button class="add-tag-inline" onclick="addSidebarTag(this)">+</button>');
         }
     });
 }
@@ -2124,36 +2208,8 @@ function showToast(message) {
     }, 3000);
 }
 
-// ===== 鍵盤快捷鍵 =====
-function initKeyboardShortcuts() {
-    document.addEventListener('keydown', e => {
-        // Ctrl+S: 儲存
-        if (e.ctrlKey && e.key === 's') {
-            e.preventDefault();
-            saveData();
-            showToast('✅ 已儲存');
-        }
-
-        // Ctrl+E: 切換編輯模式
-        if (e.ctrlKey && e.key === 'e') {
-            e.preventDefault();
-            const editBtn = document.getElementById('editModeBtn');
-            editBtn?.click();
-        }
-
-        // Ctrl+Z: 撤銷
-        if (e.ctrlKey && e.key === 'z' && !e.shiftKey) {
-            e.preventDefault();
-            undo();
-        }
-
-        // Ctrl+Y 或 Ctrl+Shift+Z: 重做
-        if ((e.ctrlKey && e.key === 'y') || (e.ctrlKey && e.shiftKey && e.key === 'z')) {
-            e.preventDefault();
-            redo();
-        }
-    });
-}
+// ===== 鍵盤快捷鍵（已停用，避免與瀏覽器衝突）=====
+// function initKeyboardShortcuts() { ... }
 
 // ===== Undo/Redo 功能 =====
 const undoStack = [];
