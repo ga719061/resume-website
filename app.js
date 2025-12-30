@@ -69,7 +69,29 @@ const translations = {
         'toast.langChanged': '語言已切換',
         // 側邊欄標題
         'sidebar.contact': '📬 聯絡方式',
-        'sidebar.social': '🔗 社群連結'
+        'sidebar.social': '🔗 社群連結',
+        // 預設範本文字
+        'default.name': '您的姓名',
+        'default.title': '您的職稱',
+        'default.about': '在這裡寫一段簡短的自我介紹，讓招聘方更了解您的專業背景、技能和職涯目標。',
+        'default.jobTitle': '職位名稱',
+        'default.company': '公司名稱',
+        'default.period': '2020 - 至今',
+        'default.jobDesc': '描述您在這個職位上的主要職責、成就和貢獻。',
+        'default.degree': '學位名稱',
+        'default.school': '學校名稱',
+        'default.eduPeriod': '2016 - 2020',
+        'default.eduDesc': '描述您的學習成就、相關課程或課外活動。',
+        'default.skillName': '技能名稱',
+        'default.projectName': '專案名稱',
+        'default.projectDesc': '描述這個專案的目標、使用的技術、您的貢獻等。',
+        'default.tag': '標籤',
+        'default.email': 'email@example.com',
+        'default.phone': '+886 912 345 678',
+        'default.location': '台北市, 台灣',
+        'default.website': 'yourwebsite.com',
+        'default.statNumber': '0',
+        'default.statLabel': '標籤'
     },
     'zh-CN': {
         'settings.title': '📄 简历生成器',
@@ -108,7 +130,28 @@ const translations = {
         'toast.reset': '数据已初始化，正在重新加载...',
         'toast.langChanged': '语言已切换',
         'sidebar.contact': '📬 联系方式',
-        'sidebar.social': '🔗 社交链接'
+        'sidebar.social': '🔗 社交链接',
+        'default.name': '您的姓名',
+        'default.title': '您的职称',
+        'default.about': '在这里写一段简短的自我介绍，让招聘方更了解您的专业背景、技能和职业目标。',
+        'default.jobTitle': '职位名称',
+        'default.company': '公司名称',
+        'default.period': '2020 - 至今',
+        'default.jobDesc': '描述您在这个职位上的主要职责、成就和贡献。',
+        'default.degree': '学位名称',
+        'default.school': '学校名称',
+        'default.eduPeriod': '2016 - 2020',
+        'default.eduDesc': '描述您的学习成就、相关课程或课外活动。',
+        'default.skillName': '技能名称',
+        'default.projectName': '项目名称',
+        'default.projectDesc': '描述这个项目的目标、使用的技术、您的贡献等。',
+        'default.tag': '标签',
+        'default.email': 'email@example.com',
+        'default.phone': '+86 123 4567 8900',
+        'default.location': '北京市',
+        'default.website': 'yourwebsite.com',
+        'default.statNumber': '0',
+        'default.statLabel': '标签'
     },
     'en': {
         'settings.title': '📄 Resume Builder',
@@ -147,7 +190,28 @@ const translations = {
         'toast.reset': 'Data reset, reloading...',
         'toast.langChanged': 'Language changed',
         'sidebar.contact': '📬 Contact',
-        'sidebar.social': '🔗 Social Links'
+        'sidebar.social': '🔗 Social Links',
+        'default.name': 'Your Name',
+        'default.title': 'Your Title',
+        'default.about': 'Write a brief introduction about yourself here, including your professional background, skills, and career goals.',
+        'default.jobTitle': 'Job Title',
+        'default.company': 'Company Name',
+        'default.period': '2020 - Present',
+        'default.jobDesc': 'Describe your main responsibilities, achievements, and contributions in this role.',
+        'default.degree': 'Degree Name',
+        'default.school': 'School Name',
+        'default.eduPeriod': '2016 - 2020',
+        'default.eduDesc': 'Describe your academic achievements, relevant courses, or extracurricular activities.',
+        'default.skillName': 'Skill Name',
+        'default.projectName': 'Project Name',
+        'default.projectDesc': 'Describe this project\'s goals, technologies used, and your contributions.',
+        'default.tag': 'Tag',
+        'default.email': 'email@example.com',
+        'default.phone': '+1 234 567 8900',
+        'default.location': 'City, Country',
+        'default.website': 'yourwebsite.com',
+        'default.statNumber': '0',
+        'default.statLabel': 'Label'
     }
 };
 
@@ -252,6 +316,54 @@ function applyLanguage(lang) {
 
     const addSectionBtn = document.getElementById('addSectionBtn');
     if (addSectionBtn) addSectionBtn.textContent = t('btn.addSection');
+
+    // 更新預設範本文字（只更新未被用戶修改過的內容）
+    updateDefaultTemplates(lang);
+}
+
+// 預設範本的原始值映射（用於判斷是否被用戶修改）
+const defaultValueMap = {
+    'name': ['您的姓名', '您的姓名', 'Your Name'],
+    'title': ['您的職稱', '您的职称', 'Your Title'],
+    'about-text': ['在這裡寫一段簡短的自我介紹，讓招聘方更了解您的專業背景、技能和職涯目標。', '在这里写一段简短的自我介绍，让招聘方更了解您的专业背景、技能和职业目标。', 'Write a brief introduction about yourself here, including your professional background, skills, and career goals.']
+};
+
+function updateDefaultTemplates(lang) {
+    // 檢查是否有儲存的資料，如果有就不更新預設範本
+    const saved = localStorage.getItem('resume-data');
+    if (saved) {
+        try {
+            const data = JSON.parse(saved);
+            // 如果有已儲存的欄位資料，不更新這些欄位
+            if (data.fields && Object.keys(data.fields).length > 0) {
+                return; // 用戶已有自己的資料，不覆蓋
+            }
+        } catch (e) {
+            console.error('無法解析儲存的資料');
+        }
+    }
+
+    // 只有在沒有儲存資料時才更新預設範本
+    const nameEl = document.querySelector('[data-field="name"]');
+    const titleEl = document.querySelector('.title');
+    const aboutEl = document.querySelector('.about-text');
+
+    if (nameEl && isDefaultValue(nameEl.textContent, 'name')) {
+        nameEl.textContent = t('default.name');
+    }
+    if (titleEl && isDefaultValue(titleEl.textContent, 'title')) {
+        titleEl.textContent = t('default.title');
+    }
+    if (aboutEl && isDefaultValue(aboutEl.textContent, 'about-text')) {
+        aboutEl.textContent = t('default.about');
+    }
+}
+
+function isDefaultValue(value, key) {
+    const defaults = defaultValueMap[key];
+    if (!defaults) return false;
+    const trimmed = value.trim();
+    return defaults.some(d => d === trimmed);
 }
 
 // ===== 設定面板事件 =====
