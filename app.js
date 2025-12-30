@@ -1816,6 +1816,16 @@ function initProjectEvents() {
 
         // URL 輸入框變更
         if (e.target.classList.contains('project-url')) {
+            const input = e.target;
+            const wrapper = input.closest('.project-link-wrapper');
+            const link = wrapper?.querySelector('.project-link-view');
+            if (link) {
+                let url = input.value.trim();
+                if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
+                    url = 'https://' + url;
+                }
+                link.href = url || '#';
+            }
             saveData();
         }
     });
@@ -1823,11 +1833,46 @@ function initProjectEvents() {
     // URL 輸入框 blur 事件
     projectsList.addEventListener('blur', (e) => {
         if (e.target.classList.contains('project-url')) {
+            const input = e.target;
+            const wrapper = input.closest('.project-link-wrapper');
+            const link = wrapper?.querySelector('.project-link-view');
+            if (link) {
+                let url = input.value.trim();
+                if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
+                    url = 'https://' + url;
+                }
+                link.href = url || '#';
+            }
             saveData();
         }
     }, true);
+
+    // 初始化時同步所有專案連結
+    syncProjectLinks();
 }
 
+// 同步專案連結：將輸入框的值同步到可點擊連結
+function syncProjectLinks() {
+    document.querySelectorAll('.project-link-wrapper').forEach(wrapper => {
+        const input = wrapper.querySelector('.project-url');
+        const link = wrapper.querySelector('.project-link-view');
+        if (input && link) {
+            let url = input.value.trim();
+            if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            link.href = url || '#';
+            // 如果沒有連結，隱藏連結顯示
+            if (!url || url === '#') {
+                link.style.opacity = '0.5';
+                link.textContent = '尚無連結';
+            } else {
+                link.style.opacity = '1';
+                link.textContent = '查看專案 →';
+            }
+        }
+    });
+}
 // ===== 打字機效果 =====
 function initTypingEffect() {
     const typingEl = document.querySelector('.typing-text');
