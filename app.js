@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initUndoRedo();
     initAutoBackup();
     initDragAndDrop();
+    initChangelog();
     loadData();
     checkStorageUsage();
 });
@@ -2778,19 +2779,44 @@ function compressImage(base64, maxWidth = 800, quality = 0.7) {
                 height = (height * maxWidth) / width;
                 width = maxWidth;
             }
+            if (height > maxWidth) {
+                width = (width * maxWidth) / height;
+                height = maxWidth;
+            }
 
             canvas.width = width;
             canvas.height = height;
-
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
 
             resolve(canvas.toDataURL('image/jpeg', quality));
         };
-        img.onerror = () => resolve(base64); // 壓縮失敗則返回原圖
+        img.onerror = () => resolve(base64); // 失敗時回傳原始圖片
         img.src = base64;
     });
 }
+
+// ===== 更新日誌折疊功能 =====
+function initChangelog() {
+    document.querySelectorAll('.changelog-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const item = header.parentElement;
+
+            // 如果要實現手風琴效果（一次只展開一個），請取消註解以下幾行
+            /*
+            document.querySelectorAll('.changelog-item.active').forEach(activeItem => {
+                if (activeItem !== item) {
+                    activeItem.classList.remove('active');
+                }
+            });
+            */
+
+            item.classList.toggle('active');
+        });
+    });
+}
+
+
 
 // 壓縮匯出資料中的圖片
 async function compressExportData(data) {

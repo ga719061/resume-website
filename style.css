@@ -2248,3 +2248,13 @@ body.edit-mode .editable:focus {
         transition: none !important;
     }
 }
+/* 更新日誌折疊樣式 */
+.changelog-item { border-bottom: 1px solid #333; padding: 10px 0; }
+.changelog-item:last-child { border-bottom: none; }
+.changelog-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 5px 0; user-select: none; }
+.changelog-header:hover { background-color: rgba(255, 255, 255, 0.05); }
+.changelog-header::after { content: '▼'; font-size: 0.8rem; color: #888; transition: transform 0.3s ease; }
+.changelog-item.active .changelog-header::after { transform: rotate(180deg); }
+.changelog-details { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, opacity 0.3s ease-out; opacity: 0; }
+.changelog-item.active .changelog-details { max-height: 500px; opacity: 1; transition: max-height 0.5s ease-in, opacity 0.3s ease-in; }
+.changelog-changes { padding: 10px 0 10px 20px; margin: 0; }
