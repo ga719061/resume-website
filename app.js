@@ -66,7 +66,10 @@ const translations = {
         'toast.exported': '資料已匯出',
         'toast.imported': '資料已匯入！',
         'toast.reset': '資料已初始化，正在重新載入...',
-        'toast.langChanged': '語言已切換'
+        'toast.langChanged': '語言已切換',
+        // 側邊欄標題
+        'sidebar.contact': '📬 聯絡方式',
+        'sidebar.social': '🔗 社群連結'
     },
     'zh-CN': {
         'settings.title': '📄 简历生成器',
@@ -103,7 +106,9 @@ const translations = {
         'toast.exported': '数据已导出',
         'toast.imported': '数据已导入！',
         'toast.reset': '数据已初始化，正在重新加载...',
-        'toast.langChanged': '语言已切换'
+        'toast.langChanged': '语言已切换',
+        'sidebar.contact': '📬 联系方式',
+        'sidebar.social': '🔗 社交链接'
     },
     'en': {
         'settings.title': '📄 Resume Builder',
@@ -140,7 +145,9 @@ const translations = {
         'toast.exported': 'Data exported',
         'toast.imported': 'Data imported!',
         'toast.reset': 'Data reset, reloading...',
-        'toast.langChanged': 'Language changed'
+        'toast.langChanged': 'Language changed',
+        'sidebar.contact': '📬 Contact',
+        'sidebar.social': '🔗 Social Links'
     }
 };
 
@@ -212,6 +219,13 @@ function applyLanguage(lang) {
         else if (type === 'projects') titleEl.innerHTML = `<span class="icon">${icon}</span> ${t('section.projects')}`;
         else if (type === 'stats') titleEl.innerHTML = `<span class="icon">${icon}</span> ${t('section.stats')}`;
     });
+
+    // 側邊欄標題
+    const contactTitle = document.querySelector('.contact-section h3');
+    if (contactTitle) contactTitle.textContent = t('sidebar.contact');
+
+    const socialTitle = document.querySelector('.social-section h3');
+    if (socialTitle) socialTitle.textContent = t('sidebar.social');
 
     // 新增按鈕
     document.getElementById('addExperienceBtn')?.childNodes.forEach(n => {
