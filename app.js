@@ -241,6 +241,22 @@ function applyLanguage(lang) {
 
 // ===== 設定面板事件 =====
 function initSettingsAccordion() {
+    // 設定按鈕點擊切換展開/縮起
+    const settingsToggle = document.querySelector('.settings-toggle');
+    const settingsDropdown = document.querySelector('.settings-dropdown');
+
+    settingsToggle?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        settingsDropdown?.classList.toggle('active');
+    });
+
+    // 點擊外部關閉設定選單
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.settings-panel')) {
+            settingsDropdown?.classList.remove('active');
+        }
+    });
+
     // 更新日誌 Modal
     const showChangelogBtn = document.getElementById('showChangelogBtn');
     const changelogModal = document.getElementById('changelogModal');
@@ -283,15 +299,14 @@ function initSettingsAccordion() {
 
 // ===== 粒子背景 =====
 function initParticles() {
-    // 檢測用戶是否偏好減少動畫
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-        console.log('尊重用戶偏好：禁用粒子動畫');
-        return;
-    }
-
     const canvas = document.getElementById('particles');
     if (!canvas) return;
+
+    // 檢測用戶是否偏好減少動畫（僅提示，不強制禁用）
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+        console.log('提示：用戶偏好減少動畫，但粒子背景仍會顯示');
+    }
 
     const ctx = canvas.getContext('2d');
     let particles = [];

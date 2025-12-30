@@ -200,7 +200,7 @@ body:hover .cursor-glow {
     box-shadow: 0 10px 40px var(--shadow-color);
 }
 
-.settings-panel:hover .settings-dropdown,
+/* 只用點擊控制展開/縮起 */
 .settings-dropdown.active {
     opacity: 1;
     visibility: visible;
@@ -1923,9 +1923,7 @@ body.edit-mode .editable:focus {
         scroll-behavior: auto !important;
     }
 
-    #particles {
-        display: none !important;
-    }
+    /* 粒子背景保留顯示，不受動畫偏好影響 */
 
     .cursor-glow {
         display: none !important;
