@@ -336,18 +336,28 @@ const defaultValueMap = {
     ],
     'jobTitle': ['職位名稱', '职位名称', 'Job Title'],
     'company': ['公司名稱', '公司名称', 'Company Name'],
-    'period': ['2020 - 至今', '2020 - Present'],
+    'period': [
+        '2020 - 至今', '2020 - Present',
+        '開始年份 - 結束年份', '开始年份 - 结束年份', 'Start Year - End Year',
+        '2016 - 2020'
+    ],
     'jobDesc': [
         '描述您在這個職位上的主要職責、成就和貢獻。',
         '描述您在这个职位上的主要职责、成就和贡献。',
-        'Describe your main responsibilities, achievements, and contributions in this role.'
+        'Describe your main responsibilities, achievements, and contributions in this role.',
+        '描述您在此職位的主要職責、達成的成就、使用的技術等。',
+        '描述您在此职位的主要职责、达成的成就、使用的技术等。',
+        'Describe your key responsibilities, achievements, and technologies used in this position.'
     ],
     'degree': ['學位名稱', '学位名称', 'Degree Name'],
     'school': ['學校名稱', '学校名称', 'School Name'],
     'eduDesc': [
         '描述您的學習成就、相關課程或課外活動。',
         '描述您的学习成就、相关课程或课外活动。',
-        'Describe your academic achievements, relevant courses, or extracurricular activities.'
+        'Describe your academic achievements, relevant courses, or extracurricular activities.',
+        '描述您的主修、研究方向、獲得的榮譽等。',
+        '描述您的主修、研究方向、获得的荣誉等。',
+        'Describe your major, research focus, and honors received.'
     ],
     'skillName': ['技能名稱', '技能名称', 'Skill Name', '技能 1', '技能 2', '技能 3'],
     'projectName': ['專案名稱', '项目名称', 'Project Name'],
