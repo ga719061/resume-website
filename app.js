@@ -329,7 +329,10 @@ const defaultValueMap = {
     'about-text': [
         '在這裡寫一段簡短的自我介紹，讓招聘方更了解您的專業背景、技能和職涯目標。',
         '在这里写一段简短的自我介绍，让招聘方更了解您的专业背景、技能和职业目标。',
-        'Write a brief introduction about yourself here, including your professional background, skills, and career goals.'
+        'Write a brief introduction about yourself here, including your professional background, skills, and career goals.',
+        '在此輸入您的自我介紹，包含專業背景、核心能力、工作理念等。例如：擁有多年相關領域經驗，專精於某某技術，熱衷於解決問題並創造價值。',
+        '在此输入您的自我介绍，包含专业背景、核心能力、工作理念等。',
+        'Enter your self-introduction here, including your professional background, core competencies, and work philosophy.'
     ],
     'jobTitle': ['職位名稱', '职位名称', 'Job Title'],
     'company': ['公司名稱', '公司名称', 'Company Name'],
