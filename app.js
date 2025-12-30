@@ -91,7 +91,11 @@ const translations = {
         'default.location': '台北市, 台灣',
         'default.website': 'yourwebsite.com',
         'default.statNumber': '0',
-        'default.statLabel': '標籤'
+        'default.statLabel': '標籤',
+        'default.socialName': '社群名稱',
+        'default.contact': '新增資訊',
+        'default.urlPlaceholder': '輸入網址',
+        'default.linkPlaceholder': '輸入專案連結'
     },
     'zh-CN': {
         'settings.title': '📄 简历生成器',
@@ -151,7 +155,11 @@ const translations = {
         'default.location': '北京市',
         'default.website': 'yourwebsite.com',
         'default.statNumber': '0',
-        'default.statLabel': '标签'
+        'default.statLabel': '标签',
+        'default.socialName': '社群名称',
+        'default.contact': '新增资讯',
+        'default.urlPlaceholder': '输入网址',
+        'default.linkPlaceholder': '输入项目链接'
     },
     'en': {
         'settings.title': '📄 Resume Builder',
@@ -211,7 +219,11 @@ const translations = {
         'default.location': 'City, Country',
         'default.website': 'yourwebsite.com',
         'default.statNumber': '0',
-        'default.statLabel': 'Label'
+        'default.statLabel': 'Label',
+        'default.socialName': 'Social Name',
+        'default.contact': 'New Info',
+        'default.urlPlaceholder': 'Enter URL',
+        'default.linkPlaceholder': 'Enter Project Link'
     }
 };
 
@@ -368,7 +380,10 @@ const defaultValueMap = {
     ],
     'tag': ['標籤', '标签', 'Tag', '標籤1', '標籤2', '標籤3'],
     'contact': ['email@example.com', '+886 912 345 678', '+86 123 4567 8900', '+1 234 567 8900', '台北市, 台灣', '北京市', 'City, Country', 'yourwebsite.com'],
-    'statLabel': ['標籤', '标签', 'Label', '年經驗', '完成專案', '滿意客戶', '其他數據']
+    'statLabel': ['標籤', '标签', 'Label', '年經驗', '完成專案', '滿意客戶', '其他數據'],
+    'socialName': ['社群名稱', '社群名称', 'Social Name'],
+    'contactText': ['新增資訊', '新增资讯', 'New Info'],
+    'urlPlaceholder': ['輸入網址', '输入网址', 'Enter URL', '輸入專案連結', '输入项目链接', 'Enter Project Link']
 };
 
 function updateDefaultTemplates(lang) {
@@ -432,12 +447,16 @@ function updateDefaultTemplates(lang) {
     document.querySelectorAll('.project-card').forEach(card => {
         const nameEl = card.querySelector('[data-field*="proj-name-"]');
         const descEl = card.querySelector('[data-field*="proj-desc-"]');
+        const urlInput = card.querySelector('.project-url');
 
         if (nameEl && isDefaultValue(nameEl.textContent, 'projectName')) {
             nameEl.textContent = t('default.projectName');
         }
         if (descEl && isDefaultValue(descEl.textContent, 'projectDesc')) {
             descEl.textContent = t('default.projectDesc');
+        }
+        if (urlInput && isDefaultValue(urlInput.placeholder, 'urlPlaceholder')) {
+            urlInput.placeholder = t('default.linkPlaceholder');
         }
     });
 
@@ -449,13 +468,14 @@ function updateDefaultTemplates(lang) {
     });
 
     // 更新標籤
-    document.querySelectorAll('.tag').forEach(el => {
+    document.querySelectorAll('.tag, .sidebar-tag').forEach(el => {
         const text = el.textContent.replace('×', '').trim();
         if (isDefaultValue(text, 'tag')) {
             // 保留刪除按鈕
-            const hasDeleteBtn = el.querySelector('.tag-delete-btn');
+            const hasDeleteBtn = el.querySelector('.tag-delete-btn') || el.closest('.sidebar-tags'); // sidebar tags don't have btn inside usually?
+            // Actually sidebar tags don't have delete btn inside span in current implementation
             el.textContent = t('default.tag');
-            if (hasDeleteBtn) {
+            if (el.querySelector('.tag-delete-btn')) {
                 el.innerHTML = t('default.tag') + '<button class="tag-delete-btn" title="刪除標籤">×</button>';
             }
         }
@@ -465,6 +485,35 @@ function updateDefaultTemplates(lang) {
     document.querySelectorAll('.stat-label').forEach(el => {
         if (isDefaultValue(el.textContent, 'statLabel')) {
             el.textContent = t('default.statLabel');
+        }
+    });
+
+    // 更新社群連結
+    document.querySelectorAll('.social-item').forEach(item => {
+        const nameEl = item.querySelector('.social-name');
+        const urlEl = item.querySelector('.social-url');
+
+        if (nameEl && isDefaultValue(nameEl.textContent, 'socialName')) {
+            nameEl.textContent = t('default.socialName');
+        }
+        if (urlEl && isDefaultValue(urlEl.textContent, 'urlPlaceholder')) {
+            urlEl.textContent = t('default.urlPlaceholder');
+        }
+    });
+
+    // 更新聯絡資訊（僅限新增的項目）
+    document.querySelectorAll('.contact-item .contact-text').forEach(el => {
+        if (isDefaultValue(el.textContent, 'contactText')) {
+            el.textContent = t('default.contact');
+        }
+        // Also check for email default
+        if (isDefaultValue(el.textContent, 'contact')) {
+            // If matches email default, maybe update to new email default?
+            // But 'contact' key has many defaults. 'default.email' is one specific one.
+            // Let's just check if it matches specific default.email
+            if (el.textContent === translations['zh-TW']['default.email'] || el.textContent === translations['zh-CN']['default.email'] || el.textContent === translations['en']['default.email']) {
+                el.textContent = t('default.email');
+            }
         }
     });
 }
@@ -1186,10 +1235,10 @@ function initAddButtons() {
         const list = document.getElementById('experienceList');
         const index = list.children.length;
         const html = createTimelineItem('exp', index, {
-            title: '資深前端工程師',
-            date: '2023 - 現在',
-            company: '公司名稱',
-            desc: '負責前端架構設計與開發，優化效能並提升使用者體驗。'
+            title: t('default.jobTitle'),
+            date: t('default.period'),
+            company: t('default.company'),
+            desc: t('default.jobDesc')
         });
         list.insertAdjacentHTML('beforeend', html);
         saveData();
@@ -1200,10 +1249,10 @@ function initAddButtons() {
         const list = document.getElementById('educationList');
         const index = list.children.length;
         const html = createTimelineItem('edu', index, {
-            title: '資訊工程學士',
-            date: '2015 - 2019',
-            company: '國立台灣大學',
-            desc: '主修演算法與軟體工程，畢業專題獲得系上首獎。'
+            title: t('default.degree'),
+            date: t('default.eduPeriod'),
+            company: t('default.school'),
+            desc: t('default.eduDesc')
         }, true);
         list.insertAdjacentHTML('beforeend', html);
         saveData();
@@ -1216,7 +1265,7 @@ function initAddButtons() {
         const html = `
             <div class="skill-item" data-index="${index}">
                 <div class="skill-header">
-                    <span class="skill-name editable" data-field="skill-name-${index}" contenteditable="${document.body.classList.contains('edit-mode')}">新技能</span>
+                    <span class="skill-name editable" data-field="skill-name-${index}" contenteditable="${document.body.classList.contains('edit-mode')}">${t('default.skillName')}</span>
                     <span class="skill-level editable" data-field="skill-level-${index}" contenteditable="${document.body.classList.contains('edit-mode')}">50</span>%
                     <button class="delete-btn small" title="刪除">✕</button>
                 </div>
@@ -1244,15 +1293,15 @@ function initAddButtons() {
                     <button class="project-img-edit" title="更換圖片">📷</button>
                 </div>
                 <div class="project-info">
-                    <h3 class="editable" data-field="proj-name-${index}" contenteditable="${isEdit}">專案名稱</h3>
-                    <p class="editable" data-field="proj-desc-${index}" contenteditable="${isEdit}">專案描述...</p>
+                    <h3 class="editable" data-field="proj-name-${index}" contenteditable="${isEdit}">${t('default.projectName')}</h3>
+                    <p class="editable" data-field="proj-desc-${index}" contenteditable="${isEdit}">${t('default.projectDesc')}</p>
                     <div class="project-tags" data-index="${index}">
-                        <span class="tag editable" data-field="proj-tag-${index}-0" contenteditable="${isEdit}">標籤</span>
+                        <span class="tag editable" data-field="proj-tag-${index}-0" contenteditable="${isEdit}">${t('default.tag')}</span>
                         <button class="add-tag-btn" title="新增標籤">+</button>
                     </div>
                     <div class="project-link-wrapper">
                         <span class="link-label">🔗</span>
-                        <input type="url" class="project-url editable" data-field="proj-url-${index}" placeholder="輸入專案連結" value="">
+                        <input type="url" class="project-url editable" data-field="proj-url-${index}" placeholder="${t('default.linkPlaceholder')}" value="">
                     </div>
                 </div>
                 <button class="delete-btn" title="刪除此項目">✕</button>
@@ -1274,8 +1323,8 @@ function initAddButtons() {
             <li class="social-item" data-index="${index}">
                 <span class="social-icon">${randomIcon}</span>
                 <div class="social-info">
-                    <span class="social-name editable" data-field="social-name-${index}" contenteditable="${isEdit}">社群名稱</span>
-                    <a class="social-url" href="#" target="_blank" data-field="social-url-${index}" contenteditable="${isEdit}">輸入網址</a>
+                    <span class="social-name editable" data-field="social-name-${index}" contenteditable="${isEdit}">${t('default.socialName')}</span>
+                    <a class="social-url" href="#" target="_blank" data-field="social-url-${index}" contenteditable="${isEdit}">${t('default.urlPlaceholder')}</a>
                 </div>
                 <button class="delete-btn small" title="刪除">✕</button>
             </li>
@@ -1293,7 +1342,7 @@ function initAddButtons() {
         const html = `
             <div class="stat-item" data-index="${index}">
                 <span class="stat-number editable" data-field="stat-number-${index}" data-target="0" contenteditable="${isEdit}">0</span>
-                <span class="stat-label editable" data-field="stat-label-${index}" contenteditable="${isEdit}">標籤</span>
+                <span class="stat-label editable" data-field="stat-label-${index}" contenteditable="${isEdit}">${t('default.statLabel')}</span>
                 <button class="delete-btn small stat-delete" title="刪除">✕</button>
             </div>
         `;
@@ -1312,7 +1361,7 @@ function initAddButtons() {
         const html = `
             <li class="contact-item" data-index="${index}">
                 <span class="icon">${randomIcon}</span>
-                <span class="contact-text editable" data-field="contact-${index}" contenteditable="${isEdit}">新增資訊</span>
+                <span class="contact-text editable" data-field="contact-${index}" contenteditable="${isEdit}">${t('default.contact')}</span>
                 <button class="delete-btn small" title="刪除">✕</button>
             </li>
         `;
@@ -1380,11 +1429,11 @@ function addSidebarSection(type) {
         'contact': `
             <div class="sidebar-section contact-section" data-section-type="contact">
                 <button class="section-delete-btn" title="刪除此區塊">✕</button>
-                <h3>📬 聯絡方式</h3>
+                <h3>${t('sidebar.contact')}</h3>
                 <ul class="contact-list" id="contactList${Date.now()}">
                     <li class="contact-item" data-index="0">
                         <span class="icon">✉️</span>
-                        <span class="contact-text editable" data-field="contact-new-0" contenteditable="${isEdit}">email@example.com</span>
+                        <span class="contact-text editable" data-field="contact-new-0" contenteditable="${isEdit}">${t('default.email')}</span>
                         <button class="delete-btn small" title="刪除">✕</button>
                     </li>
                 </ul>
@@ -1394,13 +1443,13 @@ function addSidebarSection(type) {
         'social': `
             <div class="sidebar-section social-section" data-section-type="social">
                 <button class="section-delete-btn" title="刪除此區塊">✕</button>
-                <h3>🔗 社群連結</h3>
+                <h3>${t('sidebar.social')}</h3>
                 <ul class="social-list" id="socialLinks${Date.now()}">
                     <li class="social-item" data-index="0">
                         <span class="social-icon">🌐</span>
                         <div class="social-info">
-                            <span class="social-name editable" data-field="social-new-0" contenteditable="${isEdit}">社群名稱</span>
-                            <a class="social-url" href="#" target="_blank" contenteditable="${isEdit}">輸入網址</a>
+                            <span class="social-name editable" data-field="social-new-0" contenteditable="${isEdit}">${t('default.socialName')}</span>
+                            <a class="social-url" href="#" target="_blank" contenteditable="${isEdit}">${t('default.urlPlaceholder')}</a>
                         </div>
                         <button class="delete-btn small" title="刪除">✕</button>
                     </li>
@@ -1462,7 +1511,7 @@ function addSidebarTag(btn) {
     const tag = document.createElement('span');
     tag.className = 'sidebar-tag editable';
     tag.contentEditable = document.body.classList.contains('edit-mode');
-    tag.textContent = '新標籤';
+    tag.textContent = t('default.tag');
     btn.parentElement.insertBefore(tag, btn);
     tag.focus();
     saveData();
