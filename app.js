@@ -95,7 +95,20 @@ const translations = {
         'default.socialName': '社群名稱',
         'default.contact': '新增資訊',
         'default.urlPlaceholder': '輸入網址',
-        'default.linkPlaceholder': '輸入專案連結'
+        'default.urlPlaceholder': '輸入網址',
+        'default.linkPlaceholder': '輸入專案連結',
+        // 新增板塊選項
+        'addSection.title': '➕ 新增板塊',
+        'sidebar.add': '+ 新增側邊欄區塊',
+        'sidebar.skills': '💡 技能標籤',
+        'sidebar.languages': '🌍 語言能力',
+        'sidebar.interests': '❤️ 興趣愛好',
+        'section.custom': '自訂區塊',
+        'section.certifications': '證書認證',
+        'section.languages': '語言能力',
+        'section.interests': '興趣愛好',
+        'btn.cancel': '取消',
+        'btn.apply': '套用'
     },
     'zh-CN': {
         'settings.title': '📄 简历生成器',
@@ -159,7 +172,20 @@ const translations = {
         'default.socialName': '社群名称',
         'default.contact': '新增资讯',
         'default.urlPlaceholder': '输入网址',
-        'default.linkPlaceholder': '输入项目链接'
+        'default.urlPlaceholder': '输入网址',
+        'default.linkPlaceholder': '输入项目链接',
+        // 新增板块选项
+        'addSection.title': '➕ 新增板块',
+        'sidebar.add': '+ 新增侧边栏区块',
+        'sidebar.skills': '💡 技能标签',
+        'sidebar.languages': '🌍 语言能力',
+        'sidebar.interests': '❤️ 兴趣爱好',
+        'section.custom': '自定区块',
+        'section.certifications': '证书认证',
+        'section.languages': '语言能力',
+        'section.interests': '兴趣爱好',
+        'btn.cancel': '取消',
+        'btn.apply': '应用'
     },
     'en': {
         'settings.title': '📄 Resume Builder',
@@ -223,7 +249,19 @@ const translations = {
         'default.socialName': 'Social Name',
         'default.contact': 'New Info',
         'default.urlPlaceholder': 'Enter URL',
-        'default.linkPlaceholder': 'Enter Project Link'
+        'default.linkPlaceholder': 'Enter Project Link',
+        // 新增板塊選項
+        'addSection.title': '➕ Add Section',
+        'sidebar.add': '+ Add Sidebar Section',
+        'sidebar.skills': '💡 Skill Tags',
+        'sidebar.languages': '🌍 Languages',
+        'sidebar.interests': '❤️ Interests',
+        'section.custom': 'Custom Section',
+        'section.certifications': 'Certifications',
+        'section.languages': 'Languages',
+        'section.interests': 'Interests',
+        'btn.cancel': 'Cancel',
+        'btn.apply': 'Apply'
     }
 };
 
@@ -266,6 +304,7 @@ function applyLanguage(lang) {
     const printPdfBtn = document.getElementById('printPdfBtn');
     const exportHtmlBtn = document.getElementById('exportHtmlBtn');
     const showChangelogBtn = document.getElementById('showChangelogBtn');
+    const addSectionBtn = document.getElementById('addSectionBtn');
 
     // 編輯按鈕已獨立，只保留 icon，不更新文字
     if (editModeBtn) editModeBtn.innerHTML = `<span class="edit-icon">✏️</span>`;
@@ -275,6 +314,49 @@ function applyLanguage(lang) {
     if (printPdfBtn) printPdfBtn.innerHTML = `<span>🖨️</span> ${t('export.pdf').replace('🖨️ ', '')}`;
     if (exportHtmlBtn) exportHtmlBtn.innerHTML = `<span>🌐</span> ${t('export.html').replace('🌐 ', '')}`;
     if (showChangelogBtn) showChangelogBtn.innerHTML = `<span>📋</span> ${t('changelog.title').replace('📋 ', '')}`;
+    if (addSectionBtn) addSectionBtn.textContent = t('btn.addSection');
+
+    // 新增板塊 Modal
+    const addSectionModalTitle = document.querySelector('#addSectionModal h3');
+    if (addSectionModalTitle) addSectionModalTitle.textContent = t('addSection.title');
+
+    document.querySelectorAll('.section-option-btn').forEach(btn => {
+        const type = btn.dataset.section;
+        const textSpan = btn.querySelector('.option-text');
+        if (!textSpan) return;
+
+        if (type === 'about') textSpan.textContent = t('section.about');
+        else if (type === 'experience') textSpan.textContent = t('section.experience');
+        else if (type === 'education') textSpan.textContent = t('section.education');
+        else if (type === 'skills') textSpan.textContent = t('section.skills');
+        else if (type === 'projects') textSpan.textContent = t('section.projects');
+        else if (type === 'stats') textSpan.textContent = t('section.stats');
+        else if (type === 'custom') textSpan.textContent = t('section.custom');
+        else if (type === 'certifications') textSpan.textContent = t('section.certifications');
+        else if (type === 'languages') textSpan.textContent = t('section.languages');
+        else if (type === 'interests') textSpan.textContent = t('section.interests');
+    });
+
+    // 取消/套用按鈕
+    const cancelAddSection = document.getElementById('cancelAddSection');
+    const cancelTheme = document.getElementById('cancelTheme');
+    const applyTheme = document.getElementById('applyTheme');
+    if (cancelAddSection) cancelAddSection.textContent = t('btn.cancel');
+    if (cancelTheme) cancelTheme.textContent = t('btn.cancel');
+    if (applyTheme) applyTheme.textContent = t('btn.apply');
+
+    // 側邊欄新增按鈕與選項
+    const addSidebarSectionBtn = document.getElementById('addSidebarSectionBtn');
+    if (addSidebarSectionBtn) addSidebarSectionBtn.textContent = t('sidebar.add');
+
+    document.querySelectorAll('#sidebarSectionOptions button').forEach(btn => {
+        const type = btn.dataset.type;
+        if (type === 'contact') btn.innerHTML = `📬 ${t('sidebar.contact').replace('📬 ', '')}`;
+        else if (type === 'social') btn.innerHTML = `🔗 ${t('sidebar.social').replace('🔗 ', '')}`;
+        else if (type === 'skills-sidebar') btn.innerHTML = `💡 ${t('sidebar.skills')}`;
+        else if (type === 'languages') btn.innerHTML = `🌍 ${t('sidebar.languages')}`;
+        else if (type === 'interests') btn.innerHTML = `❤️ ${t('sidebar.interests')}`;
+    });
 
     // 更新日誌 Modal 標題
     const changelogTitle = document.querySelector('#changelogModal .modal-header h3');
@@ -326,7 +408,6 @@ function applyLanguage(lang) {
     const addStatBtn = document.getElementById('addStatBtn');
     if (addStatBtn) addStatBtn.textContent = t('btn.addStat');
 
-    const addSectionBtn = document.getElementById('addSectionBtn');
     if (addSectionBtn) addSectionBtn.textContent = t('btn.addSection');
 
     // 更新預設範本文字（只更新未被用戶修改過的內容）
