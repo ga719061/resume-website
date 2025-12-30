@@ -1078,6 +1078,171 @@ function initAddButtons() {
         saveData();
         showToast('已新增統計項目');
     });
+
+    // 新增聯絡方式
+    document.getElementById('addContactBtn')?.addEventListener('click', () => {
+        const list = document.getElementById('contactList');
+        const index = list.children.length;
+        const isEdit = document.body.classList.contains('edit-mode');
+        const icons = ['✉️', '📱', '📍', '🌐', '💼', '🏠'];
+        const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+        const html = `
+            <li class="contact-item" data-index="${index}">
+                <span class="icon">${randomIcon}</span>
+                <span class="contact-text editable" data-field="contact-${index}" contenteditable="${isEdit}">新增資訊</span>
+                <button class="delete-btn small" title="刪除">✕</button>
+            </li>
+        `;
+        list.insertAdjacentHTML('beforeend', html);
+        saveData();
+        showToast('已新增聯絡方式');
+    });
+
+    // 側邊欄新增區塊按鈕
+    const addSidebarBtn = document.getElementById('addSidebarSectionBtn');
+    const sidebarOptions = document.getElementById('sidebarSectionOptions');
+
+    addSidebarBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sidebarOptions?.classList.toggle('active');
+    });
+
+    // 點擊外部關閉選單
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.sidebar-add-section')) {
+            sidebarOptions?.classList.remove('active');
+        }
+    });
+
+    // 新增側邊欄區塊
+    sidebarOptions?.addEventListener('click', (e) => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+
+        const type = btn.dataset.type;
+        addSidebarSection(type);
+        sidebarOptions.classList.remove('active');
+    });
+
+    // 刪除側邊欄區塊
+    document.querySelector('.sidebar')?.addEventListener('click', (e) => {
+        if (e.target.classList.contains('section-delete-btn')) {
+            const section = e.target.closest('.sidebar-section');
+            if (section && confirm('確定要刪除此區塊嗎？')) {
+                section.remove();
+                saveData();
+                showToast('區塊已刪除');
+            }
+        }
+
+        // 刪除聯絡方式項目
+        if (e.target.closest('.contact-item .delete-btn')) {
+            const item = e.target.closest('.contact-item');
+            if (item && confirm('確定要刪除此項目嗎？')) {
+                item.remove();
+                saveData();
+                showToast('項目已刪除');
+            }
+        }
+    });
+}
+
+// 新增側邊欄區塊
+function addSidebarSection(type) {
+    const sidebar = document.querySelector('.sidebar');
+    const addSection = document.querySelector('.sidebar-add-section');
+    const isEdit = document.body.classList.contains('edit-mode');
+
+    const templates = {
+        'contact': `
+            <div class="sidebar-section contact-section" data-section-type="contact">
+                <button class="section-delete-btn" title="刪除此區塊">✕</button>
+                <h3>📬 聯絡方式</h3>
+                <ul class="contact-list" id="contactList${Date.now()}">
+                    <li class="contact-item" data-index="0">
+                        <span class="icon">✉️</span>
+                        <span class="contact-text editable" data-field="contact-new-0" contenteditable="${isEdit}">email@example.com</span>
+                        <button class="delete-btn small" title="刪除">✕</button>
+                    </li>
+                </ul>
+                <button class="add-btn" onclick="addContactItem(this)">+ 新增聯絡</button>
+            </div>
+        `,
+        'social': `
+            <div class="sidebar-section social-section" data-section-type="social">
+                <button class="section-delete-btn" title="刪除此區塊">✕</button>
+                <h3>🔗 社群連結</h3>
+                <ul class="social-list" id="socialLinks${Date.now()}">
+                    <li class="social-item" data-index="0">
+                        <span class="social-icon">🌐</span>
+                        <div class="social-info">
+                            <span class="social-name editable" data-field="social-new-0" contenteditable="${isEdit}">社群名稱</span>
+                            <a class="social-url" href="#" target="_blank" contenteditable="${isEdit}">輸入網址</a>
+                        </div>
+                        <button class="delete-btn small" title="刪除">✕</button>
+                    </li>
+                </ul>
+                <button class="add-btn" onclick="addSocialItem(this)">+ 新增社群</button>
+            </div>
+        `,
+        'skills-sidebar': `
+            <div class="sidebar-section" data-section-type="skills-sidebar">
+                <button class="section-delete-btn" title="刪除此區塊">✕</button>
+                <h3>💡 技能標籤</h3>
+                <div class="sidebar-tags">
+                    <span class="sidebar-tag editable" contenteditable="${isEdit}">技能 1</span>
+                    <span class="sidebar-tag editable" contenteditable="${isEdit}">技能 2</span>
+                    <span class="sidebar-tag editable" contenteditable="${isEdit}">技能 3</span>
+                    <button class="add-tag-inline" onclick="addSidebarTag(this)">+</button>
+                </div>
+            </div>
+        `,
+        'languages': `
+            <div class="sidebar-section" data-section-type="languages">
+                <button class="section-delete-btn" title="刪除此區塊">✕</button>
+                <h3>🌍 語言能力</h3>
+                <ul class="language-list">
+                    <li class="language-item">
+                        <span class="language-name editable" contenteditable="${isEdit}">中文</span>
+                        <span class="language-level editable" contenteditable="${isEdit}">母語</span>
+                    </li>
+                    <li class="language-item">
+                        <span class="language-name editable" contenteditable="${isEdit}">英文</span>
+                        <span class="language-level editable" contenteditable="${isEdit}">流利</span>
+                    </li>
+                </ul>
+            </div>
+        `,
+        'interests': `
+            <div class="sidebar-section" data-section-type="interests">
+                <button class="section-delete-btn" title="刪除此區塊">✕</button>
+                <h3>❤️ 興趣愛好</h3>
+                <div class="sidebar-tags">
+                    <span class="sidebar-tag editable" contenteditable="${isEdit}">閱讀</span>
+                    <span class="sidebar-tag editable" contenteditable="${isEdit}">旅行</span>
+                    <span class="sidebar-tag editable" contenteditable="${isEdit}">音樂</span>
+                    <button class="add-tag-inline" onclick="addSidebarTag(this)">+</button>
+                </div>
+            </div>
+        `
+    };
+
+    if (templates[type]) {
+        addSection.insertAdjacentHTML('beforebegin', templates[type]);
+        saveData();
+        showToast('已新增區塊');
+    }
+}
+
+// 新增側邊欄標籤
+function addSidebarTag(btn) {
+    const tag = document.createElement('span');
+    tag.className = 'sidebar-tag editable';
+    tag.contentEditable = document.body.classList.contains('edit-mode');
+    tag.textContent = '新標籤';
+    btn.parentElement.insertBefore(tag, btn);
+    tag.focus();
+    saveData();
 }
 
 function createTimelineItem(prefix, index, defaults, isEdu = false) {

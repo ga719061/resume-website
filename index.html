@@ -33,7 +33,7 @@
         <div class="settings-dropdown">
             <div class="settings-header">
                 <span>📄 履歷生產器</span>
-                <span class="version-tag">v1.0</span>
+                <span class="version-tag">v1.1</span>
             </div>
 
             <!-- 語言選擇 -->
@@ -114,6 +114,24 @@
             </div>
             <div class="changelog-list">
                 <div class="changelog-item">
+                    <div class="changelog-version">v1.1</div>
+                    <div class="changelog-date">2024-12-30</div>
+                    <ul class="changelog-changes">
+                        <li>🚀 效能優化：粒子背景視窗暫停、圖片懶載入</li>
+                        <li>⌨️ 鍵盤快捷鍵：Ctrl+S 儲存、Ctrl+E 編輯、Ctrl+Z/Y 撤銷/重做</li>
+                        <li>↩️ Undo/Redo 撤銷重做功能</li>
+                        <li>📦 拖曳排序：編輯模式下可拖曳板塊</li>
+                        <li>💾 自動備份：每分鐘備份到 localStorage</li>
+                        <li>✏️ 編輯按鈕獨立：快速切換編輯模式</li>
+                        <li>🔗 社群/專案連結可點擊跳轉</li>
+                        <li>📱 響應式優化：手機體驗提升</li>
+                        <li>♿ 無障礙：ARIA 標籤支援</li>
+                        <li>🗂️ 側邊欄區塊管理：新增技能標籤、語言能力、興趣愛好</li>
+                        <li>🖼️ 匯出圖片壓縮</li>
+                        <li>⚠️ localStorage 容量警告</li>
+                    </ul>
+                </div>
+                <div class="changelog-item">
                     <div class="changelog-version">v1.0</div>
                     <div class="changelog-date">2024-12-28</div>
                     <ul class="changelog-changes">
@@ -147,29 +165,36 @@
                         class="typing-cursor">|</span></p>
             </div>
 
-            <div class="contact-section">
+            <div class="sidebar-section contact-section" data-section-type="contact">
+                <button class="section-delete-btn" title="刪除此區塊">✕</button>
                 <h3>📬 聯絡方式</h3>
-                <ul class="contact-list">
-                    <li class="editable" data-field="email">
+                <ul class="contact-list" id="contactList">
+                    <li class="contact-item" data-index="0">
                         <span class="icon">✉️</span>
-                        <span class="contact-text">email@example.com</span>
+                        <span class="contact-text editable" data-field="contact-0">email@example.com</span>
+                        <button class="delete-btn small" title="刪除">✕</button>
                     </li>
-                    <li class="editable" data-field="phone">
+                    <li class="contact-item" data-index="1">
                         <span class="icon">📱</span>
-                        <span class="contact-text">+886 912 345 678</span>
+                        <span class="contact-text editable" data-field="contact-1">+886 912 345 678</span>
+                        <button class="delete-btn small" title="刪除">✕</button>
                     </li>
-                    <li class="editable" data-field="location">
+                    <li class="contact-item" data-index="2">
                         <span class="icon">📍</span>
-                        <span class="contact-text">台北市, 台灣</span>
+                        <span class="contact-text editable" data-field="contact-2">台北市, 台灣</span>
+                        <button class="delete-btn small" title="刪除">✕</button>
                     </li>
-                    <li class="editable" data-field="website">
+                    <li class="contact-item" data-index="3">
                         <span class="icon">🌐</span>
-                        <span class="contact-text">yourwebsite.com</span>
+                        <span class="contact-text editable" data-field="contact-3">yourwebsite.com</span>
+                        <button class="delete-btn small" title="刪除">✕</button>
                     </li>
                 </ul>
+                <button class="add-btn" id="addContactBtn">+ 新增聯絡</button>
             </div>
 
-            <div class="social-section">
+            <div class="sidebar-section social-section" data-section-type="social">
+                <button class="section-delete-btn" title="刪除此區塊">✕</button>
                 <h3>🔗 社群連結</h3>
                 <ul class="social-list" id="socialLinks">
                     <li class="social-item" data-index="0">
@@ -192,6 +217,18 @@
                     </li>
                 </ul>
                 <button class="add-btn" id="addSocialBtn">+ 新增社群</button>
+            </div>
+
+            <!-- 新增側邊欄區塊按鈕 -->
+            <div class="sidebar-add-section">
+                <button class="add-sidebar-btn" id="addSidebarSectionBtn">+ 新增側邊欄區塊</button>
+                <div class="sidebar-section-options" id="sidebarSectionOptions">
+                    <button data-type="contact">📬 聯絡方式</button>
+                    <button data-type="social">🔗 社群連結</button>
+                    <button data-type="skills-sidebar">💡 技能標籤</button>
+                    <button data-type="languages">🌍 語言能力</button>
+                    <button data-type="interests">❤️ 興趣愛好</button>
+                </div>
             </div>
         </aside>
 

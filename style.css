@@ -572,6 +572,11 @@ body.edit-mode .avatar-edit {
 }
 
 /* 聯絡方式區塊 */
+/* 側邊欄區塊共用樣式 */
+.sidebar-section {
+    position: relative;
+}
+
 .contact-section,
 .social-section {
     padding: var(--spacing-lg);
@@ -581,13 +586,204 @@ body.edit-mode .avatar-edit {
     border-radius: var(--radius-lg);
 }
 
+/* 區塊刪除按鈕 */
+.section-delete-btn {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    font-size: 0.75rem;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+body.edit-mode .section-delete-btn {
+    display: flex;
+}
+
+.section-delete-btn:hover {
+    background: #ef4444;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* 新增側邊欄區塊 */
+.sidebar-add-section {
+    display: none;
+    position: relative;
+}
+
+body.edit-mode .sidebar-add-section {
+    display: block;
+}
+
+.add-sidebar-btn {
+    width: 100%;
+    padding: var(--spacing-md);
+    background: var(--glass-bg);
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+}
+
+.add-sidebar-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(var(--primary-rgb), 0.1);
+}
+
+.sidebar-section-options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: var(--spacing-xs);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xs);
+    z-index: 100;
+    box-shadow: 0 5px 20px var(--shadow-color);
+}
+
+.sidebar-section-options.active {
+    display: block;
+}
+
+.sidebar-section-options button {
+    width: 100%;
+    padding: var(--spacing-sm);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.85rem;
+    transition: background var(--transition-fast);
+}
+
+.sidebar-section-options button:hover {
+    background: rgba(var(--primary-rgb), 0.1);
+}
+
+/* 聯絡方式項目 */
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    transition: background var(--transition-fast);
+    position: relative;
+}
+
+.contact-item:hover {
+    background: var(--bg-card-hover);
+}
+
+.contact-item .delete-btn.small {
+    position: absolute;
+    right: var(--spacing-xs);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 .contact-section h3,
-.social-section h3 {
+.social-section h3,
+.sidebar-section h3 {
     font-size: 0.9rem;
     color: var(--text-muted);
     margin-bottom: var(--spacing-md);
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+
+/* 側邊欄標籤樣式 */
+.sidebar-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+}
+
+.sidebar-tag {
+    background: rgba(var(--primary-rgb), 0.1);
+    color: var(--primary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    transition: all var(--transition-fast);
+}
+
+.sidebar-tag:hover {
+    background: rgba(var(--primary-rgb), 0.2);
+}
+
+.add-tag-inline {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    border: 1px dashed var(--border-color);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 1rem;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+body.edit-mode .add-tag-inline {
+    display: flex;
+}
+
+.add-tag-inline:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* 語言能力列表 */
+.language-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.language-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+}
+
+.language-name {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.language-level {
+    font-size: 0.85rem;
+    color: var(--primary);
+    background: rgba(var(--primary-rgb), 0.1);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-full);
 }
 
 .contact-list {
@@ -1892,20 +2088,30 @@ body.edit-mode .editable:focus {
 
     .social-item {
         padding: 4px;
+        background: #f8f8f8 !important;
+        border: 1px solid #ddd !important;
     }
 
     .social-icon {
         font-size: 0.9rem;
     }
 
+    .social-info {
+        display: flex;
+        flex-direction: column;
+    }
+
     .social-name {
-        font-size: 0.75rem;
-        display: block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #222 !important;
+        display: block !important;
     }
 
     .social-url {
-        font-size: 0.65rem;
-        display: block;
+        font-size: 0.7rem;
+        color: #0066cc !important;
+        display: block !important;
         text-decoration: none;
     }
 
