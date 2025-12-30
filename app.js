@@ -1052,12 +1052,13 @@ function initAddButtons() {
                 <span class="social-icon">${randomIcon}</span>
                 <div class="social-info">
                     <span class="social-name editable" data-field="social-name-${index}" contenteditable="${isEdit}">社群名稱</span>
-                    <span class="social-url editable" data-field="social-url-${index}" contenteditable="${isEdit}">網址</span>
+                    <a class="social-url" href="#" target="_blank" data-field="social-url-${index}" contenteditable="${isEdit}">輸入網址</a>
                 </div>
                 <button class="delete-btn small" title="刪除">✕</button>
             </li>
         `;
         list.insertAdjacentHTML('beforeend', html);
+        initSocialLinkEvents();
         saveData();
     });
 
@@ -1865,6 +1866,40 @@ function initTypingEffect() {
 
     setTimeout(type, 1000);
 }
+
+// ===== 社群連結事件 =====
+function initSocialLinkEvents() {
+    const socialLinks = document.getElementById('socialLinks');
+    if (!socialLinks) return;
+
+    // 處理社群連結的編輯和 href 同步
+    socialLinks.addEventListener('blur', (e) => {
+        if (e.target.classList.contains('social-url')) {
+            const link = e.target;
+            let url = link.textContent.trim();
+
+            // 自動加上 https:// 如果沒有協議
+            if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+
+            link.href = url || '#';
+            saveData();
+        }
+    }, true);
+
+    // 編輯模式下阻止連結跳轉
+    socialLinks.addEventListener('click', (e) => {
+        if (e.target.classList.contains('social-url') && document.body.classList.contains('edit-mode')) {
+            e.preventDefault();
+        }
+    });
+}
+
+// 初始化時呼叫
+document.addEventListener('DOMContentLoaded', () => {
+    initSocialLinkEvents();
+});
 
 // ===== Toast 通知 =====
 function showToast(message) {
