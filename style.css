@@ -159,6 +159,37 @@ body:hover .cursor-glow {
     top: var(--spacing-lg);
     right: var(--spacing-lg);
     z-index: 1000;
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: center;
+}
+
+/* 編輯模式獨立按鈕 */
+.edit-mode-toggle {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-color);
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all var(--transition-normal);
+}
+
+.edit-mode-toggle:hover {
+    transform: scale(1.1);
+    border-color: var(--primary);
+    box-shadow: 0 0 15px rgba(var(--primary-rgb), 0.3);
+}
+
+body.edit-mode .edit-mode-toggle {
+    background: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.5);
 }
 
 .settings-toggle {

@@ -24,6 +24,9 @@
 
     <!-- 設定選單 -->
     <div class="settings-panel">
+        <button class="edit-mode-toggle" id="editModeBtn" title="編輯模式" aria-label="切換編輯模式">
+            <span class="edit-icon">✏️</span>
+        </button>
         <button class="settings-toggle" title="設定" aria-label="開啟設定選單">
             <span class="settings-icon" aria-hidden="true">⚙️</span>
         </button>
@@ -59,13 +62,10 @@
 
             <hr class="settings-divider">
 
-            <!-- 編輯管理 -->
+            <!-- 資料管理 -->
             <div class="settings-section">
-                <div class="settings-section-title">✏️ 編輯管理</div>
+                <div class="settings-section-title">📁 資料管理</div>
                 <div class="settings-actions">
-                    <button class="settings-btn" id="editModeBtn">
-                        <span>📝</span> 編輯模式
-                    </button>
                     <button class="settings-btn" id="exportBtn">
                         <span>📤</span> 匯出資料
                     </button>
