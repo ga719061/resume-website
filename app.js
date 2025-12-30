@@ -322,48 +322,128 @@ function applyLanguage(lang) {
 }
 
 // 預設範本的原始值映射（用於判斷是否被用戶修改）
+// 包含所有語言的預設值
 const defaultValueMap = {
-    'name': ['您的姓名', '您的姓名', 'Your Name'],
+    'name': ['您的姓名', 'Your Name'],
     'title': ['您的職稱', '您的职称', 'Your Title'],
-    'about-text': ['在這裡寫一段簡短的自我介紹，讓招聘方更了解您的專業背景、技能和職涯目標。', '在这里写一段简短的自我介绍，让招聘方更了解您的专业背景、技能和职业目标。', 'Write a brief introduction about yourself here, including your professional background, skills, and career goals.']
+    'about-text': [
+        '在這裡寫一段簡短的自我介紹，讓招聘方更了解您的專業背景、技能和職涯目標。',
+        '在这里写一段简短的自我介绍，让招聘方更了解您的专业背景、技能和职业目标。',
+        'Write a brief introduction about yourself here, including your professional background, skills, and career goals.'
+    ],
+    'jobTitle': ['職位名稱', '职位名称', 'Job Title'],
+    'company': ['公司名稱', '公司名称', 'Company Name'],
+    'period': ['2020 - 至今', '2020 - Present'],
+    'jobDesc': [
+        '描述您在這個職位上的主要職責、成就和貢獻。',
+        '描述您在这个职位上的主要职责、成就和贡献。',
+        'Describe your main responsibilities, achievements, and contributions in this role.'
+    ],
+    'degree': ['學位名稱', '学位名称', 'Degree Name'],
+    'school': ['學校名稱', '学校名称', 'School Name'],
+    'eduDesc': [
+        '描述您的學習成就、相關課程或課外活動。',
+        '描述您的学习成就、相关课程或课外活动。',
+        'Describe your academic achievements, relevant courses, or extracurricular activities.'
+    ],
+    'skillName': ['技能名稱', '技能名称', 'Skill Name', '技能 1', '技能 2', '技能 3'],
+    'projectName': ['專案名稱', '项目名称', 'Project Name'],
+    'projectDesc': [
+        '描述這個專案的目標、使用的技術、您的貢獻等。',
+        '描述这个项目的目标、使用的技术、您的贡献等。',
+        "Describe this project's goals, technologies used, and your contributions."
+    ],
+    'tag': ['標籤', '标签', 'Tag', '標籤1', '標籤2', '標籤3'],
+    'contact': ['email@example.com', '+886 912 345 678', '+86 123 4567 8900', '+1 234 567 8900', '台北市, 台灣', '北京市', 'City, Country', 'yourwebsite.com'],
+    'statLabel': ['標籤', '标签', 'Label', '年經驗', '完成專案', '滿意客戶', '其他數據']
 };
 
 function updateDefaultTemplates(lang) {
-    // 檢查是否有儲存的資料，如果有就不更新預設範本
-    const saved = localStorage.getItem('resume-data');
-    if (saved) {
-        try {
-            const data = JSON.parse(saved);
-            // 如果有已儲存的欄位資料，不更新這些欄位
-            if (data.fields && Object.keys(data.fields).length > 0) {
-                return; // 用戶已有自己的資料，不覆蓋
-            }
-        } catch (e) {
-            console.error('無法解析儲存的資料');
-        }
-    }
-
-    // 只有在沒有儲存資料時才更新預設範本
+    // 更新姓名
     const nameEl = document.querySelector('[data-field="name"]');
-    const titleEl = document.querySelector('.title');
-    const aboutEl = document.querySelector('.about-text');
-
     if (nameEl && isDefaultValue(nameEl.textContent, 'name')) {
         nameEl.textContent = t('default.name');
     }
+
+    // 更新職稱
+    const titleEl = document.querySelector('.title');
     if (titleEl && isDefaultValue(titleEl.textContent, 'title')) {
         titleEl.textContent = t('default.title');
     }
+
+    // 更新關於我
+    const aboutEl = document.querySelector('.about-text');
     if (aboutEl && isDefaultValue(aboutEl.textContent, 'about-text')) {
         aboutEl.textContent = t('default.about');
     }
+
+    // 更新工作經歷
+    document.querySelectorAll('.timeline-item').forEach(item => {
+        const titleEl = item.querySelector('[data-field*="-title-"], [data-field*="-degree-"]');
+        const companyEl = item.querySelector('[data-field*="-company-"], [data-field*="-school-"]');
+        const periodEl = item.querySelector('[data-field*="-date-"]');
+        const descEl = item.querySelector('[data-field*="-desc-"]');
+
+        if (titleEl && isDefaultValue(titleEl.textContent, 'jobTitle')) {
+            titleEl.textContent = item.closest('[data-section-type="education"]') ? t('default.degree') : t('default.jobTitle');
+        }
+        if (companyEl && isDefaultValue(companyEl.textContent, 'company')) {
+            companyEl.textContent = item.closest('[data-section-type="education"]') ? t('default.school') : t('default.company');
+        }
+        if (periodEl && isDefaultValue(periodEl.textContent, 'period')) {
+            periodEl.textContent = t('default.period');
+        }
+        if (descEl && isDefaultValue(descEl.textContent, 'jobDesc')) {
+            descEl.textContent = item.closest('[data-section-type="education"]') ? t('default.eduDesc') : t('default.jobDesc');
+        }
+    });
+
+    // 更新專案
+    document.querySelectorAll('.project-card').forEach(card => {
+        const nameEl = card.querySelector('[data-field*="proj-name-"]');
+        const descEl = card.querySelector('[data-field*="proj-desc-"]');
+
+        if (nameEl && isDefaultValue(nameEl.textContent, 'projectName')) {
+            nameEl.textContent = t('default.projectName');
+        }
+        if (descEl && isDefaultValue(descEl.textContent, 'projectDesc')) {
+            descEl.textContent = t('default.projectDesc');
+        }
+    });
+
+    // 更新技能
+    document.querySelectorAll('.skill-name').forEach(el => {
+        if (isDefaultValue(el.textContent, 'skillName')) {
+            el.textContent = t('default.skillName');
+        }
+    });
+
+    // 更新標籤
+    document.querySelectorAll('.tag').forEach(el => {
+        const text = el.textContent.replace('×', '').trim();
+        if (isDefaultValue(text, 'tag')) {
+            // 保留刪除按鈕
+            const hasDeleteBtn = el.querySelector('.tag-delete-btn');
+            el.textContent = t('default.tag');
+            if (hasDeleteBtn) {
+                el.innerHTML = t('default.tag') + '<button class="tag-delete-btn" title="刪除標籤">×</button>';
+            }
+        }
+    });
+
+    // 更新統計標籤
+    document.querySelectorAll('.stat-label').forEach(el => {
+        if (isDefaultValue(el.textContent, 'statLabel')) {
+            el.textContent = t('default.statLabel');
+        }
+    });
 }
 
 function isDefaultValue(value, key) {
     const defaults = defaultValueMap[key];
     if (!defaults) return false;
     const trimmed = value.trim();
-    return defaults.some(d => d === trimmed);
+    return defaults.some(d => trimmed === d || trimmed.includes(d));
 }
 
 // ===== 設定面板事件 =====
