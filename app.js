@@ -390,24 +390,41 @@ function updateDefaultTemplates(lang) {
         aboutEl.textContent = t('default.about');
     }
 
-    // 更新工作經歷
+    // 更新工作經歷和學歷
     document.querySelectorAll('.timeline-item').forEach(item => {
+        const isEducation = item.closest('[data-section-type="education"]') !== null;
         const titleEl = item.querySelector('[data-field*="-title-"], [data-field*="-degree-"]');
         const companyEl = item.querySelector('[data-field*="-company-"], [data-field*="-school-"]');
         const periodEl = item.querySelector('[data-field*="-date-"]');
         const descEl = item.querySelector('[data-field*="-desc-"]');
 
-        if (titleEl && isDefaultValue(titleEl.textContent, 'jobTitle')) {
-            titleEl.textContent = item.closest('[data-section-type="education"]') ? t('default.degree') : t('default.jobTitle');
+        // 標題（職位/學位）
+        if (titleEl) {
+            const titleKey = isEducation ? 'degree' : 'jobTitle';
+            if (isDefaultValue(titleEl.textContent, titleKey) || isDefaultValue(titleEl.textContent, 'jobTitle') || isDefaultValue(titleEl.textContent, 'degree')) {
+                titleEl.textContent = isEducation ? t('default.degree') : t('default.jobTitle');
+            }
         }
-        if (companyEl && isDefaultValue(companyEl.textContent, 'company')) {
-            companyEl.textContent = item.closest('[data-section-type="education"]') ? t('default.school') : t('default.company');
+
+        // 公司/學校
+        if (companyEl) {
+            const companyKey = isEducation ? 'school' : 'company';
+            if (isDefaultValue(companyEl.textContent, companyKey) || isDefaultValue(companyEl.textContent, 'company') || isDefaultValue(companyEl.textContent, 'school')) {
+                companyEl.textContent = isEducation ? t('default.school') : t('default.company');
+            }
         }
+
+        // 日期
         if (periodEl && isDefaultValue(periodEl.textContent, 'period')) {
-            periodEl.textContent = t('default.period');
+            periodEl.textContent = isEducation ? t('default.eduPeriod') : t('default.period');
         }
-        if (descEl && isDefaultValue(descEl.textContent, 'jobDesc')) {
-            descEl.textContent = item.closest('[data-section-type="education"]') ? t('default.eduDesc') : t('default.jobDesc');
+
+        // 描述
+        if (descEl) {
+            const descKey = isEducation ? 'eduDesc' : 'jobDesc';
+            if (isDefaultValue(descEl.textContent, descKey) || isDefaultValue(descEl.textContent, 'jobDesc') || isDefaultValue(descEl.textContent, 'eduDesc')) {
+                descEl.textContent = isEducation ? t('default.eduDesc') : t('default.jobDesc');
+            }
         }
     });
 
