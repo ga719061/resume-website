@@ -102,6 +102,35 @@
     --glass-border: rgba(168, 85, 247, 0.2);
 }
 
+/* 🌸 可愛風格主題 */
+[data-theme="cute-style"] {
+    --bg-primary: #fff0f5;
+    /* Lavender Blush */
+    --bg-secondary: #fff5f8;
+    --bg-card: rgba(255, 255, 255, 0.6);
+    --bg-card-hover: rgba(255, 255, 255, 0.9);
+    --text-primary: #8e7f7f;
+    --text-secondary: #a89999;
+    --text-muted: #c4b8b8;
+    --primary: #ffb7b2;
+    /* Pastel Red/Pink */
+    --primary-rgb: 255, 183, 178;
+    --accent: #ffdac1;
+    /* Pastel Orange/Peach */
+    --accent-rgb: 255, 218, 193;
+    --gradient-1: linear-gradient(135deg, #ff9aa2 0%, #ffb7b2 100%);
+    --gradient-2: linear-gradient(135deg, #ffdac1 0%, #e2f0cb 100%);
+    --border-color: rgba(255, 183, 178, 0.3);
+    --shadow-color: rgba(255, 183, 178, 0.2);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.5);
+
+    /* 圓潤風格 */
+    --radius-sm: 12px;
+    --radius-md: 20px;
+    --radius-lg: 30px;
+}
+
 /* ===== Reset & Base ===== */
 *,
 *::before,

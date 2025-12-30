@@ -38,7 +38,9 @@ const translations = {
         'theme.lightMinimal': '☀️ 淺色簡約',
         'theme.bluePro': '💼 藍色專業',
         'theme.purpleDream': '🔮 紫色夢幻',
+        'theme.purpleDream': '🔮 紫色夢幻',
         'theme.custom': '🎛️ 自訂顏色',
+        'theme.cute': '🌸 可愛風格',
         'edit.mode': '📝 編輯模式',
         'edit.export': '📤 匯出資料',
         'edit.import': '📥 匯入資料',
@@ -120,7 +122,9 @@ const translations = {
         'theme.lightMinimal': '☀️ 浅色简约',
         'theme.bluePro': '💼 蓝色专业',
         'theme.purpleDream': '🔮 紫色梦幻',
+        'theme.purpleDream': '🔮 紫色梦幻',
         'theme.custom': '🎛️ 自定颜色',
+        'theme.cute': '🌸 可爱风格',
         'edit.mode': '📝 编辑模式',
         'edit.export': '📤 导出数据',
         'edit.import': '📥 导入数据',
@@ -197,7 +201,9 @@ const translations = {
         'theme.lightMinimal': '☀️ Light Minimal',
         'theme.bluePro': '💼 Blue Professional',
         'theme.purpleDream': '🔮 Purple Dream',
+        'theme.purpleDream': '🔮 Purple Dream',
         'theme.custom': '🎛️ Custom Colors',
+        'theme.cute': '🌸 Cute Style',
         'edit.mode': '📝 Edit Mode',
         'edit.export': '📤 Export Data',
         'edit.import': '📥 Import Data',
@@ -293,6 +299,9 @@ function applyLanguage(lang) {
         else if (theme === 'light-minimal') btn.textContent = t('theme.lightMinimal');
         else if (theme === 'blue-professional') btn.textContent = t('theme.bluePro');
         else if (theme === 'purple-dream') btn.textContent = t('theme.purpleDream');
+        else if (theme === 'blue-professional') btn.textContent = t('theme.bluePro');
+        else if (theme === 'purple-dream') btn.textContent = t('theme.purpleDream');
+        else if (theme === 'cute-style') btn.textContent = t('theme.cute');
         else if (btn.classList.contains('custom-theme-btn')) btn.textContent = t('theme.custom');
     });
 
