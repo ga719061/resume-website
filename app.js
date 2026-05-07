@@ -1490,7 +1490,7 @@ function initAddButtons() {
             </div>
         `;
         list.insertAdjacentHTML('beforeend', html);
-        initProjectEvents();
+        syncProjectLinks();
         saveData();
     });
 
@@ -2132,6 +2132,17 @@ function collectData() {
             clone.querySelectorAll('[contenteditable]').forEach(el => {
                 el.removeAttribute('contenteditable');
             });
+
+            if (listId === 'projectsList') {
+                clone.querySelectorAll('.project-img').forEach(img => {
+                    img.removeAttribute('src');
+                    img.style.display = 'none';
+                });
+                clone.querySelectorAll('.project-placeholder').forEach(placeholder => {
+                    placeholder.style.display = '';
+                });
+            }
+
             cleanEditingArtifacts(clone);
 
             data.lists[listId] = clone.innerHTML;
@@ -2488,6 +2499,12 @@ function init3DCards() {
 function initProjectEvents() {
     const projectsList = document.getElementById('projectsList');
     if (!projectsList) return;
+
+    if (projectsList.dataset.eventsBound === 'true') {
+        syncProjectLinks();
+        return;
+    }
+    projectsList.dataset.eventsBound = 'true';
 
     // 使用事件委派，支援動態新增的元素
     projectsList.addEventListener('click', (e) => {
