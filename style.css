@@ -2146,8 +2146,8 @@ body.edit-mode .editable:focus {
 
     html,
     body {
-        width: 210mm;
-        min-height: 297mm;
+        width: auto !important;
+        min-height: 0 !important;
     }
 
     body {
@@ -2162,8 +2162,10 @@ body.edit-mode .editable:focus {
         display: grid;
         grid-template-columns: 180px 1fr;
         gap: 15px;
-        max-width: 100%;
-        padding: 0;
+        width: 100% !important;
+        max-width: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
 
     /* ?湧?甈葬撠?*/
@@ -2224,6 +2226,7 @@ body.edit-mode .editable:focus {
         padding: 10px;
         margin-bottom: 10px;
         page-break-inside: avoid;
+        break-inside: avoid;
     }
 
     .section,
@@ -2319,61 +2322,74 @@ body.edit-mode .editable:focus {
     }
 
     /* 撠? */
+    .section[data-section-type="projects"] {
+        page-break-inside: auto !important;
+        break-inside: auto !important;
+    }
+
     .projects-grid {
-        display: grid !important;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        align-items: start !important;
-        gap: 8px;
+        display: block !important;
+        columns: auto !important;
+        gap: 0 !important;
     }
 
     .project-card {
-        display: block !important;
+        display: grid !important;
+        grid-template-columns: 72px minmax(0, 1fr);
+        gap: 8px;
         min-height: 0 !important;
+        margin-bottom: 8px;
         background: #f8f8f8 !important;
         border: 1px solid #ddd !important;
         box-shadow: none !important;
         transform: none !important;
-        break-inside: avoid;
+        overflow: visible !important;
+        break-inside: avoid-page;
         page-break-inside: avoid;
     }
 
     .project-image {
-        height: 60px;
+        width: 72px;
+        height: 54px;
         min-height: 0 !important;
         aspect-ratio: auto !important;
         background: #e8e8e8 !important;
+        overflow: hidden !important;
     }
 
     .project-info {
         display: block !important;
-        padding: 8px;
+        min-width: 0 !important;
+        padding: 6px 6px 6px 0;
         gap: 0 !important;
     }
 
     .project-info h3 {
-        font-size: 0.85rem;
-        margin-bottom: 4px;
+        font-size: 0.8rem;
+        margin-bottom: 2px;
+        line-height: 1.25;
     }
 
     .project-info p {
-        font-size: 0.7rem;
-        margin-bottom: 6px;
+        font-size: 0.68rem;
+        margin-bottom: 4px;
+        line-height: 1.35;
     }
 
     .project-tags {
         gap: 3px;
-        margin-bottom: 5px;
+        margin-bottom: 3px;
     }
 
     .tag {
-        font-size: 0.65rem;
+        font-size: 0.6rem;
         padding: 1px 4px;
     }
 
     .project-link-wrapper {
         display: block !important;
-        margin-top: 4px !important;
-        padding-top: 5px !important;
+        margin-top: 3px !important;
+        padding-top: 3px !important;
         border-top: 1px solid #ddd !important;
     }
 
