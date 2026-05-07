@@ -1957,6 +1957,31 @@ body {
 }
 
 // ===== 資料持久化 =====
+function cleanEditingArtifacts(root) {
+    const cleanTargets = root.querySelectorAll?.('.editable, [contenteditable]') || [];
+    cleanTargets.forEach(el => {
+        el.removeAttribute('contenteditable');
+        el.removeAttribute('tabindex');
+
+        if (el.hasAttribute('style')) {
+            const style = el.getAttribute('style').toLowerCase();
+            const hasEditStyle = ['outline', 'box-shadow', 'background', '-webkit-text-fill-color'].some(prop => style.includes(prop));
+            if (hasEditStyle) {
+                el.removeAttribute('style');
+            }
+        }
+    });
+}
+
+function sanitizeSavedHtml(html) {
+    if (typeof html !== 'string' || !html) return html;
+
+    const template = document.createElement('template');
+    template.innerHTML = html;
+    cleanEditingArtifacts(template.content);
+    return template.innerHTML;
+}
+
 function collectData() {
     const data = {
         version: 2,
@@ -1988,7 +2013,7 @@ function collectData() {
             if (el.tagName === 'INPUT') {
                 data.fields[field] = el.value;
             } else {
-                data.fields[field] = el.innerHTML;
+                data.fields[field] = sanitizeSavedHtml(el.innerHTML);
             }
         }
     });
@@ -2013,6 +2038,7 @@ function collectData() {
             clone.querySelectorAll('[contenteditable]').forEach(el => {
                 el.removeAttribute('contenteditable');
             });
+            cleanEditingArtifacts(clone);
 
             data.lists[listId] = clone.innerHTML;
         }
@@ -2038,6 +2064,7 @@ function collectData() {
         // 清理編輯相關元素
         clone.querySelectorAll('.delete-btn, .section-delete-btn, .add-btn, .add-tag-inline').forEach(el => el.remove());
         clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+        cleanEditingArtifacts(clone);
 
         data.sidebarSections.push({
             type: sectionType,
@@ -2087,7 +2114,7 @@ function applyData(data) {
         Object.entries(data.lists).forEach(([listId, html]) => {
             const list = document.getElementById(listId);
             if (list && html) {
-                list.innerHTML = html;
+                list.innerHTML = sanitizeSavedHtml(html);
             }
         });
     }
@@ -2119,7 +2146,8 @@ function applyData(data) {
                 if (el.tagName === 'INPUT') {
                     el.value = value;
                 } else {
-                    el.innerHTML = value;
+                    el.innerHTML = sanitizeSavedHtml(value);
+                    cleanEditingArtifacts(el);
                 }
             }
         });
@@ -2160,13 +2188,15 @@ function applyData(data) {
 
             // 恢復儲存的區塊
             data.sidebarSections.forEach(sectionData => {
-                addSectionBtn.insertAdjacentHTML('beforebegin', sectionData.html);
+                addSectionBtn.insertAdjacentHTML('beforebegin', sanitizeSavedHtml(sectionData.html));
             });
 
             // 重新加入按鈕和其他 UI 元素
             restoreSidebarButtons();
         }
     }
+
+    cleanEditingArtifacts(document);
 
     // 更新技能條並重新初始化動畫
     setTimeout(() => {
