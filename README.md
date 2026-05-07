@@ -2,7 +2,7 @@
 
 一個現代化、功能豐富的個人履歷網頁，純 HTML/CSS/JavaScript 實作，無需任何框架或後端。具備即時編輯、多主題切換、資料持久化及多格式匯出功能。
 
-🔗 **線上預覽**: [https://ga719061.github.io/resume-website/](https://ga719061.github.io/resume-website/)
+🔗 **線上預覽**: [https://resume-website-eta-eight.vercel.app/](https://resume-website-eta-eight.vercel.app/)
 
 ---
 
