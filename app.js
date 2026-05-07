@@ -1234,7 +1234,7 @@ function initEditMode() {
     // 刪除按鈕
     document.addEventListener('click', e => {
         if (e.target.classList.contains('delete-btn')) {
-            const item = e.target.closest('[data-index]');
+            const item = e.target.closest('.timeline-item, .skill-item, .project-card, .social-item, .stat-item, .contact-item, [data-index]');
             if (item && confirm('確定要刪除此項目嗎？')) {
                 item.remove();
                 reindexItems();
@@ -2349,7 +2349,7 @@ function restoreDeleteButtons() {
     // 為專案卡片加入刪除按鈕
     document.querySelectorAll('.project-card').forEach(card => {
         if (!card.querySelector('.delete-btn')) {
-            card.insertAdjacentHTML('afterbegin', '<button class="delete-btn" title="刪除">✕</button>');
+            card.insertAdjacentHTML('beforeend', '<button class="delete-btn" title="刪除此項目">✕</button>');
         }
     });
 
