@@ -1496,6 +1496,7 @@ function initAddButtons() {
                     </div>
                     <div class="project-link-wrapper">
                         <span class="link-label">🔗</span>
+                        <a class="project-link-view" href="#" target="_blank">尚無連結</a>
                         <input type="url" class="project-url editable" data-field="proj-url-${index}" placeholder="${t('default.linkPlaceholder')}" value="">
                     </div>
                 </div>
