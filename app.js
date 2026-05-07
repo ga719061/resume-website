@@ -2088,6 +2088,23 @@ function sanitizeSavedHtml(html) {
     return template.innerHTML;
 }
 
+function syncFormValuesToAttributes(root) {
+    root.querySelectorAll?.('input').forEach(input => {
+        if (input.type === 'file') return;
+        input.setAttribute('value', input.value);
+    });
+
+    root.querySelectorAll?.('textarea').forEach(textarea => {
+        textarea.textContent = textarea.value;
+    });
+
+    root.querySelectorAll?.('select').forEach(select => {
+        select.querySelectorAll('option').forEach(option => {
+            option.toggleAttribute('selected', option.selected);
+        });
+    });
+}
+
 function collectData() {
     const data = {
         version: 2,
@@ -2137,6 +2154,7 @@ function collectData() {
         if (list) {
             // 複製節點以便清理
             const clone = list.cloneNode(true);
+            syncFormValuesToAttributes(clone);
 
             // 移除刪除按鈕
             clone.querySelectorAll('.delete-btn').forEach(btn => btn.remove());
@@ -2644,6 +2662,7 @@ function syncProjectLinks() {
             if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
                 url = 'https://' + url;
             }
+            input.setAttribute('value', input.value);
             link.href = url || '#';
             // 如果沒有連結，隱藏連結顯示
             if (!url || url === '#') {
