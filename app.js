@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAutoBackup();
     initDragAndDrop();
     initChangelog();
+    initAvatarAdjuster();
     loadData();
     checkStorageUsage();
 });
@@ -1227,28 +1228,6 @@ function initEditMode() {
         e.target.value = '';
     });
 
-    // 頭像上傳
-    const avatarInput = document.getElementById('avatarInput');
-    const avatarEdit = document.querySelector('.avatar-edit');
-    const avatar = document.getElementById('avatar');
-
-    avatarEdit?.addEventListener('click', () => {
-        avatarInput.click();
-    });
-
-    avatarInput?.addEventListener('change', e => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = event => {
-            avatar.src = event.target.result;
-            saveData();
-            showToast('頭像已更新！');
-        };
-        reader.readAsDataURL(file);
-    });
-
     // 新增項目按鈕
     initAddButtons();
 
@@ -1317,6 +1296,118 @@ function initEditMode() {
                 });
             }
         }, 100);
+    });
+}
+
+let avatarSettings = {
+    scale: 1,
+    x: 50,
+    y: 50
+};
+
+function applyAvatarSettings(settings = avatarSettings, target = document.getElementById('avatar')) {
+    if (!target) return;
+
+    const normalized = {
+        scale: Number(settings.scale) || 1,
+        x: Number(settings.x) || 50,
+        y: Number(settings.y) || 50
+    };
+
+    target.style.setProperty('--avatar-scale', normalized.scale);
+    target.style.setProperty('--avatar-x', `${normalized.x}%`);
+    target.style.setProperty('--avatar-y', `${normalized.y}%`);
+}
+
+function syncAvatarControls(settings = avatarSettings) {
+    const scaleInput = document.getElementById('avatarScale');
+    const xInput = document.getElementById('avatarX');
+    const yInput = document.getElementById('avatarY');
+
+    if (scaleInput) scaleInput.value = settings.scale;
+    if (xInput) xInput.value = settings.x;
+    if (yInput) yInput.value = settings.y;
+}
+
+function initAvatarAdjuster() {
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarEdit = document.querySelector('.avatar-edit');
+    const avatarAdjust = document.querySelector('.avatar-adjust');
+    const avatar = document.getElementById('avatar');
+    const modal = document.getElementById('avatarAdjustModal');
+    const preview = document.getElementById('avatarPreview');
+    const closeBtn = document.getElementById('closeAvatarAdjust');
+    const applyBtn = document.getElementById('applyAvatarAdjust');
+    const resetBtn = document.getElementById('resetAvatarAdjust');
+    const scaleInput = document.getElementById('avatarScale');
+    const xInput = document.getElementById('avatarX');
+    const yInput = document.getElementById('avatarY');
+
+    const openAdjuster = () => {
+        if (!modal || !preview || !avatar) return;
+        preview.src = avatar.src;
+        syncAvatarControls(avatarSettings);
+        applyAvatarSettings(avatarSettings, preview);
+        modal.classList.add('active');
+    };
+
+    const closeAdjuster = () => {
+        modal?.classList.remove('active');
+    };
+
+    const readControls = () => ({
+        scale: parseFloat(scaleInput?.value || '1'),
+        x: parseInt(xInput?.value || '50', 10),
+        y: parseInt(yInput?.value || '50', 10)
+    });
+
+    const updatePreview = () => {
+        applyAvatarSettings(readControls(), preview);
+    };
+
+    avatarEdit?.addEventListener('click', () => {
+        avatarInput?.click();
+    });
+
+    avatarAdjust?.addEventListener('click', openAdjuster);
+
+    avatarInput?.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file || !avatar) return;
+
+        const reader = new FileReader();
+        reader.onload = event => {
+            avatar.src = event.target.result;
+            avatarSettings = { scale: 1, x: 50, y: 50 };
+            applyAvatarSettings();
+            saveData();
+            showToast('頭像已更新，請調整顯示範圍');
+            openAdjuster();
+        };
+        reader.readAsDataURL(file);
+        e.target.value = '';
+    });
+
+    [scaleInput, xInput, yInput].forEach(input => {
+        input?.addEventListener('input', updatePreview);
+    });
+
+    applyBtn?.addEventListener('click', () => {
+        avatarSettings = readControls();
+        applyAvatarSettings();
+        saveData();
+        closeAdjuster();
+        showToast('頭像位置已套用');
+    });
+
+    resetBtn?.addEventListener('click', () => {
+        syncAvatarControls({ scale: 1, x: 50, y: 50 });
+        updatePreview();
+    });
+
+    closeBtn?.addEventListener('click', closeAdjuster);
+    modal?.addEventListener('click', e => {
+        if (e.target === modal) closeAdjuster();
     });
 }
 
@@ -1698,9 +1789,11 @@ async function exportAsHtml() {
             '.section-delete-btn',
             '.add-section-btn',
             '.avatar-edit',
+            '.avatar-adjust',
             '.settings-toggle',
             'script',
             '#customThemeModal',
+            '#avatarAdjustModal',
             '#addSectionModal',
             '#importFile',
             '#avatarInput',
@@ -1986,6 +2079,7 @@ function collectData() {
     const data = {
         version: 2,
         avatar: document.getElementById('avatar')?.src || '',
+        avatarSettings: { ...avatarSettings },
         fields: {},
         stats: [],
         lists: {}  // 儲存動態列表的 HTML
@@ -2123,6 +2217,17 @@ function applyData(data) {
         const avatar = document.getElementById('avatar');
         if (avatar) avatar.src = data.avatar;
     }
+
+    if (data.avatarSettings) {
+        avatarSettings = {
+            scale: Number(data.avatarSettings.scale) || 1,
+            x: Number(data.avatarSettings.x) || 50,
+            y: Number(data.avatarSettings.y) || 50
+        };
+    } else {
+        avatarSettings = { scale: 1, x: 50, y: 50 };
+    }
+    applyAvatarSettings();
 
 
     // 收集動態列表內的元素，避免重複設值

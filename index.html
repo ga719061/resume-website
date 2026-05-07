@@ -198,6 +198,7 @@
                     <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='35' r='25' fill='%2366fcf1'/%3E%3Cellipse cx='50' cy='85' rx='35' ry='25' fill='%2366fcf1'/%3E%3C/svg%3E"
                         alt="頭像" class="avatar" id="avatar">
                     <button class="avatar-edit" title="更換頭像" aria-label="更換個人頭像">📷</button>
+                    <button class="avatar-adjust" title="調整頭像" aria-label="調整頭像位置與大小">🎚️</button>
                     <input type="file" id="avatarInput" accept="image/*" hidden>
                 </div>
                 <h1 class="name editable" data-field="name" role="textbox" aria-label="姓名">您的姓名</h1>
@@ -502,6 +503,39 @@
             <!-- 新增板塊按鈕 (編輯模式才顯示) -->
             <button class="add-section-btn" id="addSectionBtn">+ 新增板塊</button>
         </main>
+    </div>
+
+    <!-- 頭像調整 Modal -->
+    <div class="modal" id="avatarAdjustModal">
+        <div class="modal-content avatar-adjust-modal">
+            <div class="modal-header">
+                <h3>調整頭像</h3>
+                <button class="modal-close" id="closeAvatarAdjust">✕</button>
+            </div>
+            <div class="avatar-adjust-preview">
+                <div class="avatar-preview-frame">
+                    <img src="" alt="頭像預覽" id="avatarPreview">
+                </div>
+            </div>
+            <div class="avatar-adjust-controls">
+                <label>
+                    縮放
+                    <input type="range" id="avatarScale" min="1" max="2.5" step="0.01" value="1">
+                </label>
+                <label>
+                    左右
+                    <input type="range" id="avatarX" min="0" max="100" step="1" value="50">
+                </label>
+                <label>
+                    上下
+                    <input type="range" id="avatarY" min="0" max="100" step="1" value="50">
+                </label>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="resetAvatarAdjust">重設</button>
+                <button class="btn-primary" id="applyAvatarAdjust">套用</button>
+            </div>
+        </div>
     </div>
 
     <!-- 新增板塊 Modal -->

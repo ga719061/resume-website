@@ -535,19 +535,26 @@ body.edit-mode .edit-mode-toggle {
     width: 150px;
     height: 150px;
     margin: 0 auto var(--spacing-lg);
-}
-
-.avatar {
-    width: 100%;
-    height: 100%;
     border-radius: var(--radius-full);
-    object-fit: cover;
+    overflow: hidden;
     border: 3px solid var(--primary);
     box-shadow: 0 0 30px rgba(var(--primary-rgb), 0.3);
     transition: all var(--transition-normal);
 }
 
-.avatar:hover {
+.avatar {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: inherit;
+    object-fit: cover;
+    object-position: var(--avatar-x, 50%) var(--avatar-y, 50%);
+    transform: scale(var(--avatar-scale, 1));
+    transition: all var(--transition-normal);
+    transform-origin: var(--avatar-x, 50%) var(--avatar-y, 50%);
+}
+
+.avatar-wrapper:hover {
     transform: scale(1.05);
     box-shadow: 0 0 50px rgba(var(--primary-rgb), 0.5);
 }
@@ -569,9 +576,79 @@ body.edit-mode .edit-mode-toggle {
     transition: opacity var(--transition-fast);
 }
 
+.avatar-adjust {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    border: none;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
 .avatar-wrapper:hover .avatar-edit,
-body.edit-mode .avatar-edit {
+.avatar-wrapper:hover .avatar-adjust,
+body.edit-mode .avatar-edit,
+body.edit-mode .avatar-adjust {
     opacity: 1;
+}
+
+.avatar-adjust-modal {
+    max-width: 420px;
+}
+
+.avatar-adjust-preview {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.avatar-preview-frame {
+    width: 220px;
+    height: 220px;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    border: 3px solid var(--primary);
+    background: var(--bg-card);
+}
+
+#avatarPreview {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: var(--avatar-x, 50%) var(--avatar-y, 50%);
+    transform: scale(var(--avatar-scale, 1));
+    transform-origin: var(--avatar-x, 50%) var(--avatar-y, 50%);
+}
+
+.avatar-adjust-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.avatar-adjust-controls label {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.avatar-adjust-controls input[type="range"] {
+    width: 100%;
+    accent-color: var(--primary);
 }
 
 .name {
@@ -1877,6 +1954,7 @@ body.edit-mode .editable:focus {
     .section-delete-btn,
     .add-section-btn,
     .avatar-edit,
+    .avatar-adjust,
     .add-social-btn,
     .toast,
     .project-placeholder {
@@ -1941,6 +2019,7 @@ body.edit-mode .editable:focus {
         width: 80px;
         height: 80px;
         margin-bottom: 10px;
+        overflow: hidden;
     }
 
     .name {
