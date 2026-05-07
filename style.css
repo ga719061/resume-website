@@ -2289,8 +2289,46 @@ body.edit-mode .editable:focus {
         padding: 1px 4px;
     }
 
-    .project-link {
-        font-size: 0.75rem;
+    .project-link-wrapper {
+        display: block !important;
+        margin-top: 4px !important;
+        padding-top: 5px !important;
+        border-top: 1px solid #ddd !important;
+    }
+
+    .project-link-wrapper .link-label {
+        display: none !important;
+    }
+
+    .project-link-view {
+        display: none !important;
+    }
+
+    .project-link-view:not(.is-empty)[data-print-url] {
+        display: block !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        color: #0066cc !important;
+        font-size: 0.68rem !important;
+        font-weight: 500 !important;
+        line-height: 1.35 !important;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .project-link-view:not(.is-empty)[data-print-url]::before {
+        content: "專案連結：" attr(data-print-url);
+    }
+
+    .project-link-view:not(.is-empty)[data-print-url]::after {
+        content: none !important;
+    }
+
+    .project-url,
+    body.edit-mode .project-url {
+        display: none !important;
     }
 
     /* 蝯梯??豢? */
@@ -2372,7 +2410,8 @@ body.edit-mode .editable:focus {
         color: #0066cc !important;
     }
 
-    .project-link {
+    .project-link,
+    .project-link-view {
         color: #0066cc !important;
     }
 

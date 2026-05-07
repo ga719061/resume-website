@@ -2737,10 +2737,12 @@ function syncProjectLinks() {
 
             if (hasUrl) {
                 link.href = url;
+                link.dataset.printUrl = url;
                 link.style.removeProperty('opacity');
                 link.textContent = '查看專案';
             } else {
                 link.removeAttribute('href');
+                link.removeAttribute('data-print-url');
                 link.style.removeProperty('opacity');
                 link.textContent = '尚無連結';
             }
