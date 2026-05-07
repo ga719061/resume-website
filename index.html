@@ -410,6 +410,7 @@
                                 <input type="file" class="project-img-input" id="projectImgInput-0" accept="image/*"
                                     hidden>
                                 <button class="project-img-edit" title="更換圖片">📷</button>
+                                <button class="project-img-adjust" title="調整圖片">🎚️</button>
                             </div>
                             <div class="project-info">
                                 <h3 class="editable" data-field="proj-name-0">專案名稱</h3>
@@ -441,6 +442,7 @@
                                 <input type="file" class="project-img-input" id="projectImgInput-1" accept="image/*"
                                     hidden>
                                 <button class="project-img-edit" title="更換圖片">📷</button>
+                                <button class="project-img-adjust" title="調整圖片">🎚️</button>
                             </div>
                             <div class="project-info">
                                 <h3 class="editable" data-field="proj-name-1">專案名稱</h3>
@@ -536,6 +538,39 @@
             <div class="modal-actions">
                 <button class="btn-secondary" id="resetAvatarAdjust">重設</button>
                 <button class="btn-primary" id="applyAvatarAdjust">套用</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 專案圖片調整 Modal -->
+    <div class="modal" id="projectImageAdjustModal">
+        <div class="modal-content project-image-adjust-modal">
+            <div class="modal-header">
+                <h3>調整專案圖片</h3>
+                <button class="modal-close" id="closeProjectImageAdjust">✕</button>
+            </div>
+            <div class="project-image-adjust-preview">
+                <div class="project-image-preview-frame">
+                    <img src="" alt="專案圖片預覽" id="projectImagePreview">
+                </div>
+            </div>
+            <div class="project-image-adjust-controls">
+                <label>
+                    縮放
+                    <input type="range" id="projectImageScale" min="1" max="2.5" step="0.01" value="1">
+                </label>
+                <label>
+                    左右
+                    <input type="range" id="projectImageX" min="0" max="100" step="1" value="50">
+                </label>
+                <label>
+                    上下
+                    <input type="range" id="projectImageY" min="0" max="100" step="1" value="50">
+                </label>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="resetProjectImageAdjust">重設</button>
+                <button class="btn-primary" id="applyProjectImageAdjust">套用</button>
             </div>
         </div>
     </div>

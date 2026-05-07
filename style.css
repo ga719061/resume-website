@@ -1521,17 +1521,19 @@ body.edit-mode .add-tag-btn {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: var(--project-img-x, 50%) var(--project-img-y, 50%);
+    transform: scale(var(--project-img-scale, 1));
+    transform-origin: var(--project-img-x, 50%) var(--project-img-y, 50%);
+    transition: transform var(--transition-normal), object-position var(--transition-normal);
 }
 
-.project-img-edit {
+.project-img-edit,
+.project-img-adjust {
     position: absolute;
     bottom: 8px;
-    right: 8px;
     width: 32px;
     height: 32px;
     border: none;
-    background: var(--primary);
-    color: var(--bg-primary);
     border-radius: var(--radius-full);
     cursor: pointer;
     font-size: 1rem;
@@ -1541,12 +1543,77 @@ body.edit-mode .add-tag-btn {
     transition: all var(--transition-fast);
 }
 
-body.edit-mode .project-img-edit {
+.project-img-edit {
+    right: 8px;
+    background: var(--primary);
+    color: var(--bg-primary);
+}
+
+.project-img-adjust {
+    right: 48px;
+    background: var(--bg-secondary);
+    color: var(--primary);
+    border: 1px solid rgba(var(--primary-rgb), 0.35);
+}
+
+body.edit-mode .project-img-edit,
+body.edit-mode .project-img-adjust {
     display: flex;
 }
 
-.project-img-edit:hover {
+.project-img-edit:hover,
+.project-img-adjust:hover {
     transform: scale(1.1);
+}
+
+.project-image-adjust-modal {
+    max-width: 520px;
+}
+
+.project-image-adjust-preview {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.project-image-preview-frame {
+    width: min(420px, 100%);
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--primary);
+    background: var(--bg-card);
+}
+
+#projectImagePreview {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: var(--project-img-x, 50%) var(--project-img-y, 50%);
+    transform: scale(var(--project-img-scale, 1));
+    transform-origin: var(--project-img-x, 50%) var(--project-img-y, 50%);
+}
+
+.project-image-adjust-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.project-image-adjust-controls label {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.project-image-adjust-controls input[type="range"] {
+    width: 100%;
+    accent-color: var(--primary);
 }
 
 .project-link-wrapper {
@@ -2047,6 +2114,8 @@ body.edit-mode .editable:focus {
     .add-section-btn,
     .avatar-edit,
     .avatar-adjust,
+    .project-img-edit,
+    .project-img-adjust,
     .add-social-btn,
     .toast,
     .project-placeholder {

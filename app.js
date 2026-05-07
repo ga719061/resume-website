@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initDragAndDrop();
     initChangelog();
     initAvatarAdjuster();
+    initProjectImageAdjuster();
     loadData();
     checkStorageUsage();
 });
@@ -1016,7 +1017,11 @@ const sectionTemplates = {
                 <div class="projects-grid" id="projectsList-${Date.now()}">
                     <div class="project-card card-3d" data-index="0">
                         <div class="project-image">
+                            <img class="project-img" src="" alt="專案圖片" style="display: none;" loading="lazy">
                             <div class="project-placeholder">🖼️</div>
+                            <input type="file" class="project-img-input" accept="image/*" hidden>
+                            <button class="project-img-edit" title="更換圖片">📷</button>
+                            <button class="project-img-adjust" title="調整圖片">🎚️</button>
                         </div>
                         <div class="project-info">
                             <h3 class="editable">專案名稱</h3>
@@ -1323,18 +1328,54 @@ let avatarSettings = {
     y: 50
 };
 
+const defaultImageSettings = {
+    scale: 1,
+    x: 50,
+    y: 50
+};
+
+function normalizeImageSettings(settings = defaultImageSettings) {
+    const scaleValue = Number(settings.scale);
+    const xValue = Number(settings.x);
+    const yValue = Number(settings.y);
+    const scale = Math.min(2.5, Math.max(1, Number.isFinite(scaleValue) ? scaleValue : 1));
+    const x = Math.min(100, Math.max(0, Number.isFinite(xValue) ? xValue : 50));
+    const y = Math.min(100, Math.max(0, Number.isFinite(yValue) ? yValue : 50));
+    return { scale, x, y };
+}
+
 function applyAvatarSettings(settings = avatarSettings, target = document.getElementById('avatar')) {
     if (!target) return;
 
-    const normalized = {
-        scale: Number(settings.scale) || 1,
-        x: Number(settings.x) || 50,
-        y: Number(settings.y) || 50
-    };
+    const normalized = normalizeImageSettings(settings);
 
     target.style.setProperty('--avatar-scale', normalized.scale);
     target.style.setProperty('--avatar-x', `${normalized.x}%`);
     target.style.setProperty('--avatar-y', `${normalized.y}%`);
+}
+
+function applyProjectImageSettings(img, settings = defaultImageSettings) {
+    if (!img) return;
+
+    const normalized = normalizeImageSettings(settings);
+    img.dataset.scale = normalized.scale;
+    img.dataset.x = normalized.x;
+    img.dataset.y = normalized.y;
+    img.setAttribute('data-scale', normalized.scale);
+    img.setAttribute('data-x', normalized.x);
+    img.setAttribute('data-y', normalized.y);
+    img.style.setProperty('--project-img-scale', normalized.scale);
+    img.style.setProperty('--project-img-x', `${normalized.x}%`);
+    img.style.setProperty('--project-img-y', `${normalized.y}%`);
+}
+
+function readProjectImageSettings(img) {
+    if (!img) return { ...defaultImageSettings };
+    return normalizeImageSettings({
+        scale: img.dataset.scale || defaultImageSettings.scale,
+        x: img.dataset.x || defaultImageSettings.x,
+        y: img.dataset.y || defaultImageSettings.y
+    });
 }
 
 function syncAvatarControls(settings = avatarSettings) {
@@ -1429,6 +1470,72 @@ function initAvatarAdjuster() {
     });
 }
 
+function initProjectImageAdjuster() {
+    const modal = document.getElementById('projectImageAdjustModal');
+    const preview = document.getElementById('projectImagePreview');
+    const closeBtn = document.getElementById('closeProjectImageAdjust');
+    const applyBtn = document.getElementById('applyProjectImageAdjust');
+    const resetBtn = document.getElementById('resetProjectImageAdjust');
+    const scaleInput = document.getElementById('projectImageScale');
+    const xInput = document.getElementById('projectImageX');
+    const yInput = document.getElementById('projectImageY');
+    let activeImage = null;
+
+    const syncControls = (settings = defaultImageSettings) => {
+        const normalized = normalizeImageSettings(settings);
+        if (scaleInput) scaleInput.value = normalized.scale;
+        if (xInput) xInput.value = normalized.x;
+        if (yInput) yInput.value = normalized.y;
+    };
+
+    const readControls = () => normalizeImageSettings({
+        scale: scaleInput?.value || defaultImageSettings.scale,
+        x: xInput?.value || defaultImageSettings.x,
+        y: yInput?.value || defaultImageSettings.y
+    });
+
+    const updatePreview = () => {
+        applyProjectImageSettings(preview, readControls());
+    };
+
+    const closeAdjuster = () => {
+        modal?.classList.remove('active');
+        activeImage = null;
+    };
+
+    window.openProjectImageAdjuster = (img) => {
+        if (!modal || !preview || !img || !img.src) return;
+        activeImage = img;
+        preview.src = img.src;
+        const settings = readProjectImageSettings(img);
+        syncControls(settings);
+        applyProjectImageSettings(preview, settings);
+        modal.classList.add('active');
+    };
+
+    [scaleInput, xInput, yInput].forEach(input => {
+        input?.addEventListener('input', updatePreview);
+    });
+
+    applyBtn?.addEventListener('click', () => {
+        if (!activeImage) return;
+        applyProjectImageSettings(activeImage, readControls());
+        saveData();
+        closeAdjuster();
+        showToast('專案圖片位置已套用');
+    });
+
+    resetBtn?.addEventListener('click', () => {
+        syncControls(defaultImageSettings);
+        updatePreview();
+    });
+
+    closeBtn?.addEventListener('click', closeAdjuster);
+    modal?.addEventListener('click', e => {
+        if (e.target === modal) closeAdjuster();
+    });
+}
+
 function initAddButtons() {
     // 新增工作經歷
     document.getElementById('addExperienceBtn')?.addEventListener('click', () => {
@@ -1487,10 +1594,11 @@ function initAddButtons() {
         const html = `
             <div class="project-card card-3d" data-index="${index}">
                 <div class="project-image">
-                    <img class="project-img" id="projectImg-${index}" src="" alt="專案圖片" style="display: none;">
+                    <img class="project-img" id="projectImg-${index}" src="" alt="專案圖片" style="display: none;" loading="lazy">
                     <div class="project-placeholder" id="projectPlaceholder-${index}">🖼️</div>
                     <input type="file" class="project-img-input" id="projectImgInput-${index}" accept="image/*" hidden>
                     <button class="project-img-edit" title="更換圖片">📷</button>
+                    <button class="project-img-adjust" title="調整圖片">🎚️</button>
                 </div>
                 <div class="project-info">
                     <h3 class="editable" data-field="proj-name-${index}" contenteditable="${isEdit}">${t('default.projectName')}</h3>
@@ -1810,10 +1918,13 @@ async function exportAsHtml() {
             '.add-section-btn',
             '.avatar-edit',
             '.avatar-adjust',
+            '.project-img-edit',
+            '.project-img-adjust',
             '.settings-toggle',
             'script',
             '#customThemeModal',
             '#avatarAdjustModal',
+            '#projectImageAdjustModal',
             '#addSectionModal',
             '#importFile',
             '#avatarInput',
@@ -2191,11 +2302,13 @@ function collectData() {
 
     // 儲存專案圖片
     data.projectImages = {};
+    data.projectImageSettings = {};
     document.querySelectorAll('.project-img').forEach(img => {
         if (img.src && !img.src.endsWith('undefined') && img.style.display !== 'none') {
             const card = img.closest('.project-card');
             if (card) {
                 data.projectImages[card.dataset.index] = img.src;
+                data.projectImageSettings[card.dataset.index] = readProjectImageSettings(img);
             }
         }
     });
@@ -2330,6 +2443,7 @@ function applyData(data) {
             if (img && src) {
                 img.src = src;
                 img.style.display = 'block';
+                applyProjectImageSettings(img, data.projectImageSettings?.[index]);
                 if (placeholder) placeholder.style.display = 'none';
             }
         });
@@ -2571,6 +2685,16 @@ function initProjectEvents() {
             input?.click();
         }
 
+        if (e.target.classList.contains('project-img-adjust')) {
+            const card = e.target.closest('.project-card');
+            const img = card?.querySelector('.project-img');
+            if (!img || img.style.display === 'none' || !img.src) {
+                showToast('請先上傳專案圖片');
+                return;
+            }
+            window.openProjectImageAdjuster?.(img);
+        }
+
         // 新增標籤按鈕
         if (e.target.classList.contains('add-tag-btn')) {
             const tagsContainer = e.target.closest('.project-tags');
@@ -2633,11 +2757,14 @@ function initProjectEvents() {
             reader.onload = (event) => {
                 img.src = event.target.result;
                 img.style.display = 'block';
+                applyProjectImageSettings(img, defaultImageSettings);
                 if (placeholder) placeholder.style.display = 'none';
                 saveData();
-                showToast('專案圖片已更新！');
+                showToast('專案圖片已更新，請調整顯示範圍');
+                window.openProjectImageAdjuster?.(img);
             };
             reader.readAsDataURL(file);
+            e.target.value = '';
         }
 
         // URL 輸入框變更
@@ -2666,8 +2793,63 @@ function normalizeProjectCards(root = document) {
         card.dataset.index = index;
 
         const info = card.querySelector('.project-info') || card;
+        const imageBox = card.querySelector('.project-image');
         let linkWrapper = card.querySelector('.project-link-wrapper');
         const legacyLink = card.querySelector('.project-link');
+
+        if (imageBox) {
+            let img = imageBox.querySelector('.project-img');
+            let placeholder = imageBox.querySelector('.project-placeholder');
+            let input = imageBox.querySelector('.project-img-input');
+            let editBtn = imageBox.querySelector('.project-img-edit');
+            let adjustBtn = imageBox.querySelector('.project-img-adjust');
+
+            if (!img) {
+                img = document.createElement('img');
+                img.className = 'project-img';
+                img.alt = '專案圖片';
+                img.loading = 'lazy';
+                img.style.display = 'none';
+                imageBox.insertBefore(img, imageBox.firstChild);
+            }
+
+            if (!placeholder) {
+                placeholder = document.createElement('div');
+                placeholder.className = 'project-placeholder';
+                placeholder.textContent = '🖼️';
+                imageBox.insertBefore(placeholder, img.nextSibling);
+            }
+
+            if (!input) {
+                input = document.createElement('input');
+            input.type = 'file';
+            input.className = 'project-img-input';
+            input.accept = 'image/*';
+            input.hidden = true;
+            imageBox.appendChild(input);
+        }
+        img.loading = 'lazy';
+
+            if (!editBtn) {
+                editBtn = document.createElement('button');
+                editBtn.type = 'button';
+                editBtn.className = 'project-img-edit';
+                editBtn.title = '更換圖片';
+                editBtn.textContent = '📷';
+                imageBox.appendChild(editBtn);
+            }
+
+            if (!adjustBtn) {
+                adjustBtn = document.createElement('button');
+                adjustBtn.type = 'button';
+                adjustBtn.className = 'project-img-adjust';
+                adjustBtn.title = '調整圖片';
+                adjustBtn.textContent = '🎚️';
+                imageBox.appendChild(adjustBtn);
+            }
+
+            applyProjectImageSettings(img, readProjectImageSettings(img));
+        }
 
         if (!linkWrapper) {
             linkWrapper = document.createElement('div');
@@ -3100,6 +3282,7 @@ async function compressExportData(data) {
             }
         }
     }
+    compressedData.projectImageSettings = compressedData.projectImageSettings || {};
 
     return compressedData;
 }
