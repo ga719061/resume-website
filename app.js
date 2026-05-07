@@ -1021,10 +1021,14 @@ const sectionTemplates = {
                         <div class="project-info">
                             <h3 class="editable">專案名稱</h3>
                             <p class="editable">使用現代化技術堆疊開發的網頁應用程式，解決了...</p>
-                            <div class="project-tags">
-                                <span class="tag">React</span>
+                            <div class="project-tags" data-index="0">
+                                <span class="tag editable" data-field="proj-tag-0-0">React<button class="tag-delete-btn" title="刪除標籤">×</button></span>
                             </div>
-                            <a href="#" class="project-link editable">查看專案 →</a>
+                            <div class="project-link-wrapper">
+                                <span class="link-label" aria-hidden="true">↗</span>
+                                <a class="project-link-view is-empty" target="_blank" rel="noopener noreferrer" aria-disabled="true">尚無連結</a>
+                                <input type="url" class="project-url editable" data-field="proj-url-0" placeholder="${t('default.linkPlaceholder')}" value="">
+                            </div>
                         </div>
                         <button class="delete-btn" title="刪除此項目">✕</button>
                     </div>
@@ -1120,6 +1124,7 @@ function addNewSection(type) {
         initScrollAnimations();
         init3DCards();
         initSkillBars();
+        initProjectEvents();
         initCounters();
 
         // 如果在編輯模式，設定 contenteditable
@@ -1495,8 +1500,8 @@ function initAddButtons() {
                         <button class="add-tag-btn" title="新增標籤">+</button>
                     </div>
                     <div class="project-link-wrapper">
-                        <span class="link-label">🔗</span>
-                        <a class="project-link-view" href="#" target="_blank">尚無連結</a>
+                        <span class="link-label" aria-hidden="true">↗</span>
+                        <a class="project-link-view is-empty" target="_blank" rel="noopener noreferrer" aria-disabled="true">尚無連結</a>
                         <input type="url" class="project-url editable" data-field="proj-url-${index}" placeholder="${t('default.linkPlaceholder')}" value="">
                     </div>
                 </div>
@@ -1504,6 +1509,7 @@ function initAddButtons() {
             </div>
         `;
         list.insertAdjacentHTML('beforeend', html);
+        normalizeProjectCards();
         syncProjectLinks();
         saveData();
     });
@@ -2107,6 +2113,8 @@ function syncFormValuesToAttributes(root) {
 }
 
 function collectData() {
+    syncProjectLinks();
+
     const data = {
         version: 2,
         avatar: document.getElementById('avatar')?.src || '',
@@ -2256,6 +2264,9 @@ function applyData(data) {
         });
     }
 
+    normalizeProjectCards();
+    syncProjectLinks();
+
     if (data.avatar) {
         const avatar = document.getElementById('avatar');
         if (avatar) avatar.src = data.avatar;
@@ -2312,8 +2323,10 @@ function applyData(data) {
     // 恢復專案圖片
     if (data.projectImages) {
         Object.entries(data.projectImages).forEach(([index, src]) => {
-            const img = document.querySelector(`.project-card[data-index="${index}"] .project-img`);
-            const placeholder = document.querySelector(`.project-card[data-index="${index}"] .project-placeholder`);
+            const escapedIndex = CSS.escape(index);
+            const card = document.querySelector(`.project-card[data-index="${escapedIndex}"], .project-card[data-original-index="${escapedIndex}"]`);
+            const img = card?.querySelector('.project-img');
+            const placeholder = card?.querySelector('.project-placeholder');
             if (img && src) {
                 img.src = src;
                 img.style.display = 'block';
@@ -2366,6 +2379,7 @@ function applyData(data) {
 
         // 重新初始化動態事件和動畫
         initProjectEvents();
+        syncProjectLinks();
         initSkillBars();
     }, 100);
 }
@@ -2532,6 +2546,8 @@ function initProjectEvents() {
     const projectsList = document.getElementById('projectsList');
     if (!projectsList) return;
 
+    normalizeProjectCards();
+
     if (projectsList.dataset.eventsBound === 'true') {
         syncProjectLinks();
         return;
@@ -2540,6 +2556,14 @@ function initProjectEvents() {
 
     // 使用事件委派，支援動態新增的元素
     projectsList.addEventListener('click', (e) => {
+        const linkView = e.target.closest('.project-link-view');
+        if (linkView) {
+            if (document.body.classList.contains('edit-mode') || linkView.classList.contains('is-empty')) {
+                e.preventDefault();
+            }
+            return;
+        }
+
         // 圖片編輯按鈕
         if (e.target.classList.contains('project-img-edit')) {
             const card = e.target.closest('.project-card');
@@ -2618,16 +2642,7 @@ function initProjectEvents() {
 
         // URL 輸入框變更
         if (e.target.classList.contains('project-url')) {
-            const input = e.target;
-            const wrapper = input.closest('.project-link-wrapper');
-            const link = wrapper?.querySelector('.project-link-view');
-            if (link) {
-                let url = input.value.trim();
-                if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
-                    url = 'https://' + url;
-                }
-                link.href = url || '#';
-            }
+            syncProjectLinks();
             saveData();
         }
     });
@@ -2635,16 +2650,7 @@ function initProjectEvents() {
     // URL 輸入框 blur 事件
     projectsList.addEventListener('blur', (e) => {
         if (e.target.classList.contains('project-url')) {
-            const input = e.target;
-            const wrapper = input.closest('.project-link-wrapper');
-            const link = wrapper?.querySelector('.project-link-view');
-            if (link) {
-                let url = input.value.trim();
-                if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
-                    url = 'https://' + url;
-                }
-                link.href = url || '#';
-            }
+            syncProjectLinks();
             saveData();
         }
     }, true);
@@ -2653,8 +2659,69 @@ function initProjectEvents() {
     syncProjectLinks();
 }
 
+function normalizeProjectCards(root = document) {
+    root.querySelectorAll?.('.project-card').forEach((card, index) => {
+        const originalIndex = card.dataset.originalIndex || card.dataset.index || String(index);
+        card.dataset.originalIndex = originalIndex;
+        card.dataset.index = index;
+
+        const info = card.querySelector('.project-info') || card;
+        let linkWrapper = card.querySelector('.project-link-wrapper');
+        const legacyLink = card.querySelector('.project-link');
+
+        if (!linkWrapper) {
+            linkWrapper = document.createElement('div');
+            linkWrapper.className = 'project-link-wrapper';
+            info.appendChild(linkWrapper);
+        }
+
+        let linkView = linkWrapper.querySelector('.project-link-view');
+        let input = linkWrapper.querySelector('.project-url');
+        const field = `proj-url-${card.dataset.index}`;
+
+        if (!linkWrapper.querySelector('.link-label')) {
+            const label = document.createElement('span');
+            label.className = 'link-label';
+            label.setAttribute('aria-hidden', 'true');
+            label.textContent = '↗';
+            linkWrapper.insertBefore(label, linkWrapper.firstChild);
+        }
+
+        if (!linkView) {
+            linkView = document.createElement('a');
+            linkView.className = 'project-link-view';
+            linkWrapper.insertBefore(linkView, input || null);
+        }
+
+        if (!input) {
+            input = document.createElement('input');
+            input.type = 'url';
+            input.className = 'project-url editable';
+            input.placeholder = t('default.linkPlaceholder');
+            linkWrapper.appendChild(input);
+        }
+
+        const savedUrl = input.value || input.getAttribute('value') || legacyLink?.getAttribute('href') || linkView.getAttribute('href') || '';
+        if (!input.value && savedUrl && savedUrl !== '#') input.value = savedUrl;
+
+        input.type = 'url';
+        input.dataset.field = field;
+        input.placeholder = input.placeholder || t('default.linkPlaceholder');
+        input.classList.add('project-url', 'editable');
+        linkView.classList.add('project-link-view');
+        linkView.target = '_blank';
+        linkView.rel = 'noopener noreferrer';
+
+        if (legacyLink && legacyLink !== linkView) {
+            legacyLink.remove();
+        }
+    });
+}
+
 // 同步專案連結：將輸入框的值同步到可點擊連結
 function syncProjectLinks() {
+    normalizeProjectCards();
+
     document.querySelectorAll('.project-link-wrapper').forEach(wrapper => {
         const input = wrapper.querySelector('.project-url');
         const link = wrapper.querySelector('.project-link-view');
@@ -2664,14 +2731,18 @@ function syncProjectLinks() {
                 url = 'https://' + url;
             }
             input.setAttribute('value', input.value);
-            link.href = url || '#';
-            // 如果沒有連結，隱藏連結顯示
-            if (!url || url === '#') {
-                link.style.opacity = '0.5';
-                link.textContent = '尚無連結';
+            const hasUrl = Boolean(url);
+            link.classList.toggle('is-empty', !hasUrl);
+            link.setAttribute('aria-disabled', String(!hasUrl));
+
+            if (hasUrl) {
+                link.href = url;
+                link.style.removeProperty('opacity');
+                link.textContent = '查看專案';
             } else {
-                link.style.opacity = '1';
-                link.textContent = '查看專案 →';
+                link.removeAttribute('href');
+                link.style.removeProperty('opacity');
+                link.textContent = '尚無連結';
             }
         }
     });
