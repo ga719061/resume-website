@@ -1619,6 +1619,9 @@ body.edit-mode .project-url {
     position: absolute;
     top: var(--spacing-xs);
     right: var(--spacing-xs);
+    margin-left: 0;
+    display: flex;
+    z-index: 25;
 }
 
 .stat-number {

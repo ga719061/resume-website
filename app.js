@@ -1234,6 +1234,19 @@ function initEditMode() {
     // 刪除按鈕
     document.addEventListener('click', e => {
         if (e.target.classList.contains('delete-btn')) {
+            if (!document.body.classList.contains('edit-mode')) return;
+
+            if (e.target.classList.contains('stat-delete')) {
+                const statItem = e.target.closest('.stat-item');
+                if (statItem && confirm('確定要刪除此統計項目嗎？')) {
+                    statItem.remove();
+                    reindexItems();
+                    saveData();
+                    showToast('統計項目已刪除');
+                }
+                return;
+            }
+
             const item = e.target.closest('.timeline-item, .skill-item, .project-card, .social-item, .stat-item, .contact-item, [data-index]');
             if (item && confirm('確定要刪除此項目嗎？')) {
                 item.remove();
