@@ -1719,6 +1719,13 @@ async function exportAsHtml() {
         // 移除 edit-mode class
         clone.querySelector('body')?.classList.remove('edit-mode');
 
+        // 清除匯出前可能殘留的編輯焦點樣式
+        clone.querySelectorAll('.editable').forEach(el => {
+            el.removeAttribute('style');
+            el.removeAttribute('tabindex');
+            el.blur?.();
+        });
+
         // 將計數器更新為目標數字
         clone.querySelectorAll('.counter').forEach(counter => {
             const target = counter.dataset.target;

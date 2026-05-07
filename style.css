@@ -1565,6 +1565,7 @@ body.edit-mode .project-url {
     position: relative;
     transition: all var(--transition-fast);
     cursor: default;
+    outline: none;
 }
 
 body.edit-mode .editable {
@@ -1582,8 +1583,18 @@ body.edit-mode .editable:focus {
     background: rgba(var(--primary-rgb), 0.05);
 }
 
-.editable[contenteditable="true"] {
+body.edit-mode .editable[contenteditable="true"] {
     outline-color: var(--primary);
+}
+
+.about-text {
+    color: var(--text-secondary);
+    -webkit-text-fill-color: var(--text-secondary);
+}
+
+body.edit-mode .about-text.editable {
+    color: var(--text-secondary);
+    -webkit-text-fill-color: var(--text-secondary);
 }
 
 /* 蝺刻摩璅∪?銝蝙?冽撓霈?摮????閬敺拇迤撣賊???*/
@@ -1876,6 +1887,16 @@ body.edit-mode .editable:focus {
     * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
+    }
+
+    .editable,
+    .editable[contenteditable="true"],
+    body.edit-mode .editable,
+    body.edit-mode .editable:hover,
+    body.edit-mode .editable:focus {
+        outline: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
     }
 
     /* ?閮剖? */
