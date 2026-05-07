@@ -2251,22 +2251,34 @@ body.edit-mode .editable:focus {
 
     /* 撠? */
     .projects-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start !important;
+        gap: 8px;
     }
 
     .project-card {
+        display: block !important;
+        min-height: 0 !important;
         background: #f8f8f8 !important;
         border: 1px solid #ddd !important;
+        box-shadow: none !important;
+        transform: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
     }
 
     .project-image {
         height: 60px;
+        min-height: 0 !important;
+        aspect-ratio: auto !important;
         background: #e8e8e8 !important;
     }
 
     .project-info {
+        display: block !important;
         padding: 8px;
+        gap: 0 !important;
     }
 
     .project-info h3 {
@@ -2311,7 +2323,7 @@ body.edit-mode .editable:focus {
         border: 0 !important;
         background: transparent !important;
         color: #0066cc !important;
-        font-size: 0.68rem !important;
+        font-size: 0 !important;
         font-weight: 500 !important;
         line-height: 1.35 !important;
         overflow-wrap: anywhere;
@@ -2320,6 +2332,8 @@ body.edit-mode .editable:focus {
 
     .project-link-view:not(.is-empty)[data-print-url]::before {
         content: "專案連結：" attr(data-print-url);
+        color: #0066cc !important;
+        font-size: 0.68rem !important;
     }
 
     .project-link-view:not(.is-empty)[data-print-url]::after {
